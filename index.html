@@ -538,6 +538,8 @@ select.input{appearance:none; -webkit-appearance:none}
 .nav-item span{display:none; font-size:var(--fs-meta); font-weight:700}
 .nav-item[aria-current="page"]{background:var(--nav-item-active-bg); color:var(--nav-item-active-fg)}
 .nav-item[aria-current="page"] span{display:inline}
+/* لما الكيبورد يفتح نخفي الناف بار زي الأبلكيشنز الحقيقية، عشان الآيفون ميطلعهوش فوق الكيبورد */
+body.kb-open .nav{opacity:0; visibility:hidden; transition:none}
 
 .tag-done{background:var(--tag-done-bg); color:var(--tag-done-fg)}
 .tag svg{width:12px; height:12px; margin-inline-end:3px}
@@ -2709,6 +2711,17 @@ addEventListener('scroll', () => { const b = $('appbar'); if (b) b.classList.tog
     }
     wasOpen = true;
   }).observe(box, { childList: true });
+})();
+
+// الكيبورد على الآيفون: بنعرف إنه مفتوح من الخانة اللي عليها الـ focus
+(() => {
+  const isField = el => el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') && !['checkbox','radio','button'].includes(el.type);
+  document.addEventListener('focusin', e => { if (isField(e.target)) document.body.classList.add('kb-open'); });
+  document.addEventListener('focusout', () => setTimeout(() => {
+    if (isField(document.activeElement)) return;      // انتقلت لخانة تانية، الكيبورد لسه مفتوح
+    document.body.classList.remove('kb-open');
+    window.scrollTo(window.scrollX, window.scrollY);   // بيخلي الآيفون يرجّع الحاجات الثابتة (الناف بار) لمكانها
+  }, 80));
 })();
 
 S = load();
