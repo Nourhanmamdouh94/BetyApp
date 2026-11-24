@@ -1,0 +1,2724 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<!-- maximum-scale=1: عشان الآيفون ميعملش زووم لما تدوسي على خانة كتابة -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>دفتر البيت</title>
+<meta name="theme-color" content="#6260DC">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="دفتر البيت">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   دفتر البيت — Design System (الشرح في DESIGN-SYSTEM.md)
+
+   ٣ طبقات Variables زي Figma:
+   ١) Primitives  — الدرجات الخام (teal-50 … teal-900)
+   ٢) Semantic    — الاستخدام العام (--ink, --brand …)
+   ٣) Component   — لكل component (--btn-primary-bg, --chip-bg …)
+   + Category     — كل قسم بيحط درجاته في --cat-50 … --cat-900
+
+   منطق الألوان:
+   - لون القسم  = هوية المهمة
+   - البترولي   = الأكشن والهيدر
+   - البينك     = دلوقتي ومهم
+   ========================================================= */
+:root{
+  color-scheme: light;
+
+  /* =====================================================
+     ١) Primitives — من ٥٠ لـ ٩٠٠ (OKLCH)
+     ===================================================== */
+  --white: #FFFFFF;
+  /* المحايد — رمادي بارد لحد الكحلي الغامق */
+  --neutral-50:#F7F7F9; --neutral-100:#EEF0F6; --neutral-200:#DEDFE5; --neutral-300:#C9CAD0; --neutral-400:#A9AAB0;
+  --neutral-500:#878991; --neutral-600:#6A6B73; --neutral-700:#505259; --neutral-800:#36383E; --neutral-900:#1C1C24;
+  /* الأساسي — إنديجو (من ريفرنس الهيدر) */
+  --indigo-50:#F5F5FE; --indigo-100:#EFF0FC; --indigo-200:#D9DBFB; --indigo-300:#B4B6F5; --indigo-400:#7476E7;
+  --indigo-500:#6260DC; --indigo-600:#4C4DDB; --indigo-700:#393BD3; --indigo-800:#2D2BA0; --indigo-900:#211E6B;
+  /* الخطأ والمسح */
+  --red-50:#FFF7F6; --red-100:#FEEBE9; --red-200:#FED4D0; --red-300:#FEB5AF; --red-400:#FF8A83;
+  --red-500:#F35B58; --red-600:#D64545; --red-700:#AE2D30; --red-800:#8A1F22; --red-900:#681215;
+  /* الأكسنت — بينك (دلوقتي، والكارت المهم، والـ nav) */
+  --pink-50:#FFF3F9; --pink-100:#FFE4F3; --pink-200:#F5BCDD; --pink-300:#F9A6D8; --pink-400:#E47CBD;
+  --pink-500:#C955A0; --pink-600:#A83B84; --pink-700:#892A6A; --pink-800:#691B51; --pink-900:#4C0D39;
+  /* قسم التنظيف — أخضر ليموني */
+  --lime-50:#F5F9EC; --lime-100:#E9F1D5; --lime-200:#CCDE92; --lime-300:#BBCF77; --lime-400:#9AB133;
+  --lime-500:#7D9201; --lime-600:#647505; --lime-700:#4F5D04; --lime-800:#3B4602; --lime-900:#283001;
+  /* قسم المطبخ — أصفر زبدة */
+  --butter-50:#FAF7EA; --butter-100:#F5EDD1; --butter-200:#F5D86F; --butter-300:#DCC367; --butter-400:#C3A200;
+  --butter-500:#9F8405; --butter-600:#806A05; --butter-700:#665400; --butter-800:#4D3E00; --butter-900:#352A00;
+  /* قسم المشتريات — أزرق بيريونكل */
+  --periwinkle-50:#F3F7FE; --periwinkle-100:#E4EDFF; --periwinkle-200:#B7CAED; --periwinkle-300:#A6C5FD; --periwinkle-400:#7FA4EB;
+  --periwinkle-500:#5C84D2; --periwinkle-600:#4569B2; --periwinkle-700:#335391; --periwinkle-800:#243D71; --periwinkle-900:#152952;
+  /* قسم التنظيم — لافندر */
+  --lavender-50:#F7F5FE; --lavender-100:#EDEAFC; --lavender-200:#DFD9FB; --lavender-300:#C6BBF1; --lavender-400:#A799DC;
+  --lavender-500:#8A78C2; --lavender-600:#6F5FA3; --lavender-700:#584A85; --lavender-800:#423667; --lavender-900:#2D234A;
+  /* قسم الفواتير والتنبيه — خوخي */
+  --peach-50:#FFF5ED; --peach-100:#FFE8D6; --peach-200:#F8CBA6; --peach-300:#FAB375; --peach-400:#E68C31;
+  --peach-500:#C26E05; --peach-600:#9D5803; --peach-700:#7D4503; --peach-800:#5F3302; --peach-900:#422201;
+
+  /* =====================================================
+     ٢) Semantic — الاستخدام العام
+     ===================================================== */
+  --bg:        var(--white);    /* خلفية الشاشة — ٦٠٪ من الشاشة */
+
+  /* Elevation — الظل اللي بيفصل الكروت عن الخلفية */
+  --elev-1: 0 1px 2px color-mix(in srgb, var(--neutral-900) 6%, transparent), 0 4px 14px color-mix(in srgb, var(--neutral-900) 6%, transparent);
+  --elev-2: 0 2px 4px color-mix(in srgb, var(--neutral-900) 6%, transparent), 0 10px 28px color-mix(in srgb, var(--neutral-900) 10%, transparent);
+  --stroke: var(--white);     /* حد رفيع حوالين الكروت البيضا */
+  --surface:   var(--neutral-50);         /* سطح الكروت */
+  --surface-2: var(--neutral-50);    /* سطح تاني (الـ Sheet) */
+  --line:      var(--neutral-200);   /* الحدود */
+  --ink:       var(--neutral-900);   /* النص الأساسي */
+  --muted:     var(--neutral-700);   /* النص الثانوي */
+  --brand:     var(--indigo-600);      /* الأكشن والهيدر */
+  --accent:    var(--indigo-500);      /* دلوقتي ومهم */
+  --danger:    var(--red-600);
+
+  /* الخط — أكبر مقاس 14px */
+  --font: -apple-system, "SF Arabic", BlinkMacSystemFont, "Noto Sans Arabic", "Segoe UI", system-ui, sans-serif;   /* SF Arabic على الآيفون، وNoto Sans Arabic على أي جهاز تاني */
+  --fs-title: 14px; --fs-body: 13px; --fs-meta: 12px;
+
+  /* الحواف والمسافات */
+  /* الحواف: 12 للعناصر العادية، 8 للصغيرة، 4 للأصغر — والدواير بتفضل دواير */
+  --r-lg: 12px; --r-md: 8px; --r-sm: 4px; --r-xl: 12px; --r-pill: 99px;
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+  --gutter: 16px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* =====================================================
+     ٣) Component tokens
+     ===================================================== */
+  /* Button */
+  --btn-radius: var(--r-lg);
+  --btn-h-sm: 32px; --btn-h-md: 40px; --btn-h-lg: 52px;
+  --btn-px-sm: 12px; --btn-px-md: 18px;
+  --btn-primary-bg: var(--indigo-600);  --btn-primary-bg-pressed: var(--indigo-700); --btn-primary-fg: var(--white);
+  --btn-secondary-bg: var(--white);    --btn-secondary-border: var(--indigo-200);   --btn-secondary-fg: var(--indigo-600);
+  --btn-soft-bg: var(--white);       --btn-soft-fg: var(--indigo-600);
+  --btn-text-fg: var(--indigo-600);
+  --btn-danger-fg: var(--red-600);     --btn-danger-confirm-bg: var(--red-50);    --btn-danger-confirm-fg: var(--red-700);
+  --btn-disabled-opacity: .4;
+
+  /* Icon button */
+  --icon-btn-size: 40px; --icon-btn-size-sm: 32px;
+  --icon-btn-on-brand-bg: var(--lavender-700); --icon-btn-on-brand-fg: var(--lavender-50);
+  --icon-btn-surface-bg: var(--white);     --icon-btn-surface-fg: var(--neutral-800); --icon-btn-surface-shadow: var(--elev-1);
+  --icon-btn-accent-bg: var(--indigo-50);   --icon-btn-accent-fg: var(--indigo-600);
+  --icon-btn-primary-bg: var(--indigo-600);  --icon-btn-primary-fg: var(--white);
+  --badge-dot: var(--peach-400);
+
+  /* Check (زرار الإنجاز) */
+  --check-size: 20px;
+  --check-border: var(--neutral-300);   /* الدايرة الفاضية: رمادي فاتح */
+  --check-done-bg: var(--indigo-600);   /* لون واحد لكل المهام اللي خلصت */
+
+  /* Chip */
+  --chip-h: 36px; --chip-px: 14px; --chip-radius: var(--r-md);
+  --chip-bg: var(--white);               --chip-fg: var(--neutral-800);   --chip-border: var(--neutral-200);
+  --chip-bg-selected: var(--indigo-600);   --chip-fg-selected: var(--white); --chip-border-selected: var(--indigo-600);
+  --chip-count-fg: var(--neutral-600);   --chip-count-fg-selected: var(--neutral-300);
+  --chip-icon-bg: transparent; --chip-icon-fg: var(--cat-700, var(--neutral-800));   /* الأيقونات Line art من غير خلفية */
+
+  /* Segmented */
+  --seg-bg: var(--neutral-100); --seg-fg: var(--neutral-700);
+  --seg-bg-selected: var(--white); --seg-fg-selected: var(--indigo-600);
+
+  /* Tag */
+  --tag-h: 22px;
+  --tag-bg: var(--neutral-100);  --tag-fg: var(--neutral-700);
+  --tag-accent-bg: var(--indigo-50); --tag-accent-fg: var(--indigo-700);
+  --tag-brand-bg: var(--indigo-100);  --tag-brand-fg: var(--indigo-700);
+  /* الإلحاح: كل ما الميعاد يقرب اللون يسخن */
+  --tag-urgent-bg: var(--red-100);   --tag-urgent-fg: var(--red-700);    /* النهارده وبكرة */
+  --tag-soon-bg: var(--peach-100);    --tag-soon-fg: var(--peach-700);     /* خلال ٢–٤ أيام */
+  --tag-later-bg: var(--lavender-50);    --tag-later-fg: var(--lavender-700);    /* ٥ أيام أو أكتر */
+  --tag-done-bg: var(--lime-100);     --tag-done-fg: var(--lime-800);        /* اتقنتها */
+
+  /* List item (صف المهمة) */
+  --li-radius: var(--r-lg); --li-min-h: 58px;
+  --li-bg: var(--surface);
+  --li-border: var(--stroke);
+  --li-shadow: none;
+  --li-title-fg: var(--neutral-900);
+  --li-meta-fg: var(--cat-700, var(--neutral-700));
+  --li-icon-bg: transparent;
+  --li-icon-fg: var(--cat-700, var(--neutral-800));
+  --li-done-bg: var(--white);    /* المهمة اللي خلصت: disabled */
+  --li-done-fg: var(--neutral-600);
+  --li-done-opacity: .6;
+
+  /* Tile (كارت القسم) */
+  --tile-radius: var(--r-lg);
+  --tile-cols: 3; --tile-min-h: 104px; --tile-ill-size: 46px; --tile-count-size: 24px;
+  --tile-bg: var(--cat-100);
+  --tile-title-fg: var(--cat-900);
+  --tile-sub-fg: var(--cat-800);
+  --tile-count-bg: var(--white);  --tile-count-fg: var(--cat-800);
+  --tile-border: var(--cat-200);
+  --tile-border-selected: var(--neutral-900);
+
+  /* Card (كروت «قريب») */
+  --card-radius: var(--r-lg);
+  --card-bg: var(--surface);
+  --card-border: var(--stroke);
+  --card-shadow: none;
+  --card-title-fg: var(--ink);
+  --card-icon-bg: transparent;  --card-icon-fg: var(--cat-700, var(--neutral-800));
+
+  /* Hero، والهيدر، والتقويم، والفلوس، والطبخ، والإعدادات */
+  --hero-bg: linear-gradient(180deg, var(--indigo-500) 0%, var(--indigo-700) 100%); --hero-fg: var(--white); --hero-fg-2: color-mix(in srgb, var(--white) 82%, transparent); --hero-radius: 0px;
+  --hero-avatar-bg: var(--white); --hero-avatar-fg: var(--indigo-600);
+  --today-card-bg: var(--indigo-50); --today-card-fg: var(--neutral-900); --today-card-fg-2: var(--neutral-600);
+  --week-day-bg: color-mix(in srgb, var(--white) 14%, transparent);  --week-day-fg: color-mix(in srgb, var(--white) 78%, transparent); --week-day-num: var(--white); --week-day-shadow: none;
+  --week-today-bg: var(--white); --week-today-fg: var(--indigo-600);
+  --cal-day-fg: var(--ink); --cal-day-muted: var(--neutral-400); --cal-head-fg: var(--muted);
+  --cal-selected-bg: var(--indigo-600); --cal-selected-fg: var(--white); --cal-today-ring: var(--indigo-300);
+  --cal-dot-size: 5px; --cal-cell-h: 44px;
+  --info-label-fg: var(--muted); --info-value-fg: var(--ink); --info-divider: var(--stroke);
+  --bar-h: 8px; --bar-track: var(--neutral-100); --bar-fill: var(--cat-400, var(--lavender-500));
+  --budget-bg: var(--indigo-50); --budget-fg: var(--neutral-900); --budget-track: var(--indigo-100); --budget-fill: var(--indigo-600);
+  --appbar-h: 56px; --appbar-pad-top: 8px; --appbar-pad-bottom: 8px;   /* المسافة الظاهرة فوق وتحت = 16px بالظبط (8 + (56-40)/2) */ --appbar-fg: var(--white); --appbar-fg-2: color-mix(in srgb, var(--white) 80%, transparent); --appbar-radius: 16px;   /* الهيدر إنديجو متدرج، والمحتوى ورقة بيضا طالعة فوقه */
+  --sheet-top-radius: 24px; --sheet-overlap: 20px;
+  --surface-shadow: none; --appbar-bg: var(--indigo-500); --appbar-border: transparent;
+  --switch-w: 46px; --switch-h: 28px; --switch-off: var(--neutral-300); --switch-on: var(--indigo-600); --switch-knob: var(--white);
+  --tile-add-border: var(--indigo-200); --tile-add-fg: var(--indigo-600);
+  --cook-bg: var(--neutral-50); --timer-track: var(--butter-100); --timer-fill: var(--butter-400);
+  --step-num-bg: var(--cat-100, var(--lavender-100)); --step-num-fg: var(--cat-800, var(--lavender-800));
+  --tip-bg: var(--butter-50); --tip-border: var(--butter-200);
+  --ring-track: var(--indigo-200);   --ring-fill: var(--indigo-600);
+  --next-bg: var(--white); --next-shadow: var(--elev-1);
+
+  /* Timeline (خط اليوم) */
+  --timeline-line: var(--neutral-300);
+  --node-past: var(--neutral-700);
+  --node-now: var(--pink-400); --node-now-halo: var(--pink-100);
+  --node-future: var(--neutral-300);
+  --period-tag-bg: var(--neutral-100); --period-tag-fg: var(--neutral-700); --period-ico: var(--neutral-700);
+
+  /* Nav bar */
+  --nav-h: 64px; --nav-radius: var(--r-pill);   /* شريط التنقل كبسولة — استثناء من سلّم الحواف */
+  --nav-bg: var(--white);
+  --nav-item-fg: var(--neutral-400);
+  --nav-item-active-bg: var(--indigo-50); --nav-item-active-fg: var(--indigo-600);
+  --nav-shadow: 0 8px 30px color-mix(in srgb, var(--indigo-900) 16%, transparent), 0 1px 3px color-mix(in srgb, var(--indigo-900) 8%, transparent);
+
+  /* Input */
+  --input-h: 48px; --input-radius: var(--r-lg);
+  --input-bg: var(--white); --input-fg: var(--ink); --input-placeholder: var(--neutral-400);
+  --input-border: var(--neutral-200); --input-border-focus: var(--indigo-500); --input-border-error: var(--red-500);
+  --label-fg: var(--neutral-700); --error-fg: var(--red-600);
+
+  /* Sheet */
+  --sheet-bg: var(--white); --sheet-radius: var(--r-xl); --sheet-handle: var(--neutral-300);
+  --backdrop: color-mix(in srgb, var(--neutral-900) 40%, transparent);
+
+  /* Toast */
+  --toast-bg: var(--neutral-900); --toast-fg: var(--white);
+
+  /* Illustration */
+  --ill-line: var(--neutral-900);
+}
+
+/* =========================================================
+   Category — كل قسم بيحط الـ Scale بتاعته في --cat-*
+   أي component جوه .cat-xxx بياخد ألوان القسم لوحده
+   ========================================================= */
+.cat-clean   { --cat-50:var(--lime-50);      --cat-100:var(--lime-100);      --cat-200:var(--lime-200);      --cat-300:var(--lime-300);      --cat-400:var(--lime-400);      --cat-600:var(--lime-600);      --cat-700:var(--lime-700);      --cat-800:var(--lime-800);      --cat-900:var(--lime-900) }
+.cat-kitchen { --cat-50:var(--butter-50);    --cat-100:var(--butter-100);    --cat-200:var(--butter-200);    --cat-300:var(--butter-300);    --cat-400:var(--butter-400);    --cat-600:var(--butter-600);    --cat-700:var(--butter-700);    --cat-800:var(--butter-800);    --cat-900:var(--butter-900) }
+.cat-shop    { --cat-50:var(--periwinkle-50);     --cat-100:var(--periwinkle-100);     --cat-200:var(--periwinkle-200);     --cat-300:var(--periwinkle-300);     --cat-400:var(--periwinkle-400);     --cat-600:var(--periwinkle-600);     --cat-700:var(--periwinkle-700);     --cat-800:var(--periwinkle-800);     --cat-900:var(--periwinkle-900) }
+.cat-bills   { --cat-50:var(--peach-50); --cat-100:var(--peach-100); --cat-200:var(--peach-200); --cat-300:var(--peach-300); --cat-400:var(--peach-400); --cat-600:var(--peach-600); --cat-700:var(--peach-700); --cat-800:var(--peach-800); --cat-900:var(--peach-900) }
+.cat-organize{ --cat-50:var(--lavender-50);     --cat-100:var(--lavender-100);     --cat-200:var(--lavender-200);     --cat-300:var(--lavender-300);     --cat-400:var(--lavender-400);     --cat-600:var(--lavender-600);     --cat-700:var(--lavender-700);     --cat-800:var(--lavender-800);     --cat-900:var(--lavender-900) }
+.cat-events  { --cat-50:var(--pink-50);     --cat-100:var(--pink-100);     --cat-200:var(--pink-200);     --cat-300:var(--pink-300);     --cat-400:var(--pink-400);     --cat-600:var(--pink-600);     --cat-700:var(--pink-700);     --cat-800:var(--pink-800);     --cat-900:var(--pink-900) }
+/* الـ component tokens اللي بتعتمد على القسم لازم تتحسب تاني جوه العنصر */
+[class*="cat-"]{
+  --chip-icon-fg: var(--cat-700);
+  --li-meta-fg: var(--cat-700);
+  --li-icon-fg: var(--cat-700);
+  --tile-bg: var(--cat-100); --tile-border: var(--cat-200); --tile-title-fg: var(--cat-900); --tile-sub-fg: var(--cat-800); --tile-count-fg: var(--cat-800);
+  --card-icon-fg: var(--cat-700);
+}
+
+/* =========================================================
+   Period — كل فترة بلون وقتها
+   الصبح = شروق (أصفر)، الضهر = شمس (برتقالي)، بالليل = سما (بنفسجي)
+   ========================================================= */
+.p-morning{ --p-100:var(--butter-100);  --p-200:var(--butter-200);  --p-300:var(--butter-300);  --p-500:var(--butter-500);  --p-800:var(--butter-800) }
+.p-noon   { --p-100:var(--peach-100); --p-200:var(--peach-200); --p-300:var(--peach-300); --p-500:var(--peach-400); --p-800:var(--peach-800) }
+.p-night  { --p-100:var(--lavender-100); --p-200:var(--lavender-200); --p-300:var(--lavender-300); --p-500:var(--lavender-500); --p-800:var(--lavender-800) }
+.p-morning, .p-noon, .p-night{
+  --node-past: var(--p-500); --node-now: var(--p-500); --node-now-halo: var(--p-200); --node-future: var(--p-300);
+  --period-tag-bg: var(--p-100); --period-tag-fg: var(--p-800); --period-ico: var(--p-500);
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html,body{margin:0; min-height:100%; overscroll-behavior-y:none; direction:rtl}
+body{background:var(--bg); color:var(--ink); font-family:var(--font); font-size:var(--fs-body); line-height:1.6; -webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+button,input,select{font:inherit; color:inherit}
+button{background:none; border:0; padding:0; cursor:pointer; text-align:inherit}
+:focus-visible{outline:2px solid var(--pink-600); outline-offset:2px; border-radius:var(--r-lg)}
+.gutter{padding-left:max(var(--gutter), env(safe-area-inset-left, 0px)); padding-right:max(var(--gutter), env(safe-area-inset-right, 0px))}
+.wrap{max-width:430px; margin:0 auto}
+
+/* =========================================================
+   Button
+   ========================================================= */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:var(--s-2);
+  height:var(--btn-h-md); padding:0 var(--btn-px-md); border-radius:var(--btn-radius);
+  font-size:var(--fs-body); font-weight:700; white-space:nowrap;
+  transition:transform .12s ease, background .15s ease;
+}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:var(--btn-disabled-opacity); pointer-events:none}
+.btn svg{width:18px; height:18px}
+.btn-lg{height:var(--btn-h-lg); width:100%; font-size:var(--fs-title); font-weight:800}
+.btn-sm{height:var(--btn-h-sm); padding:0 var(--btn-px-sm); font-size:var(--fs-meta); border-radius:var(--r-md)}
+.btn-primary{background:var(--btn-primary-bg); color:var(--btn-primary-fg)}
+.btn-primary:active{background:var(--btn-primary-bg-pressed)}
+.btn-secondary{background:var(--btn-secondary-bg); color:var(--btn-secondary-fg); box-shadow:inset 0 0 0 1.5px var(--btn-secondary-border)}
+.btn-soft{background:var(--btn-soft-bg); color:var(--btn-soft-fg)}
+.btn-text{background:none; color:var(--btn-text-fg); padding:0 4px; height:auto}
+.btn-danger{background:none; color:var(--btn-danger-fg)}
+.btn-danger.is-confirm{background:var(--btn-danger-confirm-bg); color:var(--btn-danger-confirm-fg)}
+
+/* Icon button */
+.icon-btn{flex:none; width:var(--icon-btn-size); height:var(--icon-btn-size); border-radius:50%; display:grid; place-items:center; position:relative}
+.icon-btn svg{width:20px; height:20px}
+.icon-btn-sm{width:var(--icon-btn-size-sm); height:var(--icon-btn-size-sm)}
+.icon-btn-sm svg{width:16px; height:16px}
+.icon-btn-on-brand{background:var(--icon-btn-on-brand-bg); color:var(--icon-btn-on-brand-fg)}
+.icon-btn-surface{background:var(--icon-btn-surface-bg); color:var(--icon-btn-surface-fg); box-shadow:var(--icon-btn-surface-shadow)}
+.icon-btn-accent{background:var(--icon-btn-accent-bg); color:var(--icon-btn-accent-fg)}
+.icon-btn-primary{background:var(--icon-btn-primary-bg); color:var(--icon-btn-primary-fg)}
+.badge-dot{position:absolute; top:8px; inset-inline-end:9px; width:8px; height:8px; border-radius:50%; background:var(--badge-dot); box-shadow:0 0 0 2px var(--white)}
+
+/* Check */
+.check{flex:none; position:relative; width:var(--check-size); height:var(--check-size); border-radius:50%; border:1.5px solid var(--check-border); background:var(--white); display:grid; place-items:center; transition:all .2s ease}
+.check::after{content:""; position:absolute; inset:-12px}   /* مساحة اللمس تفضل ٤٤px رغم إن الدايرة صغيرة */
+.check svg{width:10px; height:10px; opacity:0; transform:scale(.5); transition:all .2s ease}
+.is-done .check{background:var(--check-done-bg); border-color:var(--check-done-bg)}
+.is-done .check svg{opacity:1; transform:scale(1)}
+.check-lg{width:40px; height:40px; margin-inline-end:2px}
+.check-lg svg{width:16px; height:16px}
+
+/* =========================================================
+   Chip · Segmented · Tag
+   ========================================================= */
+.chip{
+  flex:none; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  height:var(--chip-h); padding:0 var(--chip-px); border-radius:var(--chip-radius);
+  background:var(--chip-bg); color:var(--chip-fg); box-shadow:inset 0 0 0 1px var(--chip-border);
+  font-size:var(--fs-body); font-weight:700; white-space:nowrap;
+  transition:background .15s ease, color .15s ease;
+}
+.chip .count{font-size:var(--fs-meta); color:var(--chip-count-fg)}
+.chip[aria-pressed="true"], .chip[aria-checked="true"]{background:var(--chip-bg-selected); color:var(--chip-fg-selected); box-shadow:inset 0 0 0 1px var(--chip-border-selected)}
+.chip[aria-pressed="true"] .count{color:var(--chip-count-fg-selected)}
+.chip-ico{flex:none; width:18px; height:18px; margin-inline-start:-2px; border-radius:50%; display:grid; place-items:center; background:var(--chip-icon-bg); color:var(--chip-icon-fg)}
+.chip-ico svg{width:16px; height:16px}
+.chip-row{display:flex; gap:var(--s-2); overflow-x:auto; scrollbar-width:none}
+.chip-row::-webkit-scrollbar{display:none}
+.chip-grid{display:grid; gap:6px}
+.chip-grid .chip{padding:0; width:100%}
+
+.seg{display:grid; gap:2px; background:var(--seg-bg); padding:3px; border-radius:var(--r-lg)}
+.seg .chip{height:34px; padding:0; background:none; box-shadow:none; color:var(--seg-fg); font-size:var(--fs-meta)}
+.seg .chip[aria-checked="true"]{background:var(--seg-bg-selected); color:var(--seg-fg-selected); box-shadow:0 1px 3px color-mix(in srgb, var(--lavender-900) 15%, transparent)}
+
+.tag{display:inline-flex; align-items:center; height:var(--tag-h); padding:0 8px; border-radius:var(--r-sm); background:var(--tag-bg); color:var(--tag-fg); font-size:var(--fs-meta); font-weight:700; white-space:nowrap}
+.tag-accent{background:var(--tag-accent-bg); color:var(--tag-accent-fg)}
+.tag-brand{background:var(--tag-brand-bg); color:var(--tag-brand-fg)}
+.tag-urgent{background:var(--tag-urgent-bg); color:var(--tag-urgent-fg)}
+.tag-soon{background:var(--tag-soon-bg); color:var(--tag-soon-fg)}
+.tag-later{background:var(--tag-later-bg); color:var(--tag-later-fg)}
+.tag-on-brand{background:var(--today-card-bg); color:var(--today-card-fg)}
+
+/* Icon circle */
+.ico{flex:none; width:26px; height:26px; border-radius:50%; display:grid; place-items:center; background:var(--li-icon-bg); color:var(--li-icon-fg)}
+.ico svg{width:24px; height:24px}
+.ico-sm{width:22px; height:22px}
+.ico-sm svg{width:20px; height:20px}
+
+/* Input */
+.input{width:100%; height:var(--input-h); border:1.5px solid var(--input-border); border-radius:var(--input-radius); background:var(--input-bg); color:var(--input-fg); padding:0 14px; font-size:var(--fs-body); outline:none}
+.input::placeholder{color:var(--input-placeholder)}
+.input:focus{border-color:var(--input-border-focus)}
+.input.is-error{border-color:var(--input-border-error)}
+select.input{appearance:none; -webkit-appearance:none}
+.field-label{display:block; font-size:var(--fs-meta); font-weight:700; color:var(--label-fg); margin:var(--s-4) 0 var(--s-2)}
+.field-error{font-size:var(--fs-meta); color:var(--error-fg); margin-top:6px}
+
+/* =========================================================
+   Hero
+   ========================================================= */
+.hero{background:var(--hero-bg); color:var(--hero-fg); padding-block:0 calc(var(--sheet-overlap) + 16px); margin-top:-1px}
+.hero-min{padding:0; height:calc(var(--sheet-overlap) + 4px)}
+.hero-tuck{padding-bottom:0}
+.hero-tuck .tuck{margin-bottom:0; border-bottom-left-radius:0; border-bottom-right-radius:0; padding-bottom:calc(14px + var(--sheet-overlap))}
+.hello{display:flex; align-items:center; gap:10px}
+.avatar{flex:none; width:40px; height:40px; border-radius:50%; background:var(--hero-avatar-bg); color:var(--hero-avatar-fg); display:grid; place-items:center; font-weight:800; font-size:var(--fs-title)}
+.hello-text{flex:1; min-width:0; line-height:1.4}
+.hello-title{font-size:var(--fs-title); font-weight:800; display:block}
+.hello-sub{font-size:var(--fs-meta); color:var(--hero-fg-2)}
+
+.week{display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin:0 0 16px}
+.wday{display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 0; border-radius:var(--r-lg); background:var(--week-day-bg); box-shadow:var(--week-day-shadow); font-size:var(--fs-meta); color:var(--week-day-fg)}
+.wday b{font-size:var(--fs-title); color:var(--week-day-num); font-weight:700}
+.wday.today{background:var(--week-today-bg); color:var(--week-today-fg)}
+.wday.today b{color:var(--week-today-fg)}
+.wday.past{opacity:.6}
+.wday{position:relative; width:100%; font:inherit}
+.wday[aria-pressed="true"]:not(.today){background:color-mix(in srgb, var(--white) 34%, transparent); box-shadow:inset 0 0 0 1.5px var(--white); opacity:1}
+.wday.today:not([aria-pressed="true"]){background:var(--week-day-bg); box-shadow:inset 0 0 0 1.5px var(--white)}
+.wday.today:not([aria-pressed="true"]) b, .wday.today:not([aria-pressed="true"]){color:var(--white)}
+.wdot{position:absolute; bottom:5px; left:50%; width:4px; height:4px; margin-left:-2px; border-radius:50%; background:currentColor; opacity:.8}
+.week-bar{display:flex; align-items:center; justify-content:space-between; margin:0 0 10px}
+.wk-btn{width:32px; height:32px; border-radius:50%; display:grid; place-items:center; color:var(--white); background:color-mix(in srgb, var(--white) 14%, transparent)}
+.wk-btn svg{width:18px; height:18px}
+.wk-month{display:inline-flex; align-items:center; gap:4px; color:var(--white); font-weight:800; font-size:var(--fs-body); padding:4px 10px; border-radius:var(--r-pill)}
+.wk-month svg{width:16px; height:16px}
+.day-card{justify-content:space-between}
+
+.today-card{display:flex; align-items:center; gap:12px; background:var(--today-card-bg); color:var(--today-card-fg); border-radius:var(--r-lg); padding:14px}
+.today-ill{flex:none; width:118px; height:96px}
+.today-info{flex:1; min-width:0}
+.today-title{font-size:var(--fs-title); font-weight:800; display:block}
+.today-sub{font-size:var(--fs-meta); color:var(--today-card-fg-2)}
+.ring{flex:none; width:58px; height:58px; position:relative; display:grid; place-items:center}
+.ring svg{position:absolute; inset:0; transform:rotate(-90deg)}
+.ring b{font-size:var(--fs-title); font-weight:800}
+
+.next{margin-top:10px; display:flex; align-items:center; gap:10px; background:var(--next-bg); box-shadow:var(--next-shadow); color:var(--ink); border-radius:var(--r-lg); padding:6px}
+.next-text{flex:1; min-width:0; line-height:1.35}
+.next-label{font-size:var(--fs-meta); color:var(--li-meta-fg); display:block}
+.next-title{font-size:var(--fs-body); font-weight:700; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+.page-hero{display:flex; align-items:center; gap:12px; margin-top:0}
+.page-ill{width:84px; height:84px; flex:none; border-radius:var(--r-lg); padding:4px; background:var(--tile-bg, var(--white))}
+.page-text{flex:1; min-width:0}
+.page-hero h1{font-size:var(--fs-title); font-weight:800; margin:0}
+.page-name{display:block; font-size:var(--fs-title); font-weight:800; line-height:1.6}
+.screen-top{padding-top:22px}
+.page-hero p{margin:2px 0 0; font-size:var(--fs-meta); color:var(--hero-fg-2)}
+
+/* =========================================================
+   المحتوى
+   ========================================================= */
+.screen{position:relative; z-index:1; background:var(--bg); border-radius:var(--sheet-top-radius) var(--sheet-top-radius) 0 0; margin-top:calc(-1 * var(--sheet-overlap)); min-height:60vh; padding-block:22px calc(var(--nav-h) + var(--safe-bottom) + 40px)}
+.block + .block{margin-top:26px}
+.section-head{display:flex; justify-content:space-between; align-items:center; margin:0 0 12px; min-height:24px}
+.section-title{font-size:var(--fs-title); font-weight:800; margin:0}
+
+/* Tile */
+.tiles{display:grid; grid-template-columns:repeat(var(--tile-cols), 1fr); gap:10px}
+.cal{background:var(--surface); border-radius:var(--r-lg); box-shadow:var(--surface-shadow); padding:12px}
+.cal-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
+.cal-top b{font-size:var(--fs-title); font-weight:800}
+.cal-grid{display:grid; grid-template-columns:repeat(7, 1fr); gap:2px; text-align:center}
+.cal-h{font-size:var(--fs-meta); color:var(--cal-head-fg); padding:4px 0}
+.cal-d{height:var(--cal-cell-h); border-radius:var(--r-md); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; color:var(--cal-day-fg); font-weight:700; font-size:var(--fs-body)}
+.cal-d.is-past{color:var(--cal-day-muted)}
+.cal-d.is-today{box-shadow:inset 0 0 0 1.5px var(--cal-today-ring)}
+.cal-d[aria-pressed="true"]{background:var(--cal-selected-bg); color:var(--cal-selected-fg); box-shadow:none}
+.dots{display:flex; gap:2px; height:var(--cal-dot-size)}
+.dot{display:block; width:var(--cal-dot-size); height:var(--cal-dot-size); border-radius:50%; background:var(--cat-600)}
+.cal-toggle{display:flex; align-items:center; justify-content:center; gap:6px; width:100%; margin-top:8px; padding-top:10px; border-top:1px solid var(--stroke); font-size:var(--fs-meta); font-weight:700; color:var(--brand)}
+.cal-toggle svg{width:16px; height:16px; transform:rotate(-90deg); transition:transform .2s}
+.cal-toggle[aria-expanded="true"] svg{transform:rotate(90deg)}
+.cal-top .cal-mid{display:flex; flex-direction:column; align-items:center; gap:4px}
+.li-tap{display:flex; align-items:center; gap:12px; flex:1; min-width:0; text-align:start}
+.fold{display:flex; align-items:center; gap:12px; width:100%; padding:12px; min-height:var(--li-min-h); border-radius:var(--li-radius); background:var(--li-bg); box-shadow:inset 0 0 0 1px var(--li-border), var(--li-shadow); color:var(--ink); font-weight:700; font-size:var(--fs-body)}
+.fold .chev{margin-inline-start:auto; transform:rotate(-90deg); transition:transform .2s}
+.fold[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.detail-head{display:flex; align-items:center; gap:12px}
+.detail-head h2{flex:1; font-size:var(--fs-title); font-weight:800; margin:0}
+.detail-tags{display:flex; flex-wrap:wrap; gap:6px; margin:14px 0 6px}
+.info{display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--info-divider); font-size:var(--fs-body)}
+.info:last-of-type{border-bottom:0}
+.info dt{flex:none; width:84px; color:var(--info-label-fg)}
+.info dd{margin:0; color:var(--info-value-fg); font-weight:700}
+.day-head{display:flex; align-items:baseline; gap:8px; margin-bottom:8px}
+.day-head b{font-size:var(--fs-body); font-weight:800}
+.day-head span{font-size:var(--fs-meta); color:var(--muted)}
+.day-note{font-size:var(--fs-meta); color:var(--muted); margin-top:6px}
+.tiles-2{--tile-cols: 2; --tile-min-h: 120px; --tile-ill-size: 52px}
+.tile{position:relative; display:flex; flex-direction:column; justify-content:flex-end; min-height:var(--tile-min-h); border-radius:var(--tile-radius); padding:10px 12px; overflow:hidden; background:var(--tile-bg); border:1.5px solid var(--tile-border); transition:transform .15s ease, border-color .15s ease}
+.tile[aria-pressed="true"]{border:2px solid var(--tile-border-selected); transform:scale(.97)}
+.tile-name{font-size:var(--fs-title); font-weight:800; display:block; line-height:1.4; color:var(--tile-title-fg)}
+.tile-sub{font-size:var(--fs-meta); line-height:1.4; display:block; color:var(--tile-sub-fg)}
+.tile-count{position:absolute; top:10px; inset-inline-start:10px; min-width:var(--tile-count-size); height:var(--tile-count-size); padding:0 6px; border-radius:var(--r-md); background:var(--tile-count-bg); color:var(--tile-count-fg); display:grid; place-items:center; font-size:var(--fs-meta); font-weight:800}
+.tile-ill{position:absolute; top:4px; inset-inline-end:4px; width:var(--tile-ill-size); height:var(--tile-ill-size)}
+
+/* Timeline */
+.day{position:relative; padding-inline-start:28px}
+.day::before{content:""; position:absolute; inset-inline-start:8px; top:10px; bottom:10px; width:2px; border-radius:2px; background:repeating-linear-gradient(to bottom, var(--timeline-line) 0 6px, transparent 6px 11px)}
+.period{position:relative}
+.period + .period{margin-top:20px}
+.node{position:absolute; inset-inline-start:-28px; top:4px; width:18px; height:18px; border-radius:50%; background:var(--bg); border:2px solid var(--node-future)}
+.period.is-now .node{background:var(--node-now); border-color:var(--node-now); box-shadow:0 0 0 5px var(--node-now-halo)}
+.period.is-past .node{background:var(--node-past); border-color:var(--node-past); opacity:.55}
+.period-ico{display:grid; place-items:center; color:var(--period-ico)}
+.period-ico svg{width:18px; height:18px}
+.period-head .tag{background:var(--period-tag-bg); color:var(--period-tag-fg)}
+.period.is-now .period-head .tag{background:var(--p-200, var(--period-tag-bg))}
+.period-head{display:flex; align-items:center; gap:6px; margin-bottom:8px}
+.period-name{font-weight:800; font-size:var(--fs-title)}
+.list{display:flex; flex-direction:column; gap:8px}
+
+/* List item */
+.li{display:flex; align-items:center; gap:12px; width:100%; min-height:var(--li-min-h); padding:10px 12px; border-radius:var(--li-radius); background:var(--li-bg); box-shadow:inset 0 0 0 1px var(--li-border), var(--li-shadow); transition:background .2s ease}
+.li-body{flex:1; min-width:0}
+.li-title{font-size:var(--fs-body); font-weight:700; display:block; color:var(--li-title-fg)}
+.li-meta{font-size:var(--fs-meta); color:var(--li-meta-fg)}
+.li.is-done{background:var(--li-done-bg); box-shadow:inset 0 0 0 1px var(--neutral-200)}
+.li.is-done > :not(.check){opacity:var(--li-done-opacity)}
+.li.is-done .li-title{color:var(--li-done-fg); text-decoration:line-through; font-weight:500}
+.li.is-done .li-meta{color:var(--li-done-fg)}
+.li.is-done .ico{filter:grayscale(1)}
+.chev{flex:none; color:var(--li-meta-fg); opacity:.6}
+.chev svg{width:18px; height:18px}
+.empty{background:var(--surface); box-shadow:var(--surface-shadow); border-radius:var(--li-radius); padding:22px; text-align:center; color:var(--muted)}
+
+/* Card */
+.cards{display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none}
+.cards::-webkit-scrollbar{display:none}
+.card{flex:none; width:156px; border-radius:var(--card-radius); padding:14px; display:flex; flex-direction:column; gap:10px; background:var(--card-bg); box-shadow:inset 0 0 0 1px var(--card-border), var(--card-shadow)}
+.card-top{display:flex; justify-content:space-between; align-items:center}
+.card .ico{background:var(--card-icon-bg); color:var(--card-icon-fg)}
+.card-title{font-size:var(--fs-body); font-weight:700; line-height:1.45; color:var(--card-title-fg)}
+
+/* تاب المهام */
+.group + .group{margin-top:22px}
+.group-head{display:flex; align-items:center; gap:8px; margin-bottom:8px}
+.group-name{font-size:var(--fs-title); font-weight:800; color:var(--cat-800, var(--ink))}
+.group-head .tag{background:var(--cat-100); color:var(--cat-700)}
+
+/* =========================================================
+   Sheet · Toast
+   ========================================================= */
+.backdrop{position:fixed; inset:0; z-index:25; background:var(--backdrop); animation:fade .2s ease}
+.sheet{
+  position:fixed; bottom:0; left:0; right:0; z-index:30; margin:0 auto; max-width:430px; max-height:88%;
+  overflow-y:auto; overscroll-behavior:contain; background:var(--sheet-bg);
+  border-radius:var(--sheet-radius) var(--sheet-radius) 0 0; animation:up .28s cubic-bezier(.2,.8,.2,1);
+  padding:10px max(16px, env(safe-area-inset-right, 0px)) calc(var(--safe-bottom) + 20px) max(16px, env(safe-area-inset-left, 0px));
+}
+.handle{width:40px; height:5px; border-radius:var(--r-pill); background:var(--sheet-handle); margin:0 auto 10px}
+.sheet-head{display:flex; justify-content:space-between; align-items:center}
+.sheet-head h2{font-size:var(--fs-title); font-weight:800; margin:0}
+.sheet-actions{display:flex; flex-direction:column; gap:var(--s-2); margin-top:22px}
+@keyframes up{from{transform:translateY(100%)}}
+@keyframes fade{from{opacity:0}}
+
+.toast{position:fixed; left:50%; bottom:calc(var(--nav-h) + var(--safe-bottom) + 26px); transform:translateX(-50%); z-index:40; background:var(--toast-bg); color:var(--toast-fg); padding:8px 18px; border-radius:var(--r-md); font-size:var(--fs-meta); font-weight:700; opacity:0; transition:opacity .2s ease; pointer-events:none; white-space:nowrap}
+.toast.show{opacity:1}
+
+/* =========================================================
+   Nav bar
+   ========================================================= */
+.nav{position:fixed; inset-inline:0; bottom:0; z-index:10; padding-bottom:calc(var(--safe-bottom) + 10px); pointer-events:none}
+.nav-in{pointer-events:auto; height:var(--nav-h); background:var(--nav-bg); border-radius:var(--nav-radius); display:flex; align-items:center; justify-content:space-between; padding:0 8px; box-shadow:var(--nav-shadow)}
+.nav-item{height:48px; min-width:48px; border-radius:var(--r-pill); display:flex; align-items:center; justify-content:center; gap:6px; color:var(--nav-item-fg); padding:0 12px; transition:background .2s ease}
+.nav-item svg{width:22px; height:22px}
+.nav-item span{display:none; font-size:var(--fs-meta); font-weight:700}
+.nav-item[aria-current="page"]{background:var(--nav-item-active-bg); color:var(--nav-item-active-fg)}
+.nav-item[aria-current="page"] span{display:inline}
+
+.tag-done{background:var(--tag-done-bg); color:var(--tag-done-fg)}
+.tag svg{width:12px; height:12px; margin-inline-end:3px}
+.tag-btn{border:0; cursor:pointer; height:28px; padding:0 10px}
+textarea.input{height:auto; min-height:96px; padding:10px 14px; line-height:1.7; resize:vertical}
+.hint{font-size:var(--fs-meta); color:var(--muted); margin:10px 0 12px}
+.amount{font-size:var(--fs-body); font-weight:800; white-space:nowrap}
+.check.is-on{background:var(--check-done-bg); border-color:var(--check-done-bg)}
+.check.is-on svg{opacity:1; transform:scale(1)}
+.li[aria-pressed="true"]{box-shadow:inset 0 0 0 1.5px var(--check-done-bg), var(--li-shadow)}
+.tile-add{background:transparent; border:1.5px dashed var(--tile-add-border); color:var(--tile-add-fg); align-items:center; justify-content:center; gap:6px; font-weight:800}
+.tile-add svg{width:22px; height:22px}
+/* Bar */
+.bar{display:block; height:var(--bar-h); border-radius:var(--r-pill); background:var(--bar-track); overflow:hidden}
+.bar i{display:block; height:100%; border-radius:inherit; background:var(--bar-fill); transition:width .4s ease}
+/* أكل الأسبوع */
+.meal-row{gap:10px}
+.meal-card{background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--stroke), var(--surface-shadow); padding:14px}
+.meal-top{display:flex; align-items:center; gap:12px; width:100%; text-align:start}
+.meal-ill{flex:none; width:64px; height:64px; border-radius:var(--r-lg); background:var(--cat-100); padding:4px}
+.meal-info{flex:1; min-width:0; display:flex; flex-direction:column; line-height:1.5}
+.meal-kicker{font-size:var(--fs-meta); font-weight:700; color:var(--cat-700)}
+.meal-info b{font-size:var(--fs-title); font-weight:800}
+.meal-sub{font-size:var(--fs-meta); color:var(--muted)}
+.meal-progress{display:flex; flex-direction:column; gap:6px; margin:14px 0 12px; font-size:var(--fs-meta); font-weight:700; color:var(--muted)}
+.meal-progress .bar i{background:var(--cat-400)}
+.ing-chips{display:flex; flex-wrap:wrap; gap:8px}
+.ing-chip{display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px; border-radius:var(--r-pill); font-size:var(--fs-body); font-weight:700; transition:background .15s ease}
+.ing-chip svg{width:15px; height:15px; flex:none}
+.ing-chip.is-missing{background:var(--white); color:var(--ink); box-shadow:inset 0 0 0 1.5px var(--neutral-300); border:0; outline:1.5px dashed transparent}
+.ing-chip.is-missing{box-shadow:none; border:1.5px dashed var(--neutral-400)}
+.ing-chip.is-need{background:var(--cat-200); color:var(--cat-900)}
+.ing-chip.is-bought, .ing-chip.is-have{background:var(--neutral-100); color:var(--muted)}
+.ing-chip.is-bought span, .ing-chip.is-have span{text-decoration:line-through; text-decoration-color:var(--neutral-400)}
+.ing-chip:disabled{cursor:default}
+.ing-legend{display:flex; gap:14px; margin-top:12px; font-size:var(--fs-meta); color:var(--muted)}
+.ing-legend span{display:inline-flex; align-items:center; gap:5px}
+.lg{width:12px; height:12px; border-radius:50%}
+.lg-missing{border:1.5px dashed var(--neutral-400)}
+.lg-need{background:var(--cat-200)}
+.lg-ok{background:var(--neutral-200)}
+.meal-empty{display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; padding:20px}
+.meal-empty-text{color:var(--muted)}
+.meal-head{display:flex; align-items:center; gap:12px; width:100%; margin-bottom:8px; padding:10px 12px; border-radius:var(--li-radius); background:var(--cat-50); box-shadow:inset 0 0 0 1px var(--cat-200)}
+.meal-head .btn{flex:none}
+.meal-day{flex:none; width:56px; display:flex; flex-direction:column; line-height:1.3; font-size:var(--fs-meta); color:var(--muted)}
+.meal-day b{font-size:var(--fs-body); color:var(--ink)}
+/* الوصفة */
+.ing{background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--stroke), var(--surface-shadow); padding:4px 14px}
+.ing-row{display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--stroke); font-size:var(--fs-body)}
+.ing-row:last-child{border-bottom:0}
+.ing-row b{font-weight:700; color:var(--cat-800); text-align:end}
+.steps{list-style:none; margin:0; padding:0; counter-reset:st; display:flex; flex-direction:column; gap:8px}
+.steps li{counter-increment:st; display:flex; align-items:flex-start; gap:10px; background:var(--surface); border-radius:var(--r-lg); padding:12px; box-shadow:inset 0 0 0 1px var(--stroke), var(--surface-shadow); line-height:1.8}
+.steps li::before{content:counter(st, arabic-indic); flex:none; width:26px; height:26px; border-radius:50%; display:grid; place-items:center; background:var(--step-num-bg); color:var(--step-num-fg); font-weight:800; font-size:var(--fs-meta)}
+.steps li > span:first-child{flex:1}
+.tip{margin-top:18px; background:var(--tip-bg); border:1px solid var(--tip-border); border-radius:var(--r-lg); padding:12px 14px; line-height:1.8}
+.tip b{display:block; font-size:var(--fs-meta); color:var(--butter-800)}
+/* وضع الطبخ */
+#cook{position:fixed; inset:0; z-index:50; background:var(--cook-bg)}
+.cook-in{height:100%; display:flex; flex-direction:column; gap:14px; max-width:430px; margin:0 auto; padding:calc(var(--safe-top) + 14px) 16px calc(var(--safe-bottom) + 16px)}
+.cook-top{display:flex; align-items:center; gap:10px}
+.cook-title{flex:1; font-weight:800; font-size:var(--fs-title); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.cook-body{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; text-align:center}
+.cook-n{font-size:var(--fs-meta); font-weight:800; color:var(--cat-700)}
+.cook-text{margin:0; font-size:var(--fs-title); font-weight:700; line-height:2; max-width:320px}
+.timer{position:relative; width:168px; height:168px; display:grid; place-items:center}
+.timer svg{position:absolute; inset:0; transform:rotate(-90deg)}
+.timer b{font-size:var(--fs-title); font-weight:800; letter-spacing:1px}
+.cook-nav{display:grid; grid-template-columns:1fr 1.4fr; gap:10px}
+.cook-nav .btn{height:var(--btn-h-lg)}
+/* المشتريات */
+.add-row{display:flex; gap:8px; margin-bottom:6px}
+.add-row .icon-btn{width:var(--input-h); height:var(--input-h); border-radius:var(--r-lg)}
+.sub-head{display:flex; align-items:center; gap:6px; margin:16px 0 8px; font-size:var(--fs-meta); font-weight:800; color:var(--muted)}
+.sub-head span{background:var(--neutral-100); border-radius:var(--r-sm); padding:0 6px}
+.sub-head .btn{margin-inline-start:auto}
+/* الفلوس */
+.budget{display:flex; flex-direction:column; gap:8px; width:100%; margin-top:14px; padding:16px; border-radius:var(--r-lg); background:var(--budget-bg); color:var(--budget-fg); text-align:start}
+.budget-top{display:flex; justify-content:space-between; font-size:var(--fs-meta)}
+.budget-edit svg{width:16px; height:16px}
+.budget-num{font-size:var(--fs-title); font-weight:800}
+.bar-on-brand{background:var(--budget-track)}
+.bar-on-brand i{background:var(--budget-fill)}
+.budget-foot{display:flex; justify-content:space-between; font-size:var(--fs-meta)}
+.budget-note{font-size:var(--fs-meta); background:color-mix(in srgb, var(--white) 55%, transparent); border-radius:var(--r-md); padding:4px 8px; align-self:flex-start}
+.cats-bars{display:flex; flex-direction:column; gap:12px; background:var(--surface); border-radius:var(--r-lg); padding:14px; box-shadow:inset 0 0 0 1px var(--stroke), var(--surface-shadow)}
+.cbar{display:grid; grid-template-columns:72px 1fr auto; align-items:center; gap:10px; font-size:var(--fs-meta)}
+.cbar b{font-weight:800; font-size:var(--fs-meta)}
+.cbar .bar i{background:var(--cat-400)}
+a.icon-btn{text-decoration:none}
+/* المخزن */
+.sdot{width:7px; height:7px; border-radius:50%; background:currentColor; margin-inline-end:5px; flex:none}
+.stock-tag{height:26px; padding:0 10px; border-radius:var(--r-pill)}
+.stock-sum{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px}
+.stock-sum .tag{height:28px; padding:0 10px; border-radius:var(--r-pill)}
+.stock-opt{display:flex; align-items:center; gap:12px; width:100%; min-height:58px; padding:10px 14px; border-radius:var(--li-radius); background:var(--surface); text-align:start; color:var(--ink)}
+.stock-opt .sdot{width:12px; height:12px; margin:0}
+.stock-opt.tag-done .sdot{background:var(--tag-done-fg)} .stock-opt.tag-soon .sdot{background:var(--tag-soon-fg)} .stock-opt.tag-urgent .sdot{background:var(--tag-urgent-fg)}
+.stock-opt[aria-checked="true"]{box-shadow:inset 0 0 0 1.5px var(--indigo-600)}
+.stock-opt.tag-done[aria-checked="true"]{background:var(--tag-done-bg)} .stock-opt.tag-soon[aria-checked="true"]{background:var(--tag-soon-bg)} .stock-opt.tag-urgent[aria-checked="true"]{background:var(--tag-urgent-bg)}
+/* قوايم المشتريات */
+.list-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.list-card{display:flex; flex-direction:column; gap:6px; min-height:132px; padding:12px; border-radius:var(--r-lg); background:var(--cat-100); box-shadow:inset 0 0 0 1.5px var(--cat-200); text-align:start; color:var(--cat-900)}
+.list-card b{font-size:var(--fs-title); font-weight:800; line-height:1.4; flex:1}
+.list-card-top{display:flex; align-items:center; justify-content:space-between}
+.list-card-top .tag{background:var(--white); color:var(--cat-800)}
+.list-card .ico{color:var(--cat-700)}
+.list-card-meta{font-size:var(--fs-meta); color:var(--cat-800)}
+.list-card .bar{background:color-mix(in srgb, var(--white) 70%, transparent)}
+.list-card .bar i{background:var(--cat-600)}
+.list-add{background:transparent; box-shadow:none; border:1.5px dashed var(--indigo-200); color:var(--indigo-600); align-items:center; justify-content:center; text-align:center}
+.list-add b{flex:none}
+.list-add svg{width:22px; height:22px}
+.list-add .list-card-meta{color:var(--muted)}
+.list-summary{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px; font-size:var(--fs-meta); font-weight:700; color:var(--muted)}
+.wrap > .bar{display:block}
+.wrap > .bar i{background:var(--cat-400, var(--indigo-500))}
+.del-btn{flex:none; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; background:var(--red-500); color:var(--white)}
+.del-btn svg{width:14px; height:14px; stroke-width:3}
+.bar-done{height:36px; padding:0 14px; border-radius:var(--r-pill); background:var(--white); color:var(--indigo-600); font-weight:800; font-size:var(--fs-body)}
+/* App bar — الهيدر الثابت فوق كل الصفحات (زي Navigation bar في iOS) */
+.appbar{position:sticky; top:0; z-index:20; padding-top:calc(var(--safe-top) + var(--appbar-pad-top)); padding-bottom:var(--appbar-pad-bottom); background:var(--appbar-bg); color:var(--appbar-fg); border-radius:0; box-shadow:0 6px 20px color-mix(in srgb, var(--neutral-900) 0%, transparent); transition:box-shadow .2s ease}
+.appbar.is-scrolled{border-radius:0 0 var(--appbar-radius) var(--appbar-radius); box-shadow:0 6px 20px color-mix(in srgb, var(--indigo-900) 22%, transparent)}
+.appbar .hello-sub{color:var(--appbar-fg-2)}
+.appbar .badge-dot{box-shadow:0 0 0 2px var(--appbar-bg)}
+.appbar-in{height:var(--appbar-h); display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; max-width:430px; margin:0 auto}
+.appbar-start{display:flex; align-items:center; justify-content:flex-start; min-width:0}
+.appbar-end{display:flex; align-items:center; justify-content:flex-end; gap:6px}
+.appbar-title{font-size:var(--fs-title); font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px; text-align:center}
+.back-btn{display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; margin-inline-start:-8px; color:var(--appbar-fg); font-size:var(--fs-body); font-weight:700; max-width:100%}
+.back-btn svg{width:24px; height:24px; flex:none}
+.back-btn span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.bar-btn{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; color:var(--appbar-fg); background:color-mix(in srgb, var(--white) 16%, transparent)}
+.bar-btn svg{width:22px; height:22px}
+.bar-btn:active, .back-btn:active{opacity:.5}
+.appbar .avatar{width:36px; height:36px; font-size:var(--fs-body)}
+.appbar-home{display:flex; gap:10px}
+.appbar-home .hello-title{margin:0}
+.appbar-home .bar-btn{margin-inline-start:auto}
+/* حركة التنقل: الصفحة الجديدة بتدخل من الشمال (RTL)، والرجوع من اليمين */
+@keyframes push{from{opacity:0; transform:translateX(-28px)}}
+@keyframes pop{from{opacity:0; transform:translateX(28px)}}
+@keyframes fadeIn{from{opacity:0}}
+#app.nav-push{animation:push .26s cubic-bezier(.2,.8,.2,1)}
+#app.nav-pop{animation:pop .26s cubic-bezier(.2,.8,.2,1)}
+#app.nav-fade{animation:fadeIn .18s ease}
+/* لمسة الدوسة */
+button.li:active, .li-tap:active, .tile:active, .learn-card:active, .meal-top:active{transform:scale(.985); transition:transform .08s ease}
+/* Bottom sheet: الهيدر ثابت فوق والشيت بيتسحب لتحت */
+.sheet-head{position:sticky; top:-10px; z-index:2; background:var(--sheet-bg); padding:6px 0 10px; margin-top:-6px}
+.handle{touch-action:none; cursor:grab; padding:6px 0; background-clip:content-box; height:17px}
+.sheet.is-dragging{transition:none}
+.sheet.no-anim, .backdrop.no-anim{animation:none}
+.sheet{transition:transform .22s ease}
+a.btn{text-decoration:none}
+/* اتعلمي */
+.learn-cards .learn-card{flex:none; width:170px; min-height:132px; display:flex; flex-direction:column; gap:8px; padding:14px; border-radius:var(--r-lg); background:var(--cat-100, var(--butter-100)); box-shadow:inset 0 0 0 1px var(--cat-200, var(--butter-200)); text-align:start}
+.learn-q{color:var(--cat-800)}
+.learn-q svg{width:22px; height:22px}
+.learn-title{font-size:var(--fs-body); font-weight:800; line-height:1.6; color:var(--cat-900); flex:1}
+.learn-meta{font-size:var(--fs-meta); color:var(--cat-700)}
+.credit{display:block; margin-top:10px; font-size:var(--fs-meta); color:var(--muted); line-height:1.7; text-decoration:underline; text-decoration-color:var(--neutral-300); text-underline-offset:3px}
+.why-list{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px}
+.why-list li{position:relative; background:var(--surface); border-radius:var(--r-lg); padding:12px 14px; line-height:1.9; box-shadow:inset 0 0 0 1px var(--stroke)}
+.tip-why{background:var(--surface); border-color:var(--cat-200)}
+.tip-why b{display:flex; align-items:center; gap:4px; color:var(--cat-800)}
+.tip-why b svg{width:14px; height:14px}
+/* Switch */
+.switch{flex:none; position:relative; width:var(--switch-w); height:var(--switch-h); border-radius:var(--r-pill); background:var(--switch-off); transition:background .2s ease}
+.switch i{position:absolute; top:3px; inset-inline-start:3px; width:calc(var(--switch-h) - 6px); height:calc(var(--switch-h) - 6px); border-radius:50%; background:var(--switch-knob); box-shadow:0 1px 3px rgba(0,0,0,.2); transition:inset-inline-start .2s ease}
+.switch[aria-checked="true"]{background:var(--switch-on)}
+.switch[aria-checked="true"] i{inset-inline-start:calc(var(--switch-w) - var(--switch-h) + 3px)}
+/* حسابي */
+.profile{display:flex; align-items:center; gap:12px; margin-top:0}
+.avatar-lg{width:56px; height:56px}
+.profile-text{flex:1; min-width:0; display:flex; flex-direction:column; line-height:1.5}
+.profile-text b{font-size:var(--fs-title); font-weight:800}
+.profile-text span{font-size:var(--fs-meta); color:var(--hero-fg-2)}
+.hero .detail-tags .tag{background:color-mix(in srgb, var(--white) 18%, transparent); color:var(--white)}
+.hero .page-ill{background:color-mix(in srgb, var(--white) 92%, transparent)}
+.about{text-align:center; font-size:var(--fs-meta); color:var(--muted); margin-top:28px; line-height:1.8}
+.tip-action{display:flex; align-items:center; gap:10px; margin-top:0}
+.tip-action span{flex:1}
+.li:disabled{opacity:.55}
+
+@media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
+</style>
+</head>
+<body>
+<header class="appbar gutter" id="appbar"></header>
+<div id="app"></div>
+<div id="sheet"></div>
+<div id="cook" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<nav class="nav" aria-label="الأقسام">
+  <div class="gutter"><div class="wrap"><div class="nav-in" id="tabs"></div></div></div>
+</nav>
+
+<script>
+/* =========================================================
+   دفتر البيت
+   كل مهمة = «قالب» بيتكرر: يومي، أسبوعي، شهري، أو مرة واحدة.
+   ========================================================= */
+const KEY = 'daftar-v4';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = n => Number(n).toLocaleString('ar-EG');
+const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const todayStr = () => iso(new Date());
+const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return iso(d); };
+const daysUntil = s => Math.round((new Date(s + 'T00:00') - new Date(todayStr() + 'T00:00')) / 86400000);
+
+/* ---------- الأيقونات ---------- */
+const svg = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const ICON = {
+  today:   svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+  tasks:   svg('<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>'),
+  kitchen: svg('<path d="M4 11h16v3a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M2 11h2M20 11h2"/><path d="M9 4c0 1.5-1 1.5-1 3M13 4c0 1.5-1 1.5-1 3M17 4c0 1.5-1 1.5-1 3"/>'),
+  cart:    svg('<path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/>'),
+  calendar: svg('<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h2M14 14h2M8 17h2"/>'),
+  wallet:  svg('<path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v3"/><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M15 13.5h2"/>'),
+  fwd:     svg('<path d="M15 6l-6 6 6 6"/>'),
+  house:   svg('<path d="M4 11l8-7 8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>'),
+  more:    svg('<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>'),
+  sunrise: svg('<path d="M3 19h18M6 15a6 6 0 0 1 12 0"/><path d="M12 4v4M5.6 8.6l1.8 1.8M18.4 8.6l-1.8 1.8"/>'),
+  moon:    svg('<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>'),
+  bell:    svg('<path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/>'),
+  back:    svg('<path d="M9 6l6 6-6 6"/>'),
+  plus:    svg('<path d="M12 5v14M5 12h14"/>'),
+  close:   svg('<path d="M6 6l12 12M18 6L6 18"/>'),
+  chev:    svg('<path d="M15 6l-6 6 6 6"/>'),
+  play:    svg('<path d="M8 5.5v13l10.5-6.5z"/>'),
+  timer:   svg('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/>'),
+  edit:    svg('<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'),
+  car:     svg('<path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13" r=".8"/><circle cx="16.5" cy="13" r=".8"/>'),
+  heart:   svg('<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>'),
+  shield:  svg('<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>'),
+  phone:   svg('<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/>'),
+  user:    svg('<circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/>'),
+  download: svg('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'),
+  upload:  svg('<path d="M12 15V4M7 9l5-5 5 5M5 20h14"/>'),
+  globe:   svg('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>'),
+  sound:   svg('<path d="M4 10v4h4l5 4V6L8 10z"/><path d="M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11"/>'),
+  checkInk: svg('<path d="M5 12.5 10 17l9-10"/>'),
+  bulb:    svg('<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>'),
+  chevDown: svg('<path d="M7 10l5 5 5-5"/>'),
+  minus:   svg('<path d="M6 12h12"/>'),
+  box:     svg('<path d="M4 8l8-4 8 4v8l-8 4-8-4z"/><path d="M4 8l8 4 8-4M12 12v8"/>'),
+  refresh: svg('<path d="M20 11a8 8 0 0 0-14.5-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.5 4.5L20 16"/><path d="M20 20v-4h-4"/>'),
+  check:   '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10"/></svg>'
+};
+
+const CATS = {
+  clean:    { name: 'تنظيف',   icon: svg('<path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18.5 15l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"/>') },
+  kitchen:  { name: 'شغل المطبخ', icon: ICON.kitchen },
+  shop:     { name: 'مشاوير',  icon: ICON.cart },
+  bills:    { name: 'فواتير',  icon: svg('<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>') },
+  organize: { name: 'تنظيم',   icon: svg('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M5 7l1.5-3h11L19 7"/><path d="M10 12h4"/>') },
+  events:   { name: 'مناسبات', icon: svg('<rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7c-1.5-3.5-5.5-3-4.5 0M12 7c1.5-3.5 5.5-3 4.5 0"/>') }
+};
+const catClass = k => (k && CATS[k] ? 'cat-' + k : '');
+
+/* ---------- الرسومات — بتاخد ألوانها من --cat-* بتاع القسم اللي هي جواه ---------- */
+const L = 'stroke="var(--ill-line)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"';
+const ILL = {
+  clean: () => `<svg viewBox="0 0 80 80" aria-hidden="true">
+    <rect x="24" y="36" width="28" height="38" rx="9" fill="#fff" ${L}/>
+    <rect x="28" y="48" width="20" height="14" rx="5" style="fill:var(--cat-200)"/>
+    <rect x="30" y="26" width="16" height="11" rx="3" fill="#fff" ${L}/>
+    <path d="M26 26h22l8 5h-9l-3-5" style="fill:var(--cat-300)" ${L}/>
+    <path d="M64 14l1.6 3.6 3.6 1.6-3.6 1.6L64 24.4l-1.6-3.6-3.6-1.6 3.6-1.6z" fill="#fff" ${L}/>
+    <circle cx="66" cy="34" r="3" fill="#fff" ${L}/><circle cx="58" cy="40" r="2" fill="#fff" ${L}/></svg>`,
+  kitchen: () => `<svg viewBox="0 0 80 80" aria-hidden="true">
+    <path d="M30 18c-3 4 3 6 0 10M40 14c-3 4 3 6 0 10M50 18c-3 4 3 6 0 10" fill="none" ${L}/>
+    <path d="M14 42h52v14a14 14 0 0 1-14 14H28a14 14 0 0 1-14-14z" fill="#fff" ${L}/>
+    <path d="M15 50h50" style="stroke:var(--cat-200)" stroke-width="5"/>
+    <rect x="10" y="36" width="60" height="7" rx="3.5" style="fill:var(--cat-300)" ${L}/>
+    <rect x="35" y="30" width="10" height="6" rx="3" fill="#fff" ${L}/>
+    <path d="M14 48H7M66 48h7" fill="none" ${L}/></svg>`,
+  shop: () => `<svg viewBox="0 0 80 80" aria-hidden="true">
+    <rect x="49" y="8" width="9" height="26" rx="4.5" transform="rotate(28 53 21)" style="fill:var(--butter-200)" ${L}/>
+    <path d="M28 30c-4-8 0-14 6-16 2 6-1 12-6 16z" style="fill:var(--cat-200)" ${L}/>
+    <path d="M16 30h48l-5 42H21z" fill="#fff" ${L}/>
+    <path d="M30 38a10 10 0 0 0 20 0" fill="none" ${L}/>
+    <path d="M18 56h44" style="stroke:var(--cat-200)" stroke-width="6"/></svg>`,
+  bills: () => `<svg viewBox="0 0 80 80" aria-hidden="true">
+    <path d="M18 10h36v58l-6-4-6 4-6-4-6 4-6-4-6 4z" fill="#fff" ${L}/>
+    <path d="M26 22h20M26 31h20M26 40h12" fill="none" ${L}/>
+    <circle cx="56" cy="56" r="14" style="fill:var(--cat-200)" ${L}/>
+    <circle cx="56" cy="56" r="8" fill="#fff" ${L}/></svg>`,
+  organize: () => `<svg viewBox="0 0 80 80" aria-hidden="true">
+    <rect x="10" y="44" width="30" height="26" rx="4" fill="#fff" ${L}/>
+    <rect x="40" y="44" width="30" height="26" rx="4" style="fill:var(--cat-200)" ${L}/>
+    <rect x="22" y="20" width="32" height="24" rx="4" fill="#fff" ${L}/>
+    <path d="M32 30h12M19 55h12M49 55h12" fill="none" ${L}/>
+    <path d="M62 44V30M62 32c-6-2-8-8-6-12 5 1 7 6 6 12zM62 36c5-2 8-6 6-11-5 1-7 5-6 11z" style="fill:var(--periwinkle-200)" ${L}/></svg>`,
+  events: () => `<svg viewBox="0 0 80 80" aria-hidden="true">
+    <path d="M60 40c0 6-2 10-2 16" fill="none" ${L}/>
+    <ellipse cx="60" cy="24" rx="11" ry="14" style="fill:var(--peach-300)" ${L}/>
+    <rect x="12" y="40" width="40" height="32" rx="4" fill="#fff" ${L}/>
+    <rect x="9" y="32" width="46" height="10" rx="3" style="fill:var(--cat-200)" ${L}/>
+    <path d="M32 32v40" fill="none" ${L}/>
+    <path d="M32 32c-6-10-16-6-11 0zM32 32c6-10 16-6 11 0z" fill="#fff" ${L}/></svg>`,
+  hero: () => `<svg viewBox="0 0 120 96" aria-hidden="true">
+    <rect x="18" y="6" width="58" height="58" rx="10" style="fill:var(--lime-200)" stroke="#fff" stroke-width="2.2"/>
+    <circle cx="58" cy="24" r="8" style="fill:var(--butter-200)"/>
+    <path d="M18 46c12-8 22-8 30-2s18 6 28-2v12a10 10 0 0 1-10 10H28a10 10 0 0 1-10-10z" style="fill:var(--periwinkle-200)"/>
+    <path d="M47 6v58M18 35h58" stroke="#fff" stroke-width="2.2"/>
+    <rect x="8" y="64" width="104" height="7" rx="3.5" style="fill:var(--lavender-200)"/>
+    <path d="M24 64l-3-14h22l-3 14z" style="fill:var(--pink-200)" stroke="#fff" stroke-width="2"/>
+    <path d="M32 50V36M32 40c-7-2-9-9-6-13 6 1 8 7 6 13zM32 44c6-2 9-7 7-12-6 1-8 6-7 12z" style="fill:var(--periwinkle-300)" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+    <rect x="86" y="46" width="18" height="18" rx="5" fill="#fff"/>
+    <path d="M104 50c5 0 5 9 0 9" fill="none" stroke="#fff" stroke-width="2.4"/>
+    <path d="M91 40c-2 2 2 3 0 5M98 38c-2 2 2 3 0 5" fill="none" style="stroke:var(--lavender-300)" stroke-width="1.8" stroke-linecap="round"/></svg>`
+};
+
+/* ---------- الوقت والتكرار ---------- */
+const PERIODS = [
+  { id: 'morning', name: 'الصبح',  hint: 'قبل ١٢ الضهر', from: 0,  to: 12 },
+  { id: 'noon',    name: 'الضهر',  hint: 'من ١٢ لـ ٦',    from: 12, to: 18 },
+  { id: 'night',   name: 'بالليل', hint: 'بعد ٦',          from: 18, to: 24 }
+];
+const periodIndex = id => PERIODS.findIndex(p => p.id === id);
+const periodName = id => PERIODS.find(p => p.id === id).name;
+
+const WEEK = [6, 0, 1, 2, 3, 4, 5];
+const DAY_NAME  = { 6: 'السبت', 0: 'الحد', 1: 'الاتنين', 2: 'التلات', 3: 'الأربع', 4: 'الخميس', 5: 'الجمعة' };
+const DAY_SHORT = { 6: 'سبت', 0: 'حد', 1: 'اتنين', 2: 'تلات', 3: 'أربع', 4: 'خميس', 5: 'جمعة' };
+const REPEATS = [['daily', 'كل يوم'], ['weekly', 'كل أسبوع'], ['monthly', 'كل شهر'], ['once', 'مرة واحدة']];
+const MINS = [5, 10, 15, 30, 45, 60];
+
+function occursOn(t, d) {
+  const r = t.repeat;
+  if (r.type === 'daily') return true;
+  if (r.type === 'weekly') return r.days.includes(d.getDay());
+  if (r.type === 'monthly') {
+    const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    return d.getDate() === Math.min(r.day, last);
+  }
+  if (r.type === 'once') return r.date === iso(d);
+  return false;
+}
+function whenLabel(s) {
+  const n = daysUntil(s);
+  if (n === 0) return 'النهارده';
+  if (n === 1) return 'بكرة';
+  if (n === 2) return 'بعد بكرة';
+  return 'بعد ' + num(n) + ' أيام';
+}
+/** لون التاج حسب قرب الميعاد */
+function urgency(s) {
+  const n = daysUntil(s);
+  return n <= 1 ? 'tag-urgent' : n <= 4 ? 'tag-soon' : 'tag-later';
+}
+function repeatLabel(r) {
+  if (r.type === 'daily') return 'كل يوم';
+  if (r.type === 'weekly') return r.days.length === 7 ? 'كل يوم' : 'كل ' + WEEK.filter(d => r.days.includes(d)).map(d => DAY_NAME[d]).join(' و');
+  if (r.type === 'monthly') return 'يوم ' + num(r.day) + ' في الشهر';
+  if (r.type === 'once') {
+    const n = daysUntil(r.date);
+    if (n < 0) return 'خلص ميعادها';
+    return n <= 2 ? whenLabel(r.date) : new Date(r.date + 'T00:00').toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' });
+  }
+  return '';
+}
+
+/* ---------- المهام المبدئية ---------- */
+function seed() {
+  let n = 0;
+  const T = (title, cat, period, mins, repeat, extra = {}) => ({ id: 's' + (++n), title, cat, period, mins, repeat, note: '', ...extra });
+  const D = () => ({ type: 'daily' });
+  const W = (...days) => ({ type: 'weekly', days });
+  const M = day => ({ type: 'monthly', day });
+  const O = offset => ({ type: 'once', date: addDays(offset) });
+  return {
+    name: 'نور',
+    tasks: [
+      T('ترتيب السرير وفتح الشبابيك', 'clean',   'morning', 5,  D()),
+      T('تحضير الفطار',                'kitchen', 'morning', 15, D(), { recipe: true }),
+      T('تحضير الغدا',                 'kitchen', 'noon',    45, D(), { recipe: true }),
+      T('غسيل المواعين بعد الغدا',     'clean',   'noon',    15, D()),
+      T('مسح رخامة المطبخ والبوتجاز',  'clean',   'night',   10, D()),
+      T('رمي الزبالة',                 'clean',   'night',   2,  D()),
+      T('تطليع أكل بكرة من الفريزر',   'kitchen', 'night',   2,  D()),
+      T('تشغيل غسالة هدوم',            'clean',   'morning', 10, W(6, 2)),
+      T('سقي الزرع',                   'organize','morning', 5,  W(1, 4)),
+      T('كنس ومسح الشقة كلها',         'clean',   'morning', 45, W(5)),
+      T('تغيير الملايات والفوط',        'clean',   'morning', 15, W(5)),
+      T('تنضيف الحمام',                'clean',   'noon',    30, W(3)),
+      T('شرا طلبات الأسبوع',           'shop',    'noon',    45, W(5), { note: 'من قايمة الأسبوع' }),
+      T('تخطيط أكل الأسبوع الجاي',      'kitchen', 'night',   15, W(4)),
+      T('ترتيب التلاجة ورمي اللي باظ',  'organize','night',   10, W(4)),
+      T('شرا التموين الشهري',           'shop',    'morning', 60, M(1)),
+      T('تنضيف التلاجة من جوه',         'clean',   'morning', 30, M(1)),
+      T('تجديد باقة النت',              'bills',   'noon',    5,  M(3)),
+      T('دفع فاتورة الكهربا',           'bills',   'noon',    5,  M(5)),
+      T('دفع فاتورة الغاز',             'bills',   'noon',    5,  M(10)),
+      T('ترتيب الدولاب',                'organize','morning', 30, M(15)),
+      T('تنضيف الفرن والشفاط',          'clean',   'noon',    40, M(20)),
+      T('الاتصال بصيانة الغسالة',       'organize','noon',    10, O(0)),
+      T('تحضير منيو عزومة أهل جوزي',    'events',  'night',   20, O(3)),
+      T('عزومة أهل جوزي',               'events',  'night',   180, O(5), { note: '٦ أفراد' })
+    ],
+    done: {}
+  };
+}
+function load() { try { const raw = localStorage.getItem(KEY); if (raw) return upgrade(JSON.parse(raw)); } catch (e) {} return upgrade({ ...seed(), ...seedExtra() }); }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+let S;                  // بتتحمل تحت قبل أول render
+let tab = 'today';
+let page = null;        // صفحة فرعية مفتوحة: اسم قسم، أو 'settings'، أو null
+let prevPage = null;    // الصفحة اللي قبلها (عشان زرار الرجوع)
+let planDay = null;     // اليوم المختار في تاب الخطة (null = النهارده)
+let calOpen = false;
+let kitchenView = 'plan'; // تاب المطبخ: plan | recipes | learn
+let monthSheet = false;  // شيت الشهر مفتوح    // التقويم مفتوح شهر كامل ولا أسبوع بس
+let showDaily = false;  // الروتين اليومي مفتوح في أجندة اليوم
+let viewId = null;      // المهمة المفتوحة في شيت التفاصيل
+let draft = null;
+let sheetError = '';
+let confirmDelete = false;
+
+const todayTasks = () => allTasks().filter(t => occursOn(t, new Date()));
+const doneList = () => S.done[todayStr()] || [];
+const isDone = id => id.startsWith('b:') ? billPaid(S.money.bills.find(b => b.id === id.slice(2)) || {}) : doneList().includes(id);
+const nowPeriod = () => { const h = new Date().getHours(); return PERIODS.find(p => h >= p.from && h < p.to).id; };
+
+function upcomingList() {
+  const out = [];
+  for (let i = 1; i <= 14; i++) {
+    const d = new Date(); d.setDate(d.getDate() + i);
+    allTasks().forEach(t => {
+      if ((t.repeat.type === 'monthly' || t.repeat.type === 'once') && occursOn(t, d)) out.push({ t, date: iso(d) });
+    });
+  }
+  return out.slice(0, 8);
+}
+
+function toggle(id) {
+  if (id.startsWith('b:')) { toggleBill(id.slice(2)); if (navigator.vibrate) navigator.vibrate(10); save(); render(); return; }
+  const d = todayStr(), list = S.done[d] || (S.done[d] = []);
+  const i = list.indexOf(id);
+  i >= 0 ? list.splice(i, 1) : list.push(id);
+  if (navigator.vibrate) navigator.vibrate(10);
+  save(); render();
+}
+function toast(msg) {
+  const el = $('toast'); el.textContent = msg; el.classList.add('show');
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+/* =========================================================
+   Components (بترجع HTML) — نفس أسماء DESIGN-SYSTEM.md
+   ========================================================= */
+const Ico = (svgIcon, size = '', cat = null) => `<span class="ico ${size} ${catClass(cat)}">${svgIcon}</span>`;
+const ChipIco = k => `<span class="chip-ico ${catClass(k)}">${CATS[k].icon}</span>`;
+const Chip = ({ label, pressed, attrs = '', icon = '', count = null, role = 'pressed' }) =>
+  `<button class="chip" ${role === 'radio' ? `role="radio" aria-checked="${!!pressed}"` : `aria-pressed="${!!pressed}"`} ${attrs}>
+    ${icon}${label}${count !== null ? ` <span class="count">${num(count)}</span>` : ''}</button>`;
+const Seg = (key, value, options, action = 'pick') =>
+  `<div class="seg" role="radiogroup" style="grid-template-columns:repeat(${options.length}, 1fr)">
+    ${options.map(([v, label]) => Chip({ label, pressed: String(value) === String(v), role: 'radio', attrs: `data-a="${action}" data-k="${key}" data-v="${v}"` })).join('')}</div>`;
+
+function ring(done, total) {
+  const r = 25, c = 2 * Math.PI * r, p = total ? done / total : 0;
+  return `<div class="ring" role="img" aria-label="خلصتي ${num(done)} من ${num(total)}">
+    <svg viewBox="0 0 58 58"><circle cx="29" cy="29" r="${r}" fill="none" style="stroke:var(--ring-track)" stroke-width="6"/>
+    <circle cx="29" cy="29" r="${r}" fill="none" style="stroke:var(--ring-fill); transition:stroke-dashoffset .4s ease" stroke-width="6" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - p)}"/></svg>
+    <b>${num(done)}/${num(total)}</b></div>`;
+}
+
+function weekStrip() {
+  const sel = planDay || todayStr(), sd = fromIso(sel), start = new Date(sd);
+  start.setDate(sd.getDate() - ((sd.getDay() + 1) % 7));   // الأسبوع بيبدأ السبت
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    const key = iso(d), isToday = key === todayStr(), past = d < dayDate(0);
+    const has = allTasks().some(t => notDaily(t) && occursOn(t, d)) || S.meals[key];
+    return `<button class="wday ${isToday ? 'today' : ''} ${past ? 'past' : ''}" data-a="cal-day" data-v="${key}" aria-pressed="${key === sel}" aria-label="${DAY_NAME[d.getDay()]} ${fullDate(d)}" ${isToday ? 'aria-current="date"' : ''}>
+      <span>${DAY_SHORT[d.getDay()]}</span><b>${num(d.getDate())}</b><i class="wdot" ${has ? '' : 'hidden'}></i></button>`;
+  }).join('');
+}
+function weekBar() {
+  const sd = fromIso(planDay || todayStr());
+  return `<div class="week-bar">
+    <button class="wk-btn" data-a="week-move" data-v="-1" aria-label="الأسبوع اللي فات">${ICON.back}</button>
+    <button class="wk-month" data-a="month-open" aria-label="افتحي الشهر كله">${sd.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })} ${ICON.chevDown}</button>
+    <button class="wk-btn" data-a="week-move" data-v="1" aria-label="الأسبوع الجاي">${ICON.fwd}</button>
+  </div>`;
+}
+function renderMonthSheet() {
+  monthSheet = true; calOpen = true; document.body.classList.add('locked');
+  $('sheet').innerHTML = sheetWrap('اختاري يوم', `<div style="margin-top:12px">${calendar(true)}</div>`);
+}
+
+/* =========================================================
+   شاشة النهارده
+   ========================================================= */
+function taskItem(t) {
+  const done = isDone(t.id);
+  return `
+    <div class="li ${catClass(t.cat)} ${done ? 'is-done' : ''}">
+      <button class="li-tap" data-a="detail" data-id="${t.id}" aria-label="تفاصيل: ${esc(t.title)}">
+        ${Ico(CATS[t.cat].icon)}
+        <span class="li-body">
+          <span class="li-title">${esc(t.title)}</span>
+          <span class="li-meta">${CATS[t.cat].name}، ${num(t.mins)} دقيقة${t.note ? '، ' + esc(t.note) : ''}</span>
+        </span>
+      </button>
+      ${t.recipe && !done ? `<button class="btn btn-sm btn-soft" data-a="recipe">الوصفة</button>` : ''}
+      <button class="check" data-a="toggle" data-id="${t.id}" aria-pressed="${done}" aria-label="${done ? 'رجّعي' : 'خلصت'}: ${esc(t.title)}">${ICON.check}</button>
+    </div>`;
+}
+
+function viewToday() {
+  if (planDay && planDay !== todayStr()) return viewDay(fromIso(planDay));
+  const list = todayTasks();
+  const total = list.length;
+  const left = list.filter(t => !isDone(t.id));
+  const curIdx = periodIndex(nowPeriod());
+  const h = new Date().getHours();
+  const mins = left.reduce((s, t) => s + t.mins, 0);
+
+  const hero = `
+    <header class="hero hero-tuck gutter"><div class="wrap">
+      ${weekBar()}
+      <div class="week" role="group" aria-label="أيام الأسبوع">${weekStrip()}</div>
+      <div class="today-card tuck">
+        <div class="today-ill">${ILL.hero()}</div>
+        <div class="today-info">
+          <span class="today-title">يومك النهارده</span>
+          <span class="today-sub">${left.length ? `باقي ${num(left.length)} مهام، حوالي ${num(mins)} دقيقة` : total ? 'خلصتي كل حاجة 🤍' : 'مفيش مهام النهارده'}</span>
+        </div>
+        ${ring(total - left.length, total)}
+      </div>
+    </div></header>`;
+
+  const periods = PERIODS.map((p, i) => {
+    const tasks = list.filter(t => t.period === p.id);
+    if (!tasks.length) return '';
+    const state = i === curIdx ? 'is-now' : i < curIdx ? 'is-past' : '';
+    const pIcon = { morning: ICON.sunrise, noon: ICON.today, night: ICON.moon }[p.id];
+    return `
+      <section class="period p-${p.id} ${state}" aria-label="${p.name}">
+        <span class="node" aria-hidden="true"></span>
+        <div class="period-head">
+          <span class="period-ico">${pIcon}</span>
+          <span class="period-name">${p.name}</span>
+          <span class="tag">${state === 'is-now' ? 'دلوقتي' : p.hint}</span>
+        </div>
+        <div class="list">${tasks.map(taskItem).join('')}</div>
+      </section>`;
+  }).join('');
+
+  const cards = upcomingList()
+    .map(({ t, date }) => `
+      <div class="card ${catClass(t.cat)}">
+        <div class="card-top">${Ico(CATS[t.cat].icon, 'ico-sm')}<span class="tag ${urgency(date)}">${whenLabel(date)}</span></div>
+        <span class="card-title">${esc(t.title)}</span>
+      </div>`).join('');
+
+  return `${hero}
+    <main class="screen gutter"><div class="wrap">
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">مهام النهارده</h2></div>
+        ${periods ? `<div class="day">${periods}</div>` : `<div class="empty">مفيش مهام النهارده. دوسي + فوق عشان تضيفي.</div>`}
+      </section>
+      ${todayMealBlock()}
+      ${cards ? `<section class="block"><div class="section-head"><h2 class="section-title">المواعيد الجاية</h2></div><div class="cards">${cards}</div></section>` : ''}
+    </div></main>`;
+}
+
+/* ---------- يوم تاني غير النهارده (من شريط الأسبوع أو الشهر) ---------- */
+function viewDay(d) {
+  const key = iso(d), items = allTasks().filter(t => occursOn(t, d));
+  const special = items.filter(notDaily).length;
+  const r = recipeById(S.meals[key]);
+  const periods = PERIODS.map(p => {
+    const tasks = items.filter(t => t.period === p.id); if (!tasks.length) return '';
+    const pIcon = { morning: ICON.sunrise, noon: ICON.today, night: ICON.moon }[p.id];
+    return `<section class="period p-${p.id}" aria-label="${p.name}"><span class="node" aria-hidden="true"></span>
+      <div class="period-head"><span class="period-ico">${pIcon}</span><span class="period-name">${p.name}</span><span class="tag">${p.hint}</span></div>
+      <div class="list">${tasks.map(t => agendaRow(t, d)).join('')}</div></section>`;
+  }).join('');
+  return `
+    <header class="hero hero-tuck gutter"><div class="wrap">
+      ${weekBar()}
+      <div class="week" role="group" aria-label="أيام الأسبوع">${weekStrip()}</div>
+      <div class="today-card tuck day-card">
+        <div class="today-info">
+          <span class="today-title">${dayTitle(d)}، ${fullDate(d)}</span>
+          <span class="today-sub">${num(items.length)} مهام${special ? `، منهم ${num(special)} مش يومية` : ''}${r ? `، والأكلة ${esc(r.name)}` : ''}</span>
+        </div>
+        <button class="btn btn-sm btn-primary" data-a="cal-day" data-v="${todayStr()}">ارجعي للنهارده</button>
+      </div>
+    </div></header>
+    <main class="screen gutter"><div class="wrap">
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">مهام اليوم ده</h2></div>
+        ${periods ? `<div class="day">${periods}</div>` : `<div class="empty">مفيش مهام اليوم ده</div>`}
+      </section>
+      <section class="block cat-kitchen">
+        <div class="section-head"><h2 class="section-title">أكلة اليوم ده</h2></div>
+        <div class="li meal-row">
+          ${r ? `<button class="li-tap" data-a="open-recipe" data-v="${r.id}">${Ico(ICON.kitchen)}<span class="li-body"><span class="li-title">${esc(r.name)}</span><span class="li-meta">${num(r.mins)} دقيقة</span></span></button>`
+              : `${Ico(ICON.kitchen)}<span class="li-body"><span class="li-meta">لسه ما اخترتيش</span></span>`}
+          <button class="btn btn-sm ${r ? 'btn-text' : 'btn-soft'}" data-a="meal-pick" data-v="${key}">${r ? 'غيّري' : 'اختاري'}</button>
+        </div>
+      </section>
+    </div></main>`;
+}
+
+/* =========================================================
+   تاب الخطة — فكرة واحدة: اختاري يوم ← شوفي خطته
+   التقويم أسبوع، ويتفتح شهر كامل. والروتين صفحة لوحده.
+   ========================================================= */
+const notDaily = t => t.repeat.type !== 'daily';
+const dayDate = off => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + off); return d; };
+const fromIso = k => new Date(k + 'T00:00');
+const dayTitle = d => { const n = Math.round((d - dayDate(0)) / 864e5); return n === 0 ? 'النهارده' : n === 1 ? 'بكرة' : n === -1 ? 'امبارح' : DAY_NAME[d.getDay()]; };
+const fullDate = d => d.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' });
+
+function agendaRow(t, d) {
+  const done = iso(d) === todayStr() && isDone(t.id);
+  return `
+    <button class="li ${catClass(t.cat)} ${done ? 'is-done' : ''}" data-a="detail" data-id="${t.id}" aria-label="تفاصيل: ${esc(t.title)}">
+      ${Ico(CATS[t.cat].icon)}
+      <span class="li-body"><span class="li-title">${esc(t.title)}</span>
+      <span class="li-meta">${CATS[t.cat].name}، ${periodName(t.period)}، ${num(t.mins)} دقيقة</span></span>
+      <span class="chev">${ICON.chev}</span>
+    </button>`;
+}
+function dayCell(d, sel) {
+  const key = iso(d);
+  const cats = [...new Set(allTasks().filter(t => notDaily(t) && occursOn(t, d)).map(t => t.cat))].slice(0, 3);
+  const cls = (key === todayStr() ? ' is-today' : '') + (d < dayDate(0) ? ' is-past' : '');
+  return `<button class="cal-d${cls}" data-a="cal-day" data-v="${key}" aria-pressed="${key === sel}" aria-label="${DAY_NAME[d.getDay()]} ${fullDate(d)}${cats.length ? '، فيه مواعيد' : ''}">
+    ${num(d.getDate())}<span class="dots">${cats.map(c => `<i class="dot ${catClass(c)}"></i>`).join('')}</span></button>`;
+}
+function calendar(inSheet) {
+  const sel = planDay || todayStr(), sd = fromIso(sel);
+  let cells;
+  if (calOpen) {
+    const first = new Date(sd.getFullYear(), sd.getMonth(), 1);
+    const days = new Date(sd.getFullYear(), sd.getMonth() + 1, 0).getDate();
+    cells = Array.from({ length: (first.getDay() + 1) % 7 }, () => '<span></span>').join('') +
+      Array.from({ length: days }, (_, i) => dayCell(new Date(sd.getFullYear(), sd.getMonth(), i + 1), sel)).join('');
+  } else {
+    const start = new Date(sd); start.setDate(sd.getDate() - ((sd.getDay() + 1) % 7));   // السبت
+    cells = Array.from({ length: 7 }, (_, i) => { const d = new Date(start); d.setDate(start.getDate() + i); return dayCell(d, sel); }).join('');
+  }
+  const unit = calOpen ? 'الشهر' : 'الأسبوع';
+  return `
+    <div class="cal">
+      <div class="cal-top">
+        <button class="icon-btn icon-btn-sm icon-btn-surface" data-a="cal-move" data-v="-1" aria-label="${unit} اللي فات">${ICON.back}</button>
+        <div class="cal-mid">
+          <b>${sd.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })}</b>
+          ${sel !== todayStr() ? `<button class="tag tag-brand" data-a="cal-day" data-v="${todayStr()}">ارجعي للنهارده</button>` : ''}
+        </div>
+        <button class="icon-btn icon-btn-sm icon-btn-surface" data-a="cal-move" data-v="1" aria-label="${unit} الجاي">${ICON.fwd}</button>
+      </div>
+      <div class="cal-grid">${WEEK.map(d => `<span class="cal-h">${DAY_SHORT[d]}</span>`).join('')}${cells}</div>
+      ${inSheet ? '' : `<button class="cal-toggle" data-a="cal-open" aria-expanded="${calOpen}">${calOpen ? 'صغّري للأسبوع' : 'اعرضي الشهر كله'}${ICON.chev}</button>`}
+    </div>`;
+}
+function dayPlan(d) {
+  const items = allTasks().filter(t => notDaily(t) && occursOn(t, d)).sort((a, b) => periodIndex(a.period) - periodIndex(b.period));
+  const daily = S.tasks.filter(t => !notDaily(t)).sort((a, b) => periodIndex(a.period) - periodIndex(b.period));
+  return `
+    <section class="block">
+      <div class="section-head"><h2 class="section-title">${dayTitle(d)}، ${fullDate(d)}</h2></div>
+      ${items.length ? `<div class="list">${items.map(t => agendaRow(t, d)).join('')}</div>` : `<div class="empty">مفيش مواعيد اليوم ده، الروتين اليومي بس</div>`}
+    </section>
+    <section class="block">
+      <div class="section-head"><h2 class="section-title">الروتين اليومي</h2><span class="tag">${num(daily.length)} مهام كل يوم</span></div>
+      <div class="list">${daily.map(t => agendaRow(t, d)).join('')}</div>
+    </section>`;
+}
+function viewPlan() {
+  return `
+    <main class="screen screen-top gutter"><div class="wrap">
+      <div class="block">${calendar()}</div>
+      ${dayPlan(fromIso(planDay || todayStr()))}
+    </div></main>`;
+}
+
+/* ---------- تاب البيت: كل أقسام الشغل، وكل قسم بيفتح صفحته ---------- */
+function viewHouse() {   // تاب «البيت»: شغل البيت بالأقسام + بيانات البيت
+  const list = todayTasks();
+  const tiles = Object.entries(CATS).filter(([k]) => k !== 'bills').map(([k, c]) => {   // الفواتير بيتها تاب الفلوس
+    const all = S.tasks.filter(t => t.cat === k).length;
+    const rest = list.filter(t => t.cat === k && !isDone(t.id)).length;
+    return `
+      <button class="tile ${catClass(k)}" data-a="open-cat" data-v="${k}" aria-label="افتحي قسم ${c.name}">
+        <span class="tile-name">${c.name}</span>
+        <span class="tile-sub">${num(all)} مهمة</span>
+        ${rest ? `<span class="tile-count" aria-label="فاضل ${num(rest)} النهارده">${num(rest)}</span>` : ''}
+        <span class="tile-ill">${ILL[k]()}</span>
+      </button>`;
+  }).join('');
+  const soon = S.home.warranties.filter(w => daysUntil(w.until) >= 0 && daysUntil(w.until) <= 60).length;
+  return `
+    <main class="screen screen-top gutter"><div class="wrap">
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">شغل البيت</h2><span class="tag">${num(S.tasks.length)} مهمة بتتكرر</span></div>
+        <div class="tiles tiles-2">${tiles}<button class="tile tile-add" data-a="new">${ICON.plus}ضيفي مهمة</button></div>
+      </section>
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">بيانات البيت</h2></div>
+        <div class="list">
+          ${navRow('open-cat', 'warranties', ICON.shield, 'organize', 'الأجهزة والضمانات', `${num(S.home.warranties.length)} أجهزة`, soon ? `<span class="tag tag-soon">${num(soon)} قرب يخلص</span><span class="chev">${ICON.chev}</span>` : undefined)}
+          ${navRow('open-cat', 'contacts', ICON.phone, 'clean', 'أرقام مهمة', `${num(S.home.contacts.length)} أرقام`)}
+        </div>
+      </section>
+    </div></main>`;
+}
+
+/* =========================================================
+   شيت التفاصيل — الدوسة على مهمة بتعرضها الأول، والتعديل زرار جوه
+   ========================================================= */
+function nextDates(t, n = 3) {
+  const out = [];
+  for (let i = 0; i < 400 && out.length < n; i++) { const d = dayDate(i); if (occursOn(t, d)) out.push(d); }
+  return out;
+}
+function openDetail(id) { viewId = id; document.body.classList.add('locked'); renderDetail(); }
+function renderDetail() {
+  const t = findTask(viewId); if (!t) return closeSheet();
+  const isBill = !!t.bill;
+  const today = occursOn(t, new Date()), done = isDone(t.id);
+  const next = nextDates(t, 3);
+  $('sheet').innerHTML = `
+    <div class="backdrop" data-a="close-sheet"></div>
+    <div class="sheet ${catClass(t.cat)}" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <div class="handle" aria-hidden="true"></div>
+      <div class="detail-head">
+        ${Ico(CATS[t.cat].icon)}
+        <h2 id="sheet-title">${esc(t.title)}</h2>
+        <button class="icon-btn icon-btn-sm icon-btn-surface" data-a="close-sheet" aria-label="اقفلي">${ICON.close}</button>
+      </div>
+      <div class="detail-tags">
+        <span class="tag" style="background:var(--cat-100); color:var(--cat-800)">${CATS[t.cat].name}</span>
+        <span class="tag">${periodName(t.period)}</span>
+        <span class="tag">${num(t.mins)} دقيقة</span>
+        ${isBill ? `<span class="tag ${done ? 'tag-brand' : 'tag-accent'}">${done ? 'اتدفعت الشهر ده' : 'لسه ما اتدفعتش'}</span>` : today ? `<span class="tag ${done ? 'tag-brand' : 'tag-accent'}">${done ? 'خلصت النهارده' : 'عليكي النهارده'}</span>` : ''}
+      </div>
+      <dl style="margin:0">
+        ${isBill ? `<div class="info"><dt>المبلغ</dt><dd>${t.note || 'من غير مبلغ'}</dd></div>` : ''}
+        <div class="info"><dt>بتتكرر</dt><dd>${repeatLabel(t.repeat)}</dd></div>
+        <div class="info"><dt>المرات الجاية</dt><dd>${next.length ? next.map(d => `${dayTitle(d)}، ${fullDate(d)}`).join('<br>') : 'مفيش'}</dd></div>
+        ${t.note && !isBill ? `<div class="info"><dt>ملاحظة</dt><dd>${esc(t.note)}</dd></div>` : ''}
+      </dl>
+      <div class="sheet-actions">
+        ${isBill ? `<button class="btn ${done ? 'btn-secondary' : 'btn-primary'} btn-lg" data-a="detail-toggle">${done ? 'رجّعيها مش مدفوعة' : 'دفعتها ✓'}</button>`
+          : today ? `<button class="btn ${done ? 'btn-secondary' : 'btn-primary'} btn-lg" data-a="detail-toggle">${done ? 'رجّعيها مش متعملة' : 'خلصتها ✓'}</button>` : ''}
+        ${t.recipe ? `<button class="btn btn-soft btn-lg" data-a="recipe">افتحي الوصفة</button>` : ''}
+        <button class="btn btn-secondary btn-lg" data-a="edit-form">${isBill ? 'عدّلي الفاتورة' : 'عدّلي المهمة'}</button>
+      </div>
+    </div>`;
+}
+
+/* =========================================================
+   الـ Sheet: إضافة وتعديل مهمة
+   ========================================================= */
+function openSheet(task, presetCat) {
+  const now = new Date();
+  draft = task ? {
+    id: task.id, title: task.title, cat: task.cat, period: task.period, mins: task.mins, note: task.note || '', recipe: task.recipe,
+    rtype: task.repeat.type,
+    days: task.repeat.days ? [...task.repeat.days] : [now.getDay()],
+    day: task.repeat.day || now.getDate(),
+    date: task.repeat.date || addDays(1)
+  } : {
+    id: null, title: '', cat: presetCat || 'clean', period: 'morning', mins: 10, note: '',
+    rtype: 'weekly', days: [now.getDay()], day: now.getDate(), date: addDays(1)
+  };
+  sheetError = ''; confirmDelete = false;
+  document.body.classList.add('locked');
+  renderSheet();
+  setTimeout(() => { const f = $('f-title'); if (f && !task) f.focus(); }, 300);
+}
+function closeSheet() { stockId = null; stockConfirm = false; draft = null; viewId = null; form = null; picker = null; if (monthSheet) { monthSheet = false; calOpen = false; } $('sheet').innerHTML = ''; document.body.classList.remove('locked'); }
+
+function renderSheet() {
+  if (!draft) return;
+  const d = draft;
+  let repeatExtra = '';
+  if (d.rtype === 'weekly') {
+    repeatExtra = `<div class="chip-grid" style="grid-template-columns:repeat(7, 1fr); margin-top:10px" role="group" aria-label="أيام التكرار">
+      ${WEEK.map(w => Chip({ label: DAY_SHORT[w], pressed: d.days.includes(w), attrs: `data-a="pick-day" data-v="${w}"` })).join('')}</div>`;
+  } else if (d.rtype === 'monthly') {
+    repeatExtra = `<label class="field-label" for="f-day">يوم كام في الشهر؟</label>
+      <select class="input" id="f-day" data-f="day">${Array.from({ length: 31 }, (_, i) => i + 1).map(n =>
+        `<option value="${n}" ${d.day === n ? 'selected' : ''}>يوم ${num(n)}</option>`).join('')}</select>`;
+  } else if (d.rtype === 'once') {
+    repeatExtra = `<label class="field-label" for="f-date">إمتى؟</label>
+      <input class="input" type="date" id="f-date" data-f="date" value="${d.date}" min="${todayStr()}">`;
+  }
+
+  $('sheet').innerHTML = `
+    <div class="backdrop" data-a="close-sheet"></div>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <div class="handle" aria-hidden="true"></div>
+      <div class="sheet-head">
+        <h2 id="sheet-title">${d.id ? 'تعديل المهمة' : 'مهمة جديدة'}</h2>
+        <button class="icon-btn icon-btn-sm icon-btn-surface" data-a="close-sheet" aria-label="اقفلي">${ICON.close}</button>
+      </div>
+
+      <label class="field-label" for="f-title">اسم المهمة</label>
+      <input class="input ${sheetError === 'title' ? 'is-error' : ''}" id="f-title" data-f="title" value="${esc(d.title)}" placeholder="مثلاً: تنضيف الشبابيك" autocomplete="off">
+      ${sheetError === 'title' ? '<div class="field-error">اكتبي اسم المهمة</div>' : ''}
+
+      <span class="field-label">القسم</span>
+      <div class="chip-grid" style="grid-template-columns:repeat(3, 1fr)" role="radiogroup">
+        ${Object.entries(CATS).filter(([k]) => k !== 'bills').map(([k, c]) => Chip({ label: c.name, icon: ChipIco(k), pressed: d.cat === k, role: 'radio', attrs: `data-a="pick" data-k="cat" data-v="${k}"` })).join('')}
+      </div>
+
+      <span class="field-label">وقتها في اليوم</span>
+      ${Seg('period', d.period, PERIODS.map(p => [p.id, p.name]))}
+
+      <span class="field-label">بتتكرر</span>
+      ${Seg('rtype', d.rtype, REPEATS)}
+      ${repeatExtra}
+      ${sheetError === 'days' ? '<div class="field-error">اختاري يوم واحد على الأقل</div>' : ''}
+
+      <span class="field-label">بتاخد قد إيه؟</span>
+      <div class="chip-grid" style="grid-template-columns:repeat(6, 1fr)" role="radiogroup">
+        ${MINS.map(m => Chip({ label: num(m) + ' د', pressed: d.mins === m, role: 'radio', attrs: `data-a="pick" data-k="mins" data-v="${m}"` })).join('')}
+      </div>
+
+      <label class="field-label" for="f-note">ملاحظة (اختياري)</label>
+      <input class="input" id="f-note" data-f="note" value="${esc(d.note)}" placeholder="مثلاً: استخدمي منظف الزجاج" autocomplete="off">
+
+      <div class="sheet-actions">
+        <button class="btn btn-primary btn-lg" data-a="save">${d.id ? 'احفظي التعديل' : 'ضيفي المهمة'}</button>
+        ${d.id ? `<button class="btn btn-danger ${confirmDelete ? 'is-confirm' : ''}" data-a="delete">${confirmDelete ? 'دوسي تاني عشان تمسحيها' : 'امسحي المهمة'}</button>` : ''}
+      </div>
+    </div>`;
+}
+
+function saveDraft() {
+  const d = draft;
+  d.title = d.title.trim();
+  if (!d.title) { sheetError = 'title'; renderSheet(); $('f-title').focus(); return; }
+  if (d.rtype === 'weekly' && !d.days.length) { sheetError = 'days'; renderSheet(); return; }
+  const repeat = d.rtype === 'daily' ? { type: 'daily' }
+               : d.rtype === 'weekly' ? { type: 'weekly', days: [...d.days] }
+               : d.rtype === 'monthly' ? { type: 'monthly', day: Number(d.day) }
+               : { type: 'once', date: d.date || addDays(1) };
+  const task = { id: d.id || 't' + Date.now(), title: d.title, cat: d.cat, period: d.period, mins: Number(d.mins), note: d.note.trim(), repeat };
+  if (d.recipe) task.recipe = true;
+  const i = S.tasks.findIndex(t => t.id === task.id);
+  i >= 0 ? (S.tasks[i] = task) : S.tasks.push(task);
+  save(); closeSheet(); render();
+  toast(i < 0 ? 'اتضافت المهمة' : 'اتحفظ التعديل');
+}
+function deleteDraft() {
+  if (!confirmDelete) { confirmDelete = true; renderSheet(); return; }
+  S.tasks = S.tasks.filter(t => t.id !== draft.id);
+  save(); closeSheet(); render(); toast('اتمسحت المهمة');
+}
+
+/* =========================================================
+   صفحة القسم — بتفتح من تاب روتين البيت
+   ========================================================= */
+function viewCategory(k) {
+  const c = CATS[k];
+  const extra = '';
+  const today = todayTasks().filter(t => t.cat === k);
+  const left = today.filter(t => !isDone(t.id)).length;
+  const all = S.tasks.filter(t => t.cat === k);
+  const upcoming = upcomingList().filter(u => u.t.cat === k);
+  const GROUPS = [['daily', 'كل يوم'], ['weekly', 'كل أسبوع'], ['monthly', 'كل شهر'], ['once', 'مرة واحدة']];
+
+  const groups = GROUPS.map(([type, label]) => {
+    const list = all.filter(t => t.repeat.type === type).sort((a, b) => periodIndex(a.period) - periodIndex(b.period));
+    if (!list.length) return '';
+    return `
+      <div class="group">
+        <div class="group-head"><span class="group-name">${label}</span><span class="tag">${num(list.length)}</span></div>
+        <div class="list">${list.map(t => `
+          <button class="li" data-a="edit" data-id="${t.id}" aria-label="عدّلي: ${esc(t.title)}">
+            <span class="li-body"><span class="li-title">${esc(t.title)}</span>
+            <span class="li-meta">${repeatLabel(t.repeat)}، ${periodName(t.period)}، ${num(t.mins)} دقيقة</span></span>
+            <span class="chev">${ICON.chev}</span>
+          </button>`).join('')}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <header class="hero gutter"><div class="wrap">
+      <div class="page-hero">
+        <div class="page-text">
+          <p>${today.length ? (left ? `فاضل ${num(left)} من ${num(today.length)} النهارده` : 'خلصتي مهام النهارده ✓') : 'مفيش مهام النهارده'}، و${num(all.length)} مهمة في القسم</p>
+        </div>
+        <div class="page-ill ${catClass(k)}">${ILL[k]()}</div>
+      </div>
+    </div></header>
+    <main class="screen gutter"><div class="wrap ${catClass(k)}">
+      ${extra}
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">${extra ? 'مهام النهارده' : 'النهارده'}</h2></div>
+        ${today.length ? `<div class="list">${today.sort((a, b) => periodIndex(a.period) - periodIndex(b.period)).map(taskItem).join('')}</div>` : `<div class="empty">مفيش مهام ${c.name} النهارده</div>`}
+      </section>
+      ${upcoming.length ? `<section class="block"><div class="section-head"><h2 class="section-title">المواعيد الجاية</h2></div>
+        <div class="cards">${upcoming.map(({ t, date }) => `
+          <div class="card ${catClass(t.cat)}"><div class="card-top">${Ico(c.icon, 'ico-sm')}<span class="tag ${urgency(date)}">${whenLabel(date)}</span></div>
+          <span class="card-title">${esc(t.title)}</span></div>`).join('')}</div></section>` : ''}
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">كل مهام ${c.name}</h2></div>
+        ${groups || `<div class="empty">مفيش مهام لسه</div>`}
+        <button class="btn btn-secondary btn-lg" style="margin-top:18px" data-a="new" data-cat="${k}">${ICON.plus}ضيفي مهمة ${c.name}</button>
+      </section>
+    </div></main>`;
+}
+
+/* =========================================================
+   الداتا الجديدة: الوصفات، الأكل، المشتريات، الفلوس، بيانات البيت
+   ========================================================= */
+const monthKey = (d = new Date()) => iso(d).slice(0, 7);
+const money = n => num(Math.round(n)) + ' جنيه';
+const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+
+// أقسام السوبر ماركت — القايمة بتتقسم بيها عشان اللفة في المحل تبقى أسرع
+const SECTIONS = [['veg', 'خضار وفاكهة'], ['meat', 'لحوم وفراخ'], ['dairy', 'ألبان وبيض'], ['bakery', 'عيش ومخبوزات'], ['grocery', 'بقالة'], ['clean', 'منظفات'], ['other', 'حاجات تانية']];
+const SEC_NAME = Object.fromEntries(SECTIONS);
+const SEC_GUESS = [
+  ['meat', /فراخ|لحم|مفروم|سمك|بسطرمة|كبدة|سجق|صدور|أوراك|وراك/],
+  ['dairy', /لبن|جبن|زبادي|بيض|زبدة|قشطة|كريمة|سمنة/],
+  ['bakery', /عيش|توست|بقسماط|فينو|كرواسون/],
+  ['clean', /صابون|منظف|كلور|مسحوق|سائل|مناديل|تواليت|إسفنج|سلك|مطهر|معطر/],
+  ['grocery', /رز|مكرونة|شعرية|سكر|ملح|زيت|دقيق|عدس|شاي|بن|قهوة|صلصة|تونة|فول|توابل|كمون|بهارات|خل|مرقة|نشا/],
+  ['veg', /طماطم|بصل|ثوم|بطاطس|خيار|جزر|فلفل|ليمون|خس|كوسة|باذنجان|موز|تفاح|برتقال|بقدونس|شبت|كزبرة|فاكهة|خضار/]
+];
+const guessSec = name => (SEC_GUESS.find(([, re]) => re.test(name)) || ['other'])[0];
+const BASICS = /^(ملح|فلفل|كمون|زيت|مية|بهارات|بابريكا)/;   // حاجات أساسية مش بتتبعت للمشتريات
+
+const RSTATUS = [['want', 'عايزة أجربها'], ['tried', 'جربتها'], ['mastered', 'اتقنتها']];
+const RSTATUS_TAG = { want: 'tag-accent', tried: 'tag-brand', mastered: 'tag-done' };
+const STOCK = { ok: ['موجود', 'tag-done'], low: ['قرب يخلص', 'tag-soon'], out: ['خلص', 'tag-urgent'] };
+const EXP_CATS = [['food', 'أكل وشرب', 'kitchen'], ['home', 'البيت', 'clean'], ['bills', 'فواتير', 'bills'], ['transport', 'مواصلات', 'shop'], ['out', 'خروج', 'events'], ['other', 'تانية', 'organize']];
+const EXP = Object.fromEntries(EXP_CATS.map(([k, n, c]) => [k, { name: n, cat: c }]));
+
+function seedExtra() {
+  const I = (n, q) => ({ n, q, sec: guessSec(n) });
+  const st = (t, min = 0) => ({ t, min });
+  const recipes = [
+    { id: 'r1', name: 'مكرونة بالصلصة واللحمة المفرومة', mins: 30, level: 'سهلة', status: 'want',
+      ing: [I('مكرونة قلم', '٢٥٠ جرام'), I('لحمة مفرومة', '٢٥٠ جرام'), I('بصل', 'بصلة متوسطة'), I('ثوم', '٢ فص'), I('طماطم', '٢ حباية'), I('صلصة طماطم', '٣ معالق كبيرة'), I('زيت', 'معلقة كبيرة'), I('ملح وفلفل وكمون', 'حسب ذوقك')],
+      steps: [st('اغلي مية في حلة كبيرة وحطي فيها معلقة ملح.'), st('حطي المكرونة في المية وهي بتغلي، وقلبيها كل شوية عشان ما تلزقش.', 10),
+        st('في طاسة تانية، سخني الزيت وشوّحي البصل المفروم لحد ما يدبل.', 4), st('ضيفي اللحمة المفرومة والثوم، وقلبي لحد ما لون اللحمة يتغير.', 7),
+        st('ضيفي الطماطم المبشورة والصلصة والملح والفلفل والكمون، وسيبيها تتسبك على نار هادية.', 10), st('صفّي المكرونة وقلبيها مع الصلصة، وقدميها سخنة.')],
+      tip: 'ما تغسليش المكرونة بعد ما تصفيها، عشان الصلصة تمسك فيها.' },
+    { id: 'r2', name: 'فراخ بانيه', mins: 35, level: 'سهلة', status: 'tried',
+      ing: [I('صدور فراخ', '٢ صدر (حوالي ٤٠٠ جرام)'), I('بيض', '٢ بيضة'), I('بقسماط', 'كوباية'), I('دقيق', 'نص كوباية'), I('ثوم', '٢ فص'), I('ليمون', 'لمونة'), I('زيت للتحمير', 'على قد الطاسة'), I('ملح وفلفل وبابريكا', 'حسب ذوقك')],
+      steps: [st('افردي صدور الفراخ رفيعة بالشاكوش، أو قطعيها شرايح رفيعة.'), st('تبّليها بالثوم المهروس والليمون والملح والفلفل، وسيبيها ترتاح.', 15),
+        st('جهزي ٣ أطباق: واحد فيه دقيق، وواحد فيه البيض مخفوق، وواحد فيه بقسماط.'), st('غطّسي كل شريحة في الدقيق، وبعدين البيض، وبعدين البقسماط.'),
+        st('سخني الزيت على نار متوسطة، وحمّري كل وش لحد ما يدهّب.', 4), st('طلعيها على ورق مطبخ عشان يشرب الزيت الزيادة.')],
+      tip: 'اتأكدي إن الزيت سخن قبل ما تحطي الفراخ، وإلا البانيه هيشرب زيت.' },
+    { id: 'r3', name: 'رز أبيض بالشعرية', mins: 25, level: 'سهلة', status: 'tried',
+      ing: [I('رز مصري', 'كوباية'), I('شعرية', 'ربع كوباية'), I('زبدة', 'معلقة كبيرة'), I('مية سخنة', 'كوباية وربع'), I('ملح', 'نص معلقة صغيرة')],
+      steps: [st('اغسلي الرز كويس لحد ما المية تطلع صافية، وسيبيه يصفّى.'), st('سيّحي الزبدة في حلة، وحمّري الشعرية لحد ما تدهّب.', 3),
+        st('ضيفي الرز وقلبيه مع الشعرية.', 1), st('ضيفي المية السخنة والملح، وسيبيه يغلي على نار عالية.', 3),
+        st('وطّي النار خالص وغطّي الحلة، وسيبيه يستوي.', 15), st('اطفي النار وسيبيه متغطي شوية قبل ما تقلبيه.', 5)],
+      tip: 'النسبة اللي عمرها ما تخيب: كوباية رز لكوباية وربع مية.' },
+    { id: 'r4', name: 'شوربة عدس', mins: 40, level: 'سهلة', status: 'want',
+      ing: [I('عدس أصفر', 'كوباية'), I('بصل', 'بصلة'), I('جزر', 'جزرة'), I('طماطم', 'حباية'), I('مرقة', 'مكعب'), I('ليمون', 'لمونة للتقديم'), I('ملح وكمون', 'حسب ذوقك')],
+      steps: [st('اغسلي العدس كويس.'), st('حطي العدس والبصل والجزر والطماطم متقطعين في حلة، مع ٤ كوبايات مية ومكعب المرقة.'),
+        st('سيبيها تغلي على نار عالية.', 5), st('وطّي النار وسيبيها لحد ما العدس والخضار يستووا.', 25),
+        st('اضربيها في الخلاط لحد ما تبقى ناعمة، وتبّليها بالملح والكمون.'), st('قدميها سخنة مع الليمون والعيش المحمص.')],
+      tip: 'لو الشوربة تقيلة زيادة، ضيفي مية سخنة شوية بشوية.' },
+    { id: 'r5', name: 'شكشوكة', mins: 15, level: 'سهلة', status: 'mastered',
+      ing: [I('بيض', '٤ بيضات'), I('طماطم', '٢ حباية'), I('فلفل رومي', 'حباية'), I('بصل', 'بصلة صغيرة'), I('عيش', 'للتقديم'), I('زيت', 'معلقة كبيرة'), I('ملح وكمون', 'حسب ذوقك')],
+      steps: [st('شوّحي البصل في الزيت.', 3), st('ضيفي الفلفل الرومي وقلبي.', 2), st('ضيفي الطماطم المبشورة والملح والكمون، وسيبيها تتسبك.', 5),
+        st('اكسري البيض فوق الصلصة وغطّي الطاسة على نار هادية.', 4), st('قدميها سخنة مع العيش.')],
+      tip: 'لو بتحبي الصفار سايح، شيليها من على النار أول ما البياض يجمد.' },
+    { id: 'r6', name: 'صينية بطاطس بالفراخ', mins: 75, level: 'متوسطة', status: 'want',
+      ing: [I('أوراك فراخ', '٤ وراك'), I('بطاطس', '٣ حبايات كبيرة'), I('بصل', 'بصلة'), I('طماطم', '٢ حباية'), I('صلصة طماطم', '٢ معلقة كبيرة'), I('ثوم', '٣ فصوص'), I('بهارات فراخ', 'حسب ذوقك')],
+      steps: [st('سخني الفرن على ٢٠٠ درجة.', 10), st('قطعي البطاطس حلقات، والبصل والطماطم شرايح.'), st('تبّلي الفراخ بالثوم والبهارات.'),
+        st('رصّي البطاطس والبصل في الصينية، والفراخ فوقهم.'), st('اخلطي الصلصة مع كوباية مية وملح، وصبيها على الصينية.'),
+        st('غطّي الصينية بورق فويل وحطيها في الفرن.', 40), st('شيلي الفويل وسيبيها لحد ما الوش يحمّر.', 20)],
+      tip: 'خرّمي الفويل كام خرم صغيرين عشان البخار يطلع.' }
+  ];
+  const meals = { [addDays(0)]: 'r1', [addDays(1)]: 'r2', [addDays(2)]: 'r4', [addDays(4)]: 'r6' };
+  const W = (name, qty, done = false) => ({ id: uid('i'), name, qty, sec: guessSec(name), list: 'week', done });
+  const M = (name, qty) => ({ id: uid('i'), name, qty, sec: guessSec(name), list: 'month', done: false });
+  const shop = {
+    items: [W('طماطم', '١ كيلو'), W('بصل', '١ كيلو'), W('لبن', '٢ كرتونة'), W('بيض', 'كرتونة', true), W('عيش', '٢ كيس'), W('صدور فراخ', 'نص كيلو'), W('سائل مواعين', 'إزازة'),
+            M('رز مصري', '٢ كيلو'), M('مكرونة', '٤ أكياس'), M('سكر', '٢ كيلو'), M('زيت', '٢ لتر'), M('شاي', 'علبة'), M('مسحوق غسيل', 'كيس كبير')],
+    stock: [['رز مصري', 'ok'], ['زيت', 'low'], ['سكر', 'ok'], ['ملح', 'ok'], ['صلصة طماطم', 'out'], ['شاي', 'low'], ['مكرونة', 'ok']].map(([name, state]) => ({ id: uid('s'), name, state }))
+  };
+  const first = new Date(); first.setDate(1);
+  const ago = n => { const d = dayDate(-n); return iso(d < first ? first : d); };
+  const m = monthKey();
+  const bills = [{ id: 'b1', name: 'باقة النت', amount: 250, day: 3 }, { id: 'b2', name: 'فاتورة الكهربا', amount: 450, day: 5 }, { id: 'b3', name: 'فاتورة الغاز', amount: 120, day: 10 }]
+    .map(b => ({ ...b, paid: new Date().getDate() >= b.day ? { [m]: true } : {} }));
+  const expenses = [
+    { amount: 1400, cat: 'food', note: 'التموين الشهري', date: iso(first) }, { amount: 600, cat: 'out', note: 'عشا برا', date: ago(8) },
+    { amount: 320, cat: 'home', note: 'منظفات', date: ago(5) }, { amount: 850, cat: 'food', note: 'طلبات الأسبوع', date: ago(2) },
+    { amount: 150, cat: 'transport', note: 'مشوار', date: ago(1) },
+    ...bills.filter(b => b.paid[m]).map(b => ({ amount: b.amount, cat: 'bills', note: b.name, date: iso(new Date(first.getFullYear(), first.getMonth(), b.day)), bill: b.id, month: m }))
+  ].map(e => ({ id: uid('e'), ...e }));
+  return {
+    recipes, meals, shop,
+    money: { budget: 12000, expenses, bills },
+    home: {
+      warranties: [{ id: uid('w'), name: 'التلاجة', until: addDays(700) }, { id: uid('w'), name: 'الغسالة', until: addDays(300) }, { id: uid('w'), name: 'التكييف', until: addDays(45) }],
+      contacts: [{ id: uid('c'), name: 'أسطى محمد', role: 'سباك', phone: '01000000000' }, { id: uid('c'), name: 'صيانة الغسالة', role: 'خدمة العملاء', phone: '19000' }]
+    }
+  };
+}
+
+/** بيكمل الداتا القديمة اللي على الموبايل بالأجزاء الجديدة، وبينقل الفواتير من «مهام» لـ«الفلوس» */
+function upgrade(s) {
+  const d = seedExtra();
+  ['recipes', 'meals', 'shop', 'home'].forEach(k => { if (!s[k]) s[k] = d[k]; });
+  if (!s.learn) { s.learn = seedLearn(); newRecipes().forEach(r => { if (!s.recipes.some(x => x.id === r.id)) s.recipes.push(r); }); }
+  if (!s.money) {
+    const old = s.tasks.filter(t => t.cat === 'bills');
+    s.money = { budget: d.money.budget, expenses: [], bills: old.length ? old.map(t => {
+      const name = t.title.replace(/^(دفع|تجديد)\s+/, '');
+      const known = d.money.bills.find(b => b.name === name);
+      return { id: uid('b'), name, amount: known ? known.amount : 0, day: t.repeat.day || 1, paid: {} };
+    }) : d.money.bills };
+  }
+  s.tasks = s.tasks.filter(t => t.cat !== 'bills');   // الفاتورة بيتها الفلوس دلوقتي
+  return upgradeLists(s);
+}
+
+/* ---------- الفواتير بتظهر في النهارده والخطة كأنها مهام (عرض بس، بيتها الفلوس) ---------- */
+const billTasks = () => S.money.bills.map(b => ({
+  id: 'b:' + b.id, title: 'دفع ' + b.name, cat: 'bills', period: 'noon', mins: 5,
+  repeat: { type: 'monthly', day: b.day }, note: b.amount ? money(b.amount) : '', bill: b.id
+}));
+const allTasks = () => S.tasks.concat(billTasks());
+const findTask = id => allTasks().find(t => t.id === id);
+const billPaid = (b, m = monthKey()) => !!(b.paid && b.paid[m]);
+
+function toggleBill(bid) {
+  const b = S.money.bills.find(x => x.id === bid), m = monthKey();
+  if (billPaid(b)) {
+    delete b.paid[m];
+    S.money.expenses = S.money.expenses.filter(e => !(e.bill === bid && e.month === m));
+  } else {
+    b.paid = b.paid || {}; b.paid[m] = true;
+    if (b.amount) S.money.expenses.push({ id: uid('e'), amount: b.amount, cat: 'bills', note: b.name, date: todayStr(), bill: bid, month: m });
+  }
+}
+
+/* =========================================================
+   Sheet عام — أي فورم بسيط (مصروف، فاتورة، وصفة، جهاز، رقم...)
+   ========================================================= */
+let form = null;
+const sheetWrap = (title, body, cls = '') => `
+  <div class="backdrop" data-a="close-sheet"></div>
+  <div class="sheet ${cls}" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="handle" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <h2 id="sheet-title">${title}</h2>
+      <button class="icon-btn icon-btn-sm icon-btn-surface" data-a="close-sheet" aria-label="اقفلي">${ICON.close}</button>
+    </div>${body}
+  </div>`;
+
+function openForm(cfg) {
+  form = { ...cfg, values: { ...cfg.values }, confirmDel: false, error: null };
+  document.body.classList.add('locked'); renderForm();
+  setTimeout(() => { const f = document.querySelector('#sheet [data-ff]'); if (f && !cfg.editing) f.focus(); }, 300);
+}
+function renderForm() {
+  const f = form, v = f.values;
+  const fields = f.fields.map(fd => {
+    const err = f.error === fd.k ? `<div class="field-error">${fd.err || 'المكان ده مطلوب'}</div>` : '';
+    if (fd.type === 'chips') return `<span class="field-label">${fd.label}</span>
+      <div class="chip-grid" style="grid-template-columns:repeat(${fd.cols || 3}, 1fr)" role="radiogroup">
+        ${fd.options.map(([val, label, cat]) => Chip({ label, icon: cat ? ChipIco(cat) : '', pressed: String(v[fd.k]) === String(val), role: 'radio', attrs: `data-a="ff-pick" data-k="${fd.k}" data-v="${val}"` })).join('')}</div>${err}`;
+    if (fd.type === 'textarea') return `<label class="field-label" for="ff-${fd.k}">${fd.label}</label>
+      <textarea class="input ${err ? 'is-error' : ''}" id="ff-${fd.k}" data-ff="${fd.k}" placeholder="${fd.ph || ''}" rows="${fd.rows || 4}">${esc(v[fd.k] || '')}</textarea>${err}`;
+    return `<label class="field-label" for="ff-${fd.k}">${fd.label}</label>
+      <input class="input ${err ? 'is-error' : ''}" id="ff-${fd.k}" data-ff="${fd.k}" type="${fd.type || 'text'}" ${fd.type === 'number' ? 'inputmode="numeric" min="0"' : ''} value="${esc(v[fd.k] ?? '')}" placeholder="${fd.ph || ''}" autocomplete="off">${err}`;
+  }).join('');
+  $('sheet').innerHTML = sheetWrap(f.title, `${fields}
+    <div class="sheet-actions">
+      <button class="btn btn-primary btn-lg" data-a="ff-save">${f.saveLabel || 'احفظي'}</button>
+      ${f.onDelete ? `<button class="btn btn-danger ${f.confirmDel ? 'is-confirm' : ''}" data-a="ff-delete">${f.confirmDel ? 'دوسي تاني عشان تمسحي' : (f.deleteLabel || 'امسحي')}</button>` : ''}
+    </div>`);
+}
+function saveForm() {
+  const f = form, v = f.values;
+  const miss = f.fields.find(fd => fd.required && !String(v[fd.k] ?? '').trim());
+  if (miss) { f.error = miss.k; renderForm(); return; }
+  const bad = f.fields.find(fd => fd.type === 'number' && fd.required && !(Number(v[fd.k]) > 0));
+  if (bad) { f.error = bad.k; bad.err = 'اكتبي رقم أكبر من صفر'; renderForm(); return; }
+  const msg = f.onSave(v);
+  save(); closeSheet(); render(); toast(msg || 'اتحفظ');
+}
+
+/* =========================================================
+   المطبخ — أكل الأسبوع + وصفاتي (جوه صفحة قسم المطبخ)
+   ========================================================= */
+const recipeById = id => S.recipes.find(r => r.id === id);
+let picker = null;   // تاريخ اليوم اللي بنختار أكلته
+
+function kitchenBlocks() {
+  const days = Array.from({ length: 7 }, (_, i) => dayDate(i));
+  const planned = days.filter(d => S.meals[iso(d)]).length;
+  const rows = days.map(d => {
+    const r = recipeById(S.meals[iso(d)]);
+    return `
+      <div class="li meal-row">
+        <span class="meal-day"><b>${dayTitle(d)}</b><span>${num(d.getDate())}</span></span>
+        ${r ? `<button class="li-tap" data-a="open-recipe" data-v="${r.id}"><span class="li-body"><span class="li-title">${esc(r.name)}</span><span class="li-meta">${num(r.mins)} دقيقة</span></span></button>`
+            : `<span class="li-body"><span class="li-meta">لسه ما اخترتيش</span></span>`}
+        <button class="btn btn-sm ${r ? 'btn-text' : 'btn-soft'}" data-a="meal-pick" data-v="${iso(d)}">${r ? 'غيّري' : 'اختاري'}</button>
+      </div>`;
+  }).join('');
+  const recipes = S.recipes.map(r => `
+    <button class="li" data-a="open-recipe" data-v="${r.id}">
+      ${Ico(ICON.kitchen)}
+      <span class="li-body"><span class="li-title">${esc(r.name)}</span><span class="li-meta">${num(r.mins)} دقيقة، ${r.level}</span></span>
+      <span class="tag ${RSTATUS_TAG[r.status]}">${Object.fromEntries(RSTATUS)[r.status]}</span>
+    </button>`).join('');
+  const KV = [['plan', 'أكل الأسبوع'], ['recipes', 'وصفاتي'], ['learn', 'اتعلمي']];
+  const seg = `<div class="block">${Seg('kitchen', kitchenView, KV, 'kitchen-view')}</div>`;
+  if (kitchenView === 'learn') return seg + learnBlock();
+  if (kitchenView === 'recipes') return `${seg}
+    <section class="block">
+      <div class="section-head"><h2 class="section-title">وصفاتي</h2><span class="tag">${num(S.recipes.length)} وصفات</span></div>
+      <div class="list">${recipes}</div>
+    </section>`;
+  return `${seg}
+    <section class="block">
+      <div class="section-head"><h2 class="section-title">أكل الأسبوع</h2><span class="tag">${num(planned)} من ٧ أيام</span></div>
+      <div class="list">${rows}</div>
+      <button class="btn btn-secondary btn-lg" style="margin-top:12px" data-a="meals-to-shop">${ICON.cart}ابعتي مكونات الأسبوع للمشتريات</button>
+    </section>`;
+}
+
+function renderPicker() {
+  const d = fromIso(picker), cur = S.meals[picker];
+  $('sheet').innerHTML = sheetWrap(`أكلة ${dayTitle(d)}، ${fullDate(d)}`, `
+    <div class="list" style="margin-top:14px">${S.recipes.map(r => `
+      <button class="li ${r.id === cur ? 'is-picked' : ''}" data-a="meal-set" data-v="${r.id}" aria-pressed="${r.id === cur}">
+        ${Ico(ICON.kitchen)}<span class="li-body"><span class="li-title">${esc(r.name)}</span><span class="li-meta">${num(r.mins)} دقيقة، ${r.level}</span></span>
+        ${r.id === cur ? `<span class="check is-on">${ICON.check}</span>` : ''}
+      </button>`).join('')}</div>
+    <div class="sheet-actions">${cur ? `<button class="btn btn-danger" data-a="meal-set" data-v="">شيلي الأكلة من اليوم ده</button>` : ''}</div>`, 'cat-kitchen');
+}
+
+function mealsToShop(dates) {
+  let added = 0;
+  dates.forEach(k => {
+    const r = recipeById(S.meals[k]); if (!r) return;
+    r.ing.forEach(i => {
+      if (BASICS.test(i.n)) return;
+      const have = S.shop.items.some(x => !x.done && x.name === i.n);
+      const stocked = S.shop.stock.some(x => x.name === i.n && x.state === 'ok');
+      if (have || stocked) return;
+      S.shop.items.push({ id: uid('i'), name: i.n, qty: i.q, sec: i.sec || guessSec(i.n), list: mainList(), done: false, from: r.name });
+      added++;
+    });
+  });
+  return added;
+}
+
+/* =========================================================
+   اتعلمي — «العلم ورا الطبخة»
+   المواضيع مستوحاة من حساب علي باشا (@bashacook.ar)، والشرح مكتوب بكلامنا،
+   وكل كارت بيودّي لحسابه عشان تتفرجي على الريل نفسه.
+   ========================================================= */
+const BASHA_URL = 'https://www.instagram.com/bashacook.ar/';
+const SRC = { name: 'علي باشا', handle: '@bashacook.ar', url: BASHA_URL };
+
+function seedLearn() {
+  return [
+    { id: 'l1', title: 'سر قرمشة الفراخ المقلية', recipe: 'r7', url: BASHA_URL,
+      why: ['المية هي عدو القرمشة: أي مية على سطح الفراخ بتتحول لبخار وتطري الطبقة اللي برا. نشفيها كويس بورق المطبخ قبل التغطيس.',
+            'خلطي الدقيق بنشا الذرة: النشا ما بيعملش «جلوتين» زي الدقيق، فالطبقة بتطلع أخف وأنشف وأقرمش.',
+            'الزيت لازم يبقى سخن (حوالي ١٧٠ درجة): لو بارد، الفراخ بتقعد فيه وقت أطول وتشرب زيت. اختبريه بحتة عيش صغيرة: لو فارت على طول، الزيت جاهز.',
+            'ريحيها على شبكة مش على ورق: الورق بيحبس البخار تحت الفراخ فيطري الوش اللي تحت.'] },
+    { id: 'l2', title: 'ليه الباذنجان بيشرب زيت؟', recipe: 'r8', url: BASHA_URL,
+      why: ['الباذنجان جواه فراغات هوا كتير زي الإسفنجة، ولما يدخل الزيت الفراغات دي بتمتص الزيت.',
+            'رشي عليه ملح وسيبيه نص ساعة: الملح بيسحب المية، والخلايا بتنكمش فالفراغات تقل.',
+            'نشفيه كويس قبل القلي، عشان المية والزيت السخن ما يطرطشوش.',
+            'ولو عايزة أقل زيت خالص: ادهنيه بالفرشة واشويه في الفرن بدل ما تغرقيه في الزيت.'] },
+    { id: 'l3', title: 'الحليب الدهبي (الكركم باللبن)', recipe: 'r9', url: BASHA_URL,
+      why: ['الكركم لونه وطعمه جايين من مادة اسمها «الكركمين»، والجسم ما بيمتصهاش لوحدها بسهولة.',
+            'رشة فلفل أسود بتفرق: الفلفل فيه مادة بتساعد الجسم يستفيد من الكركمين أكتر.',
+            'الكركمين بيدوب في الدهون، فاللبن كامل الدسم أو معلقة عسل وزبدة بيخلوه أحسن من اللبن الخالي.',
+            'ما تغليهوش جامد: سخنيه على نار هادية عشان اللبن ما يفورش والتوابل ما تمررش.'] },
+    { id: 'l4', title: 'أشهر أنواع الرز وتطبخي كل واحد إزاي', recipe: 'r3', url: BASHA_URL,
+      why: ['الرز المصري (حبته قصيرة ومدورة): فيه نشا كتير فبيطلع طري ولازق شوية. ده بتاع الرز بالشعرية والمحشي. النسبة: كوباية رز لكوباية وربع مية.',
+            'البسمتي (حبته طويلة ورفيعة): بيطلع مفلفل وريحته حلوة، وده بتاع الكبسة والبرياني. اغسليه وانقعيه ٢٠ دقيقة قبل الطبخ.',
+            'الرز الأمريكاني (حبته طويلة): بيطلع مفلفل ونشاه أقل. ونسبة الميه بتاعته بتختلف من نوع للتاني، فاتبعي المكتوب على الكيس.',
+            'قاعدة لكل الأنواع: ما تقلبيش الرز وهو بيستوي، والقلب بيكسر الحبة ويطلّع النشا فيلزق.'] },
+    { id: 'l5', title: 'المخبوزات القطنية: ليه العيش يطلع طري؟', recipe: '', url: BASHA_URL,
+      why: ['العجن بيبني شبكة «جلوتين» جوه العجينة، والشبكة دي بتحبس الغاز اللي بتطلعه الخميرة فالعيش ينفخ.',
+            'اللبن والزبدة والبيض بيطروا العجينة وبيخلوا القشرة رقيقة، عشان كده عيش البرجر أطرى من العيش البلدي.',
+            'خلي العجينة تخمر في مكان دافي، لكن مش سخن: الحرارة العالية بتموت الخميرة.',
+            'سر إضافي: سخني جزء صغير من الدقيق مع مية لحد ما يبقى زي البودنج (اسمه تانجزونج)، واخلطيه في العجينة. بيمسك ميه أكتر، فالعيش يفضل طري أيام.'] }
+  ];
+}
+
+const newRecipes = () => {
+  const I = (n, q) => ({ n, q, sec: guessSec(n) });
+  const st = (t, min = 0) => ({ t, min });
+  return [
+    { id: 'r7', name: 'فراخ مقلية مقرمشة', mins: 45, level: 'متوسطة', status: 'want', learn: 'l1',
+      ing: [I('أوراك فراخ', '٤ وراك'), I('لبن زبادي', 'كوباية'), I('دقيق', 'كوباية'), I('نشا ذرة', 'نص كوباية'), I('ثوم بودرة', 'معلقة صغيرة'), I('بابريكا', 'معلقة صغيرة'), I('زيت للتحمير', 'على قد الحلة'), I('ملح وفلفل', 'حسب ذوقك')],
+      steps: [st('تبّلي الفراخ بالزبادي والملح والفلفل، وسيبيها في التلاجة.', 30), st('اخلطي الدقيق والنشا والثوم والبابريكا ورشة ملح في طبق واسع.'),
+        st('طلعي الفراخ من الزبادي ونشفيها شوية، وبعدين غطّسيها في خليط الدقيق واضغطي عليها كويس.'), st('سخني الزيت لحد ما حتة عيش صغيرة تفور فيه على طول.'),
+        st('حطي الفراخ على دفعات من غير ما تزحمي الحلة، وسيبيها لحد ما تدهّب وتستوي من جوه.', 14), st('طلعيها على شبكة، مش ورق، وسيبيها ترتاح.', 5)],
+      tip: 'ما تزحميش الحلة: كل ما تحطي فراخ أكتر، الزيت بيبرد.', why: 'النشا بيدّي قرمشة، والزيت السخن بيقفل الوش بسرعة فالفراخ ما تشربش زيت.' },
+    { id: 'r8', name: 'باذنجان مقلي من غير ما يشرب زيت', mins: 45, level: 'سهلة', status: 'want', learn: 'l2',
+      ing: [I('باذنجان', '٢ حباية متوسطة'), I('ملح', 'معلقة صغيرة'), I('زيت', 'نص كوباية'), I('ثوم', '٢ فص'), I('خل', 'معلقة كبيرة'), I('كمون', 'رشة')],
+      steps: [st('قطعي الباذنجان حلقات سُمكها حوالي سنتي.'), st('رشي عليه ملح من الناحيتين وسيبيه في مصفاة.', 30),
+        st('نشفيه كويس جداً بورق المطبخ، واضغطي عليه عشان يطلع اللي فيه.'), st('سخني الزيت في طاسة، وحمّري الحلقات من الناحيتين لحد ما تدهّب.', 6),
+        st('طلعيها على شبكة، ورشي عليها الثوم المهروس مع الخل والكمون.')],
+      tip: 'لو عايزاه أخف: ادهنيه بالزيت بالفرشة واشويه في الفرن على ٢٢٠ درجة.', why: 'الملح بيسحب المية من الباذنجان، فالفراغات اللي جواه بتقل، وبالتالي بيشرب زيت أقل.' },
+    { id: 'r9', name: 'الحليب الدهبي', mins: 10, level: 'سهلة', status: 'want', learn: 'l3',
+      ing: [I('لبن', '٢ كوباية'), I('كركم', 'معلقة صغيرة'), I('قرفة', 'نص معلقة صغيرة'), I('جنزبيل', 'رشة'), I('فلفل أسود', 'رشة صغيرة'), I('عسل', 'معلقة كبيرة')],
+      steps: [st('حطي اللبن في كنكة أو حلة صغيرة على نار هادية.'), st('ضيفي الكركم والقرفة والجنزبيل والفلفل وقلبي بالمضرب.'),
+        st('سيبيه يسخن من غير ما يغلي.', 5), st('شيليه من على النار، وحليه بالعسل وقدميه.')],
+      tip: 'العسل يتحط في الآخر بعد ما اللبن يهدى شوية.', why: 'الفلفل الأسود ودهون اللبن بيساعدوا الجسم يستفيد من الكركم.' }
+  ];
+};
+
+/* ---------- كروت «اتعلمي» في صفحة المطبخ ---------- */
+function learnBlock() {
+  const cards = S.learn.map(l => {
+    const r = l.recipe && recipeById(l.recipe);
+    return `
+      <button class="learn-card" data-a="learn-open" data-v="${l.id}">
+        <span class="learn-q">${ICON.bulb}</span>
+        <span class="learn-title">${esc(l.title)}</span>
+        <span class="learn-meta">${r ? 'فيه وصفة' : `${num(l.why.length)} نقط`}</span>
+      </button>`;
+  }).join('');
+  return `
+    <section class="block">
+      <div class="section-head"><h2 class="section-title">اتعلمي: العلم ورا الطبخة</h2><button class="btn btn-text btn-sm" data-a="learn-new">${ICON.plus}ضيفي ريل</button></div>
+      <div class="cards learn-cards">${cards}</div>
+      <a class="credit" href="${SRC.url}" target="_blank" rel="noopener">المواضيع مستوحاة من حساب ${SRC.name} ${SRC.handle}، والشرح مكتوب بكلامنا. اتفرجي على الريلز عنده ↗</a>
+    </section>`;
+}
+
+function renderLearn(id) {
+  const l = S.learn.find(x => x.id === id); if (!l) return closeSheet();
+  const r = l.recipe && recipeById(l.recipe);
+  document.body.classList.add('locked');
+  $('sheet').innerHTML = sheetWrap(esc(l.title), `
+    <ul class="why-list">${l.why.map(w => `<li>${esc(w)}</li>`).join('')}</ul>
+    <div class="sheet-actions">
+      ${r ? `<button class="btn btn-primary btn-lg" data-a="open-recipe-sheet" data-v="${r.id}">${ICON.kitchen}جربيها: ${esc(r.name)}</button>` : ''}
+      <a class="btn btn-secondary btn-lg" href="${esc(l.url || SRC.url)}" target="_blank" rel="noopener">${ICON.play}اتفرجي على الريل عند ${SRC.name}</a>
+      <button class="btn btn-text" data-a="learn-edit" data-v="${l.id}">عدّلي أو حطي لينك الريل</button>
+    </div>`, 'cat-kitchen');
+}
+
+function openLearnForm(l) {
+  openForm({
+    title: l ? 'تعديل الكارت' : 'ريل جديد', editing: !!l, saveLabel: l ? 'احفظي' : 'ضيفي',
+    values: l ? { title: l.title, url: l.url || '', why: l.why.join('\n'), recipe: l.recipe || '' } : { title: '', url: '', why: '', recipe: '' },
+    fields: [
+      { k: 'title', label: 'اسم الموضوع', ph: 'مثلاً: سر الرز المفلفل', required: true },
+      { k: 'url', label: 'لينك الريل (انسخيه من إنستجرام)', type: 'url', ph: 'https://www.instagram.com/reel/...' },
+      { k: 'why', label: 'اتعلمتي إيه؟ (كل نقطة في سطر)', type: 'textarea', ph: 'النقطة الأولى\nالنقطة التانية', required: true, rows: 5 },
+      { k: 'recipe', label: 'مربوط بوصفة؟', type: 'chips', cols: 2, options: [['', 'لأ'], ...S.recipes.map(r => [r.id, r.name])] }
+    ],
+    onSave: v => {
+      const data = { title: v.title.trim(), url: v.url.trim() || SRC.url, why: v.why.split('\n').map(x => x.trim()).filter(Boolean), recipe: v.recipe };
+      if (l) { Object.assign(l, data); return 'اتحفظ'; }
+      S.learn.push({ id: uid('l'), ...data }); return 'اتضاف لـ«اتعلمي»';
+    },
+    onDelete: l ? () => { S.learn = S.learn.filter(x => x.id !== l.id); return 'اتمسح'; } : null
+  });
+}
+
+/* ---------- الهوم: مشتريات أكلة النهارده ---------- */
+function mealNeeds(r) {
+  return r.ing.filter(i => !BASICS.test(i.n)).map((i, idx) => {
+    const item = S.shop.items.find(x => x.name === i.n && !x.done) || S.shop.items.find(x => x.name === i.n);
+    const stocked = S.shop.stock.some(x => x.name === i.n && x.state === 'ok');
+    const state = item ? (item.done ? 'bought' : 'need') : stocked ? 'have' : 'missing';
+    return { i, idx, item, state };
+  });
+}
+function todayMealBlock() {
+  const r = recipeById(S.meals[todayStr()]);
+  if (!r) return `
+    <section class="block">
+      <div class="section-head"><h2 class="section-title">مشتريات أكلة النهارده</h2></div>
+      <div class="meal-card meal-empty cat-kitchen">
+        <span class="meal-ill">${ILL.kitchen()}</span>
+        <span class="meal-empty-text">لسه ما اخترتيش هتطبخي إيه النهارده</span>
+        <button class="btn btn-primary btn-sm" data-a="meal-pick" data-v="${todayStr()}">اختاري الأكلة</button>
+      </div>
+    </section>`;
+  const needs = mealNeeds(r);
+  const ready = needs.filter(n => n.state === 'have' || n.state === 'bought').length;
+  const missing = needs.filter(n => n.state === 'missing').length;
+  const order = { missing: 0, need: 1, bought: 2, have: 3 };
+  const LABEL = { missing: 'ناقص، دوسي تضيفيه', need: 'في القايمة، دوسي لما تشتريه', bought: 'اشتريتيه', have: 'عندك في المخزن' };
+  const ICO = { missing: ICON.plus, need: ICON.cart, bought: ICON.checkInk, have: ICON.checkInk };
+  const chips = needs.sort((a, b) => order[a.state] - order[b.state]).map(({ i, idx, item, state }) => {
+    const act = state === 'missing' ? `data-a="ing-add" data-v="${idx}"` : item ? `data-a="item-toggle" data-v="${item.id}"` : 'disabled';
+    return `<button class="ing-chip is-${state}" ${act} aria-label="${esc(i.n)}: ${LABEL[state]}" title="${esc(i.q)}">${ICO[state]}<span>${esc(i.n)}</span></button>`;
+  }).join('');
+  return `
+    <section class="block">
+      <div class="section-head"><h2 class="section-title">مشتريات أكلة النهارده</h2></div>
+      <div class="meal-card cat-kitchen">
+        <button class="meal-top" data-a="today-recipe" aria-label="افتحي وصفة ${esc(r.name)}">
+          <span class="meal-ill">${ILL.kitchen()}</span>
+          <span class="meal-info"><span class="meal-kicker">أكلة النهارده</span><b>${esc(r.name)}</b><span class="meal-sub">${num(r.mins)} دقيقة، لشخصين</span></span>
+          <span class="chev">${ICON.chev}</span>
+        </button>
+        <div class="meal-progress">
+          <span>${ready === needs.length ? 'كل المكونات جاهزة ✓' : `جاهز ${num(ready)} من ${num(needs.length)} مكونات`}</span>
+          <span class="bar"><i style="width:${needs.length ? ready / needs.length * 100 : 0}%"></i></span>
+        </div>
+        <div class="ing-chips">${chips}</div>
+        <div class="ing-legend"><span><i class="lg lg-missing"></i>ناقص</span><span><i class="lg lg-need"></i>في القايمة</span><span><i class="lg lg-ok"></i>جاهز</span></div>
+        ${missing ? `<button class="btn btn-primary btn-lg" style="margin-top:14px" data-a="ing-add-all">${ICON.cart}ضيفي الناقص للقايمة (${num(missing)})</button>` : ''}
+      </div>
+    </section>`;
+}
+
+/* ---------- صفحة الوصفة ---------- */
+function viewRecipe(id) {
+  const r = recipeById(id); if (!r) { page = 'kitchen'; return viewCategory('kitchen'); }
+  const days = Object.entries(S.meals).filter(([k, v]) => v === id && daysUntil(k) >= 0).map(([k]) => fromIso(k)).sort((a, b) => a - b);
+  return `
+    <header class="hero gutter"><div class="wrap cat-kitchen">
+      <div class="page-hero">
+        <div class="page-text"><b class="page-name">${esc(r.name)}</b>
+          <p>${days.length ? 'في أكل الأسبوع: ' + days.map(dayTitle).join('، ') : 'مش في أكل الأسبوع لسه'}</p></div>
+        <div class="page-ill cat-kitchen">${ILL.kitchen()}</div>
+      </div>
+      <div class="detail-tags"><span class="tag">${num(r.mins)} دقيقة</span><span class="tag">${r.level}</span><span class="tag">لشخصين</span></div>
+    </div></header>
+    <main class="screen gutter"><div class="wrap cat-kitchen">
+      <button class="btn btn-primary btn-lg" data-a="cook" data-v="${r.id}">${ICON.play}ابدئي الطبخ خطوة بخطوة</button>
+      <div style="margin-top:14px">${Seg('rstatus', r.status, RSTATUS, 'rstatus')}</div>
+      <section class="block" style="margin-top:22px">
+        <div class="section-head"><h2 class="section-title">المكونات</h2><button class="btn btn-text btn-sm" data-a="recipe-to-shop" data-v="${r.id}">${ICON.cart}ابعتيها للمشتريات</button></div>
+        <div class="ing">${r.ing.map(i => `<div class="ing-row"><span>${esc(i.n)}</span><b>${esc(i.q)}</b></div>`).join('')}</div>
+      </section>
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">الخطوات</h2><span class="tag">${num(r.steps.length)} خطوات</span></div>
+        <ol class="steps">${r.steps.map(s => `<li><span>${esc(s.t)}</span>${s.min ? `<span class="tag tag-brand">${ICON.timer}${num(s.min)} د</span>` : ''}</li>`).join('')}</ol>
+      </section>
+      ${r.tip ? `<div class="tip"><b>نصيحة</b>${esc(r.tip)}</div>` : ''}
+      ${r.why ? `<div class="tip tip-why"><b>${ICON.bulb}ليه بتنجح؟</b>${esc(r.why)}</div>` : ''}
+      ${r.learn && S.learn.some(l => l.id === r.learn) ? `<button class="btn btn-soft btn-lg" style="margin-top:10px" data-a="learn-open" data-v="${r.learn}">${ICON.bulb}اتعلمي العلم ورا الطبخة دي</button>` : ''}
+      <button class="btn btn-secondary btn-lg" style="margin-top:22px" data-a="recipe-edit" data-v="${r.id}">عدّلي الوصفة</button>
+    </div></main>`;
+}
+
+const ingToText = r => r.ing.map(i => `${i.n} - ${i.q}`).join('\n');
+const stepsToText = r => r.steps.map(s => s.min ? `${s.t} [${s.min}]` : s.t).join('\n');
+function openRecipeForm(r) {
+  openForm({
+    title: r ? 'تعديل الوصفة' : 'وصفة جديدة', editing: !!r, saveLabel: r ? 'احفظي التعديل' : 'ضيفي الوصفة',
+    values: r ? { name: r.name, mins: r.mins, level: r.level, ing: ingToText(r), steps: stepsToText(r), tip: r.tip || '' } : { name: '', mins: 30, level: 'سهلة', ing: '', steps: '', tip: '' },
+    fields: [
+      { k: 'name', label: 'اسم الأكلة', ph: 'مثلاً: محشي كرنب', required: true },
+      { k: 'mins', label: 'بتاخد كام دقيقة؟', type: 'number', required: true },
+      { k: 'level', label: 'صعوبتها', type: 'chips', options: [['سهلة', 'سهلة'], ['متوسطة', 'متوسطة'], ['صعبة', 'صعبة']] },
+      { k: 'ing', label: 'المكونات لشخصين (كل مكون في سطر: الاسم - الكمية)', type: 'textarea', ph: 'رز مصري - كوباية\nبصل - بصلة', required: true, rows: 5 },
+      { k: 'steps', label: 'الخطوات (كل خطوة في سطر، ولو ليها وقت اكتبيه كده [١٠])', type: 'textarea', ph: 'اغسلي الرز\nسيبيه يستوي على نار هادية [15]', required: true, rows: 5 },
+      { k: 'tip', label: 'نصيحة (اختياري)', ph: 'حاجة اتعلمتيها' }
+    ],
+    onSave: v => {
+      const toN = s => Number(String(s).replace(/[٠-٩]/g, c => '٠١٢٣٤٥٦٧٨٩'.indexOf(c)));
+      const ing = v.ing.split('\n').map(l => l.trim()).filter(Boolean).map(l => { const [n, ...q] = l.split(/\s+-\s+|\s*:\s*/); return { n: n.trim(), q: q.join(' ').trim() || 'حسب ذوقك', sec: guessSec(n) }; });
+      const steps = v.steps.split('\n').map(l => l.trim()).filter(Boolean).map(l => { const m = l.match(/\[([\d٠-٩]+)\]\s*$/); return { t: l.replace(/\s*\[[\d٠-٩]+\]\s*$/, ''), min: m ? toN(m[1]) : 0 }; });
+      const data = { name: v.name.trim(), mins: toN(v.mins), level: v.level, ing, steps, tip: v.tip.trim() };
+      if (r) { Object.assign(r, data); return 'اتحفظت الوصفة'; }
+      const nr = { id: uid('r'), status: 'want', ...data }; S.recipes.push(nr); return 'اتضافت الوصفة';
+    },
+    onDelete: r ? () => { S.recipes = S.recipes.filter(x => x.id !== r.id); Object.keys(S.meals).forEach(k => { if (S.meals[k] === r.id) delete S.meals[k]; }); page = 'kitchen'; prevPage = null; return 'اتمسحت الوصفة'; } : null
+  });
+}
+
+/* ---------- وضع الطبخ: خطوة في كل شاشة + تايمر + الشاشة ما تطفيش ---------- */
+let cook = null, wakeLock = null;
+function startCook(id) {
+  cook = { id, step: 0, end: null, left: null, total: 0 };
+  document.body.classList.add('locked');
+  try { navigator.wakeLock && navigator.wakeLock.request('screen').then(l => { wakeLock = l; }).catch(() => {}); } catch (e) {}
+  renderCook();
+}
+function stopCook() {
+  clearInterval(cook && cook.tick); cook = null; $('cook').innerHTML = ''; $('cook').hidden = true;
+  document.body.classList.remove('locked');
+  try { wakeLock && wakeLock.release(); } catch (e) {} wakeLock = null;
+}
+const mmss = s => num(Math.floor(s / 60)) + ':' + num(s % 60).padStart(2, '٠');
+function renderCook() {
+  const r = recipeById(cook.id), s = r.steps[cook.step], last = cook.step === r.steps.length - 1;
+  const running = cook.end !== null, left = running ? Math.max(0, Math.round((cook.end - Date.now()) / 1000)) : (cook.left ?? s.min * 60);
+  const total = s.min * 60, c = 2 * Math.PI * 70;
+  $('cook').hidden = false;
+  $('cook').innerHTML = `
+    <div class="cook-in cat-kitchen" role="dialog" aria-modal="true" aria-label="وضع الطبخ">
+      <div class="cook-top">
+        <button class="icon-btn icon-btn-sm icon-btn-surface" data-a="cook-close" aria-label="اقفلي وضع الطبخ">${ICON.close}</button>
+        <span class="cook-title">${esc(r.name)}</span>
+        <span class="tag">${num(cook.step + 1)} من ${num(r.steps.length)}</span>
+      </div>
+      <div class="bar" aria-hidden="true"><i style="width:${(cook.step + 1) / r.steps.length * 100}%"></i></div>
+      <div class="cook-body">
+        <span class="cook-n">الخطوة ${num(cook.step + 1)}</span>
+        <p class="cook-text">${esc(s.t)}</p>
+        ${s.min ? `
+        <div class="timer" role="timer" aria-live="off">
+          <svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="70" fill="none" style="stroke:var(--timer-track)" stroke-width="10"/>
+            <circle id="tm-ring" cx="80" cy="80" r="70" fill="none" style="stroke:var(--timer-fill)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - left / total)}"/></svg>
+          <b id="tm-text">${mmss(left)}</b>
+        </div>
+        <button class="btn ${running ? 'btn-secondary' : 'btn-soft'}" data-a="cook-timer">${running ? 'وقّفي التايمر' : left === 0 ? 'التايمر خلص، شغليه تاني' : left < total ? 'كمّلي التايمر' : `شغّلي تايمر ${num(s.min)} دقيقة`}</button>` : ''}
+      </div>
+      <div class="cook-nav">
+        <button class="btn btn-secondary" data-a="cook-step" data-v="-1" ${cook.step === 0 ? 'disabled' : ''}>اللي قبلها</button>
+        <button class="btn btn-primary" data-a="${last ? 'cook-done' : 'cook-step'}" data-v="1">${last ? 'خلصت الطبخ ✓' : 'الخطوة الجاية'}</button>
+      </div>
+    </div>`;
+}
+function cookTimer() {
+  const s = recipeById(cook.id).steps[cook.step];
+  if (cook.end !== null) { cook.left = Math.max(0, Math.round((cook.end - Date.now()) / 1000)); cook.end = null; clearInterval(cook.tick); renderCook(); return; }
+  const left = cook.left && cook.left > 0 ? cook.left : s.min * 60;
+  cook.end = Date.now() + left * 1000; cook.left = null;
+  clearInterval(cook.tick);
+  cook.tick = setInterval(() => {
+    if (!cook) return;
+    const l = Math.max(0, Math.round((cook.end - Date.now()) / 1000)), c = 2 * Math.PI * 70;
+    const t = $('tm-text'), ring = $('tm-ring');
+    if (t) t.textContent = mmss(l);
+    if (ring) ring.style.strokeDashoffset = c * (1 - l / (s.min * 60));
+    if (l === 0) { clearInterval(cook.tick); cook.end = null; cook.left = 0; beep(); renderCook(); toast('التايمر خلص ⏰'); }
+  }, 500);
+  renderCook();
+}
+function beep() {
+  try { navigator.vibrate && navigator.vibrate([300, 150, 300]); } catch (e) {}
+  if (!prefs().sound) return;
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    [0, .35, .7].forEach(t => { const o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = 880; g.gain.value = .15; o.connect(g); g.connect(ac.destination); o.start(ac.currentTime + t); o.stop(ac.currentTime + t + .2); });
+  } catch (e) {}
+}
+
+/* =========================================================
+   المشتريات — قايمة الأسبوع / التموين الشهري / المخزن (جوه صفحة قسم المشتريات)
+   ========================================================= */
+/* =========================================================
+   المشتريات — قوايم بتعمليها بنفسك، وبتتحفظ وتتجدد لوحدها
+   كل قايمة: اسم + بتتجدد إمتى (كل أسبوع / كل شهر / يدوي)
+   «بتتجدد» = الحاجات بتفضل في القايمة، والعلامات بس بتترجع فاضية
+   ========================================================= */
+let shopView = 'week', shopNew = '', listEdit = false;
+const RENEW = [['weekly', 'كل أسبوع'], ['monthly', 'كل شهر'], ['manual', 'لما أقول']];
+const RENEW_NAME = Object.fromEntries(RENEW);
+const LIST_COLORS = ['shop', 'clean', 'kitchen', 'organize', 'events', 'bills'];
+const listById = id => S.shop.lists.find(l => l.id === id);
+const mainList = () => (listById('week') || S.shop.lists[0] || {}).id;   // الحاجات اللي بتتبعت أوتوماتيك بتروح هنا
+const weekKey = (d = new Date()) => { const s = new Date(d); s.setHours(0, 0, 0, 0); s.setDate(s.getDate() - ((s.getDay() + 1) % 7)); return iso(s); };
+const periodKey = l => l.renew === 'weekly' ? weekKey() : l.renew === 'monthly' ? monthKey() : '';
+
+/** أول مرة: نحوّل «الأسبوع» و«الشهر» القدام لقوايم */
+function upgradeLists(s) {
+  if (!s.shop.lists) s.shop.lists = [
+    { id: 'week', name: 'قايمة الأسبوع', renew: 'weekly', color: 'shop' },
+    { id: 'month', name: 'التموين الشهري', renew: 'monthly', color: 'kitchen' }
+  ];
+  s.shop.lists.forEach(l => { if (l.period === undefined) l.period = l.renew === 'weekly' ? weekKey() : l.renew === 'monthly' ? monthKey() : ''; });
+  return s;
+}
+/** لما يبدأ أسبوع أو شهر جديد: العلامات بترجع فاضية والحاجات بتفضل */
+function renewLists() {
+  let n = 0;
+  S.shop.lists.forEach(l => {
+    const k = periodKey(l);
+    if (k && l.period !== k) { S.shop.items.forEach(i => { if (i.list === l.id) i.done = false; }); l.period = k; n++; }
+  });
+  if (n) save();
+}
+
+function shopRow(i) {
+  const del = listEdit && shopView !== 'stock';
+  return `
+    <div class="li ${i.done && !del ? 'is-done' : ''}">
+      ${del ? `<button class="del-btn" data-a="item-del" data-v="${i.id}" aria-label="امسحي ${esc(i.name)}">${ICON.minus}</button>` : ''}
+      <button class="li-tap" data-a="item-edit" data-v="${i.id}" aria-label="عدّلي: ${esc(i.name)}">
+        <span class="li-body"><span class="li-title">${esc(i.name)}</span><span class="li-meta">${esc(i.qty || '')}${i.from ? `${i.qty ? '، ' : ''}عشان ${esc(i.from)}` : ''}</span></span>
+      </button>
+      ${del ? '' : `<button class="check" data-a="item-toggle" data-v="${i.id}" aria-pressed="${i.done}" aria-label="${i.done ? 'رجّعيها' : 'اشتريتها'}: ${esc(i.name)}">${ICON.check}</button>`}
+    </div>`;
+}
+const addRow = ph => `
+  <div class="add-row">
+    <input class="input" id="shop-new" data-sf="new" value="${esc(shopNew)}" placeholder="${ph}" autocomplete="off" enterkeyhint="done">
+    <button class="icon-btn icon-btn-primary" data-a="shop-add" aria-label="ضيفي">${ICON.plus}</button>
+  </div>`;
+
+/* ---------- تاب المشتريات: قوايمي + المخزن ---------- */
+function viewShopping() {
+  const cards = S.shop.lists.map(l => {
+    const items = S.shop.items.filter(i => i.list === l.id), left = items.filter(i => !i.done).length;
+    return `
+      <button class="list-card cat-${l.color || 'shop'}" data-a="open-list" data-v="${l.id}">
+        <span class="list-card-top">${Ico(ICON.cart)}<span class="tag">${RENEW_NAME[l.renew]}</span></span>
+        <b>${esc(l.name)}</b>
+        <span class="list-card-meta">${items.length ? (left ? `فاضل ${num(left)} من ${num(items.length)}` : 'اشتريتي كله ✓') : 'فاضية'}</span>
+        <span class="bar"><i style="width:${items.length ? (items.length - left) / items.length * 100 : 0}%"></i></span>
+      </button>`;
+  }).join('');
+  const low = S.shop.stock.filter(x => x.state !== 'ok').length;
+  return `<main class="screen screen-top gutter"><div class="wrap">
+    <section class="block">
+      <div class="section-head"><h2 class="section-title">قوايمي</h2><span class="tag">${num(S.shop.lists.length)} قوايم</span></div>
+      <div class="list-grid">${cards}<button class="list-card list-add" data-a="list-new">${ICON.plus}<b>قايمة جديدة</b><span class="list-card-meta">هايبر، خضار، أونلاين…</span></button></div>
+    </section>
+    <section class="block">
+      <div class="section-head"><h2 class="section-title">المخزن</h2></div>
+      <div class="list">${navRow('open-list', 'stock', ICON.box, 'kitchen', 'اللي عندي في البيت', low ? `${num(low)} حاجات قربت تخلص أو خلصت` : 'كله موجود', low ? `<span class="tag tag-soon">${num(low)}</span><span class="chev">${ICON.chev}</span>` : undefined)}</div>
+    </section>
+  </div></main>`;
+}
+
+/* ---------- صفحة القايمة ---------- */
+function viewList(id) {
+  if (id === 'stock') return viewStock();
+  const l = listById(id); if (!l) { page = null; return viewShopping(); }
+  const items = S.shop.items.filter(i => i.list === id);
+  const left = items.filter(i => !i.done), done = items.filter(i => i.done);
+  const rows = arr => SECTIONS.map(([k, name]) => {
+    const g = arr.filter(i => i.sec === k);
+    return g.length ? `<div class="sub-head">${name}<span>${num(g.length)}</span></div><div class="list">${g.map(shopRow).join('')}</div>` : '';
+  }).join('');
+  if (listEdit) return `<main class="screen screen-top gutter"><div class="wrap cat-${l.color || 'shop'}">
+    <p class="hint" style="margin-top:0">دوسي على ⊖ عشان تمسحي حاجة، أو على اسمها عشان تعدليها.</p>
+    ${items.length ? rows(items) : '<div class="empty">القايمة فاضية</div>'}
+    <div class="sheet-actions">
+      <button class="btn btn-secondary btn-lg" data-a="list-settings" data-v="${id}">${ICON.edit}اسم القايمة وبتتجدد إمتى</button>
+      ${items.length ? `<button class="btn btn-danger ${listEdit === 'clear' ? 'is-confirm' : ''}" data-a="list-empty" data-v="${id}">${listEdit === 'clear' ? 'متأكدة؟ دوسي تاني وكل الحاجات هتتمسح' : 'امسحي كل الحاجات اللي فيها'}</button>` : ''}
+    </div>
+  </div></main>`;
+  return `<main class="screen screen-top gutter"><div class="wrap cat-${l.color || 'shop'}">
+    <div class="list-summary">
+      <span>${items.length ? `اشتريتي ${num(done.length)} من ${num(items.length)}` : 'القايمة فاضية، ابدئي ضيفي'}</span>
+      <span class="tag">بتتجدد ${RENEW_NAME[l.renew]}</span>
+    </div>
+    ${items.length ? `<span class="bar" style="margin-bottom:14px"><i style="width:${done.length / items.length * 100}%"></i></span>` : ''}
+    ${addRow('ضيفي حاجة، مثلاً: خيار')}
+    ${left.length ? rows(left) : items.length ? '<div class="empty">اشتريتي كل حاجة 🎉</div>' : ''}
+    ${done.length ? `<div class="sub-head">اشتريتيهم<span>${num(done.length)}</span></div><div class="list">${done.map(shopRow).join('')}</div>` : ''}
+    ${done.length ? `<button class="btn btn-secondary btn-lg" style="margin-top:16px" data-a="list-renew" data-v="${id}">${ICON.refresh}ابدئي القايمة من جديد</button>
+      <p class="hint" style="text-align:center">الحاجات هتفضل زي ما هي، والعلامات بس هترجع فاضية.${l.renew !== 'manual' ? ` وده بيحصل لوحده ${RENEW_NAME[l.renew]}.` : ''}</p>` : ''}
+  </div></main>`;
+}
+
+function viewStock() {
+  const main = listById(mainList());
+  const ORDER = [['out', 'خلص'], ['low', 'قرب يخلص'], ['ok', 'موجود']];
+  const row = x => {
+    const inList = S.shop.items.some(i => !i.done && i.name === x.name);
+    return `
+      <div class="li stock-row">
+        ${listEdit ? `<button class="del-btn" data-a="stock-del" data-v="${x.id}" aria-label="امسحي ${esc(x.name)}">${ICON.minus}</button>` : ''}
+        <button class="li-tap" data-a="stock-open" data-v="${x.id}" aria-label="${esc(x.name)}: ${STOCK[x.state][0]}، دوسي عشان تغيري الحالة">
+          <span class="li-body"><span class="li-title">${esc(x.name)}</span>${inList && x.state !== 'ok' ? `<span class="li-meta">في القايمة ✓</span>` : ''}</span>
+          <span class="tag stock-tag ${STOCK[x.state][1]}"><i class="sdot"></i>${STOCK[x.state][0]}</span>
+          ${listEdit ? '' : `<span class="chev">${ICON.chev}</span>`}
+        </button>
+      </div>`;
+  };
+  const groups = ORDER.map(([k, name]) => {
+    const g = S.shop.stock.filter(x => x.state === k);
+    return g.length ? `<div class="sub-head">${name}<span>${num(g.length)}</span></div><div class="list">${g.map(row).join('')}</div>` : '';
+  }).join('');
+  const out = S.shop.stock.filter(x => x.state === 'out').length, low = S.shop.stock.filter(x => x.state === 'low').length;
+  return `<main class="screen screen-top gutter"><div class="wrap cat-kitchen">
+    <div class="stock-sum">
+      <span class="tag tag-urgent"><i class="sdot"></i>${num(out)} خلص</span>
+      <span class="tag tag-soon"><i class="sdot"></i>${num(low)} قرب يخلص</span>
+      <span class="tag tag-done"><i class="sdot"></i>${num(S.shop.stock.length - out - low)} موجود</span>
+    </div>
+    ${listEdit ? '' : addRow('ضيفي حاجة للمخزن، مثلاً: عسل')}
+    <p class="hint">دوسي على أي حاجة عشان تغيري حالتها${main ? `، أو تبعتيها لـ«${esc(main.name)}»` : ''}.</p>
+    ${groups || '<div class="empty">المخزن فاضي</div>'}
+  </div></main>`;
+}
+
+/* ---------- شيت حاجة في المخزن: الحالة بتتغير من هنا ---------- */
+let stockId = null;
+function renderStockItem() {
+  const x = S.shop.stock.find(y => y.id === stockId); if (!x) return closeSheet();
+  document.body.classList.add('locked');
+  const main = listById(mainList());
+  const inList = S.shop.items.some(i => !i.done && i.name === x.name);
+  const opt = (k, label, sub) => `
+    <button class="stock-opt ${STOCK[k][1]}" role="radio" aria-checked="${x.state === k}" data-a="stock-set" data-v="${k}">
+      <i class="sdot"></i><span class="li-body"><span class="li-title">${label}</span><span class="li-meta">${sub}</span></span>
+      <span class="check ${x.state === k ? 'is-on' : ''}">${ICON.check}</span>
+    </button>`;
+  $('sheet').innerHTML = sheetWrap(esc(x.name), `
+    <span class="field-label">حالتها دلوقتي</span>
+    <div class="list" role="radiogroup" aria-label="حالة ${esc(x.name)}">
+      ${opt('ok', 'موجود', 'عندي منه كفاية')}
+      ${opt('low', 'قرب يخلص', 'لازم أجيب قريب')}
+      ${opt('out', 'خلص', 'مش موجود في البيت')}
+    </div>
+    <div class="sheet-actions">
+      ${!main ? '' : x.state === 'ok'
+        ? `<button class="btn btn-primary btn-lg" style="visibility:hidden" aria-hidden="true" tabindex="-1">.</button>`   /* مكانه محجوز عشان الشيت ما ينطش لما الحالة تتغير */
+        : inList ? `<button class="btn btn-soft btn-lg" disabled style="opacity:1">في «${esc(main.name)}» ✓</button>`
+        : `<button class="btn btn-primary btn-lg" data-a="stock-to-list" data-v="${x.id}">${ICON.cart}ضيفيها لـ«${esc(main.name)}»</button>`}
+      <button class="btn btn-secondary btn-lg" data-a="stock-rename" data-v="${x.id}">${ICON.edit}عدّلي الاسم</button>
+      <button class="btn btn-danger ${stockConfirm ? 'is-confirm' : ''}" data-a="stock-del-sheet" data-v="${x.id}">${stockConfirm ? 'دوسي تاني عشان تمسحيها' : 'امسحيها من المخزن'}</button>
+    </div>`, 'cat-kitchen');
+}
+let stockConfirm = false;
+
+function addShop(name) {
+  name = name.trim(); if (!name) return;
+  if (shopView === 'stock') {
+    if (!S.shop.stock.some(x => x.name === name)) S.shop.stock.unshift({ id: uid('s'), name, state: 'ok' });
+  } else {
+    S.shop.items.push({ id: uid('i'), name, qty: '', sec: guessSec(name), list: shopView, done: false });
+  }
+  shopNew = ''; save(); render();
+  setTimeout(() => { const f = $('shop-new'); if (f) f.focus(); }, 30);
+  toast(shopView === 'stock' ? 'اتضافت للمخزن' : `اتضافت في ${SEC_NAME[guessSec(name)]}`);
+}
+function openItemForm(i) {
+  openForm({
+    title: 'تعديل الحاجة', editing: true, saveLabel: 'احفظي',
+    values: { name: i.name, qty: i.qty || '', sec: i.sec, list: i.list },
+    fields: [
+      { k: 'name', label: 'الاسم', required: true },
+      { k: 'qty', label: 'الكمية (اختياري)', ph: 'مثلاً: ٢ كيلو' },
+      { k: 'sec', label: 'قسمها في السوبر ماركت', type: 'chips', options: SECTIONS, cols: 2 },
+      { k: 'list', label: 'في أنهي قايمة؟', type: 'chips', options: S.shop.lists.map(l => [l.id, l.name]), cols: 2 }
+    ],
+    onSave: v => { Object.assign(i, { name: v.name.trim(), qty: v.qty.trim(), sec: v.sec, list: v.list }); return 'اتحفظ'; },
+    onDelete: () => { S.shop.items = S.shop.items.filter(x => x.id !== i.id); return 'اتمسحت'; }
+  });
+}
+function openListForm(l) {
+  openForm({
+    title: l ? 'إعدادات القايمة' : 'قايمة جديدة', editing: !!l, saveLabel: l ? 'احفظي' : 'اعملي القايمة',
+    values: l ? { name: l.name, renew: l.renew, color: l.color || 'shop' } : { name: '', renew: 'monthly', color: LIST_COLORS[S.shop.lists.length % LIST_COLORS.length] },
+    fields: [
+      { k: 'name', label: 'اسم القايمة', ph: 'مثلاً: الهايبر ماركت، الخضار، طلبات أونلاين', required: true },
+      { k: 'renew', label: 'تتجدد إمتى؟ (الحاجات بتفضل، والعلامات بترجع فاضية)', type: 'chips', options: RENEW },
+      { k: 'color', label: 'لونها', type: 'chips', cols: 3, options: [['shop', 'أزرق', 'shop'], ['clean', 'أخضر', 'clean'], ['kitchen', 'أصفر', 'kitchen'], ['organize', 'بنفسجي', 'organize'], ['events', 'بينك', 'events'], ['bills', 'خوخي', 'bills']] }
+    ],
+    onSave: v => {
+      const d = { name: v.name.trim(), renew: v.renew, color: v.color };
+      if (l) { const changed = l.renew !== d.renew; Object.assign(l, d); if (changed) l.period = periodKey(l); return 'اتحفظت القايمة'; }
+      const nl = { id: uid('l'), ...d }; nl.period = periodKey(nl); S.shop.lists.push(nl);
+      listEdit = false; navDir = 'push'; prevPage = null; page = 'list:' + nl.id; shopView = nl.id;
+      return 'اتعملت القايمة، ابدئي ضيفي حاجات';
+    },
+    deleteLabel: 'امسحي القايمة كلها',
+    onDelete: l ? () => {
+      S.shop.items = S.shop.items.filter(i => i.list !== l.id); S.shop.lists = S.shop.lists.filter(x => x.id !== l.id);
+      listEdit = false; page = null; prevPage = null; return 'اتمسحت القايمة';
+    } : null
+  });
+}
+
+/* =========================================================
+   تاب الفلوس — الميزانية، الفواتير، المصاريف
+   ========================================================= */
+function viewMoney() {
+  const m = monthKey(), now = new Date();
+  const exps = S.money.expenses.filter(e => e.date.slice(0, 7) === m).sort((a, b) => b.date.localeCompare(a.date));
+  const spent = exps.reduce((s, e) => s + Number(e.amount), 0), budget = Number(S.money.budget) || 0;
+  const left = budget - spent, pct = budget ? Math.min(100, spent / budget * 100) : 0;
+  const daysLeft = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() - now.getDate() + 1;
+  const unpaid = S.money.bills.filter(b => !billPaid(b)).reduce((s, b) => s + Number(b.amount || 0), 0);
+
+  const byCat = EXP_CATS.map(([k, n, c]) => [k, n, c, exps.filter(e => e.cat === k).reduce((s, e) => s + Number(e.amount), 0)]).filter(x => x[3] > 0).sort((a, b) => b[3] - a[3]);
+  const maxCat = byCat.length ? byCat[0][3] : 1;
+
+  const bills = S.money.bills.slice().sort((a, b) => a.day - b.day).map(b => {
+    const paid = billPaid(b);
+    const due = new Date(now.getFullYear(), now.getMonth(), Math.min(b.day, new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()));
+    const n = daysUntil(iso(due));
+    const state = paid ? 'اتدفعت' : n < 0 ? `متأخرة ${num(-n)} يوم` : n === 0 ? 'النهارده' : `بعد ${num(n)} يوم`;
+    return `
+      <div class="li cat-bills ${paid ? 'is-done' : ''}">
+        <button class="li-tap" data-a="detail" data-id="b:${b.id}" aria-label="تفاصيل: ${esc(b.name)}">
+          ${Ico(CATS.bills.icon)}
+          <span class="li-body"><span class="li-title">${esc(b.name)}</span><span class="li-meta">${b.amount ? money(b.amount) : 'من غير مبلغ'}، يوم ${num(b.day)}</span></span>
+        </button>
+        ${!paid ? `<span class="tag ${n < 0 ? 'tag-urgent' : n <= 4 ? 'tag-soon' : 'tag-later'}">${state}</span>` : ''}
+        <button class="check" data-a="toggle" data-id="b:${b.id}" aria-pressed="${paid}" aria-label="${paid ? 'رجّعيها مش مدفوعة' : 'دفعتها'}: ${esc(b.name)}">${ICON.check}</button>
+      </div>`;
+  }).join('');
+
+  let lastDate = '';
+  const list = exps.map(e => {
+    const head = e.date !== lastDate ? `<div class="sub-head">${dayTitle(fromIso(e.date))}، ${fullDate(fromIso(e.date))}</div>` : '';
+    lastDate = e.date;
+    return `${head}
+      <button class="li ${catClass(EXP[e.cat].cat)}" data-a="exp-edit" data-v="${e.id}">
+        ${Ico(e.cat === 'bills' ? CATS.bills.icon : e.cat === 'food' ? ICON.kitchen : e.cat === 'transport' ? ICON.car : e.cat === 'out' ? ICON.heart : e.cat === 'home' ? ICON.house : ICON.wallet)}
+        <span class="li-body"><span class="li-title">${esc(e.note || EXP[e.cat].name)}</span><span class="li-meta">${EXP[e.cat].name}</span></span>
+        <b class="amount">${money(e.amount)}</b>
+      </button>`;
+  }).join('');
+
+  return `
+    <header class="hero hero-tuck gutter"><div class="wrap">
+      <div class="page-hero">
+        <div class="page-text"><p>${now.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })}، فاضل ${num(daysLeft)} يوم في الشهر</p></div>
+      </div>
+      <button class="budget tuck" data-a="budget-edit" aria-label="ميزانية الشهر، دوسي عشان تعدليها">
+        <span class="budget-top"><span>${left >= 0 ? 'فاضل معاكي' : 'صرفتي زيادة'}</span><span class="budget-edit">${ICON.edit}</span></span>
+        <b class="budget-num">${money(Math.abs(left))}</b>
+        <span class="bar bar-on-brand" aria-hidden="true"><i style="width:${pct}%"></i></span>
+        <span class="budget-foot"><span>صرفتي ${money(spent)}</span><span>من ${money(budget)}</span></span>
+        ${unpaid ? `<span class="budget-note">منهم ${money(unpaid)} فواتير لسه ما اتدفعتش</span>` : ''}
+      </button>
+    </div></header>
+    <main class="screen gutter"><div class="wrap">
+      <button class="btn btn-primary btn-lg" data-a="exp-new">${ICON.plus}سجّلي مصروف</button>
+      <section class="block" style="margin-top:24px">
+        <div class="section-head"><h2 class="section-title">الفواتير</h2><button class="btn btn-text btn-sm" data-a="bill-new">${ICON.plus}ضيفي فاتورة</button></div>
+        <div class="list">${bills || '<div class="empty">مفيش فواتير لسه</div>'}</div>
+      </section>
+      ${byCat.length ? `<section class="block">
+        <div class="section-head"><h2 class="section-title">صرفتي على إيه؟</h2></div>
+        <div class="cats-bars">${byCat.map(([k, n, c, v]) => `
+          <div class="cbar ${catClass(c)}"><span class="cbar-name">${n}</span><span class="bar"><i style="width:${v / maxCat * 100}%"></i></span><b>${money(v)}</b></div>`).join('')}</div>
+      </section>` : ''}
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">مصاريف الشهر</h2><span class="tag">${num(exps.length)}</span></div>
+        ${list ? `<div class="list">${list}</div>` : '<div class="empty">لسه ما سجلتيش مصاريف الشهر ده</div>'}
+      </section>
+    </div></main>`;
+}
+
+function openExpenseForm(e) {
+  openForm({
+    title: e ? 'تعديل المصروف' : 'مصروف جديد', editing: !!e, saveLabel: e ? 'احفظي التعديل' : 'سجّلي',
+    values: e ? { amount: e.amount, cat: e.cat, note: e.note || '', date: e.date } : { amount: '', cat: 'food', note: '', date: todayStr() },
+    fields: [
+      { k: 'amount', label: 'المبلغ بالجنيه', type: 'number', ph: '٠', required: true },
+      { k: 'cat', label: 'على إيه؟', type: 'chips', options: EXP_CATS.map(([k, n, c]) => [k, n, c]) },
+      { k: 'note', label: 'تفاصيل (اختياري)', ph: 'مثلاً: خضار السوق' },
+      { k: 'date', label: 'إمتى؟', type: 'date' }
+    ],
+    onSave: v => {
+      const data = { amount: Number(v.amount), cat: v.cat, note: v.note.trim(), date: v.date || todayStr() };
+      if (e) { Object.assign(e, data); return 'اتحفظ التعديل'; }
+      S.money.expenses.push({ id: uid('e'), ...data }); return 'اتسجل المصروف';
+    },
+    onDelete: e ? () => {
+      if (e.bill) { const b = S.money.bills.find(x => x.id === e.bill); if (b && b.paid) delete b.paid[e.month]; }
+      S.money.expenses = S.money.expenses.filter(x => x.id !== e.id); return 'اتمسح المصروف';
+    } : null
+  });
+}
+function openBillForm(b) {
+  openForm({
+    title: b ? 'تعديل الفاتورة' : 'فاتورة جديدة', editing: !!b, saveLabel: b ? 'احفظي التعديل' : 'ضيفي الفاتورة',
+    values: b ? { name: b.name, amount: b.amount || '', day: b.day } : { name: '', amount: '', day: new Date().getDate() },
+    fields: [
+      { k: 'name', label: 'اسم الفاتورة', ph: 'مثلاً: فاتورة المية', required: true },
+      { k: 'amount', label: 'المبلغ المتوقع بالجنيه', type: 'number', ph: '٠' },
+      { k: 'day', label: 'بتتدفع يوم كام في الشهر؟', type: 'number', required: true }
+    ],
+    onSave: v => {
+      const data = { name: v.name.trim(), amount: Number(v.amount) || 0, day: Math.min(31, Math.max(1, Number(v.day) || 1)) };
+      if (b) { Object.assign(b, data); return 'اتحفظت الفاتورة'; }
+      S.money.bills.push({ id: uid('b'), paid: {}, ...data }); return 'اتضافت الفاتورة، وهتظهرلك في الخطة';
+    },
+    onDelete: b ? () => { S.money.bills = S.money.bills.filter(x => x.id !== b.id); return 'اتمسحت الفاتورة'; } : null
+  });
+}
+
+/* =========================================================
+   تاب «حسابي» — الإعدادات وأدوات البيت (نمط صفحة Settings في iOS)
+   كل صف بيفتح صفحة فرعية، والإعدادات البسيطة بتتغير من مكانها
+   ========================================================= */
+let confirmReset = false;
+const PREFS = { morning: true, bills: true, warranty: true, sound: true, lang: 'ar' };
+const prefs = () => (S.prefs = { ...PREFS, ...(S.prefs || {}) });
+const Switch = (key, on, label) =>
+  `<button class="switch" role="switch" aria-checked="${on}" aria-label="${label}" data-a="pref" data-v="${key}"><i></i></button>`;
+const navRow = (action, v, icon, cat, title, meta, trailing = `<span class="chev">${ICON.chev}</span>`) => `
+  <button class="li ${cat ? 'cat-' + cat : ''}" data-a="${action}" ${v ? `data-v="${v}"` : ''}>
+    ${Ico(icon)}<span class="li-body"><span class="li-title">${title}</span>${meta ? `<span class="li-meta">${meta}</span>` : ''}</span>${trailing}
+  </button>`;
+const subHero = (title, sub, ill) => `
+  <header class="hero gutter"><div class="wrap">
+    <div class="page-hero">
+      <div class="page-text"><p>${sub}</p></div>
+      ${ill ? `<div class="page-ill cat-${ill}">${ILL[ill]()}</div>` : ''}
+    </div>
+  </div></header>`;
+
+function notifState() {
+  if (!('Notification' in window)) return 'none';
+  return Notification.permission;   // default | granted | denied
+}
+
+function viewKitchen() { return `<main class="screen screen-top gutter"><div class="wrap cat-kitchen">${kitchenBlocks()}</div></main>`; }
+function renderQuickAdd() {
+  document.body.classList.add('locked');
+  const row = (a, v, icon, cat, t, m) => `<button class="li ${cat ? 'cat-' + cat : ''}" data-a="${a}" ${v ? `data-v="${v}"` : ''}>${Ico(icon)}<span class="li-body"><span class="li-title">${t}</span><span class="li-meta">${m}</span></span><span class="chev">${ICON.chev}</span></button>`;
+  $('sheet').innerHTML = sheetWrap('ضيفي حاجة جديدة', `<div class="list" style="margin-top:14px">
+    ${row('new', '', ICON.today, 'clean', 'مهمة', 'حاجة تتعمل في البيت، مرة أو بتتكرر')}
+    ${row('exp-new', '', ICON.wallet, 'bills', 'مصروف', 'سجّلي فلوس اتصرفت')}
+    ${row('qa-shop', '', ICON.cart, 'shop', 'حاجة للمشتريات', 'تتضاف لقايمتك الأساسية')}
+    ${row('meal-pick', todayStr(), ICON.kitchen, 'kitchen', 'أكلة النهارده', 'اختاري هتطبخي إيه')}
+  </div>`);
+}
+
+function viewProfile() {
+  const p = prefs();
+  const soon = S.home.warranties.filter(w => daysUntil(w.until) >= 0 && daysUntil(w.until) <= 60).length;
+  const on = ['morning', 'bills', 'warranty'].filter(k => p[k]).length;
+  return `
+    <header class="hero gutter"><div class="wrap">
+      <div class="profile">
+        <span class="avatar avatar-lg" aria-hidden="true">${esc(S.name[0])}</span>
+        <span class="profile-text"><b>${esc(S.name)}</b><span>بيت ${esc(S.name)}، ${num(S.tasks.length)} مهمة و${num(S.recipes.length)} وصفات</span></span>
+      </div>
+    </div></header>
+    <main class="screen gutter"><div class="wrap">
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">الإعدادات</h2></div>
+        <div class="list">
+          ${navRow('open-cat', 'notifs', ICON.bell, '', 'الإشعارات', on ? `${num(on)} تذكيرات شغالة` : 'كلها مقفولة')}
+          ${navRow('open-cat', 'lang', ICON.globe, '', 'اللغة', p.lang === 'ar' ? 'العربية' : 'English')}
+          <div class="li">${Ico(ICON.sound)}<span class="li-body"><span class="li-title">صوت تايمر الطبخ</span><span class="li-meta">بيرن لما التايمر يخلص</span></span>${Switch('sound', p.sound, 'صوت تايمر الطبخ')}</div>
+        </div>
+      </section>
+      <section class="block">
+        <div class="section-head"><h2 class="section-title">الداتا</h2></div>
+        <div class="list">
+          ${navRow('backup', '', ICON.download, '', 'نزّلي نسخة احتياطية', 'ملف فيه كل الداتا، احتفظي بيه', '')}
+          <label class="li" for="restore-file">${Ico(ICON.upload)}<span class="li-body"><span class="li-title">رجّعي نسخة احتياطية</span><span class="li-meta">اختاري الملف اللي نزّلتيه قبل كده</span></span></label>
+          <input type="file" id="restore-file" accept="application/json,.json" hidden>
+        </div>
+        <button class="btn btn-danger ${confirmReset ? 'is-confirm' : ''}" style="margin-top:14px; width:100%" data-a="reset">${confirmReset ? 'متأكدة؟ دوسي تاني وكل الداتا هتتمسح' : 'ابدئي من الأول'}</button>
+      </section>
+      <p class="about">دفتر البيت، النسخة ٢٫٠<br>معمول بحب لبيت نور 🤍</p>
+    </div></main>`;
+}
+
+function viewWarranties() {
+  const w = S.home.warranties.slice().sort((a, b) => a.until.localeCompare(b.until)).map(x => {
+    const n = daysUntil(x.until);
+    const tag = n < 0 ? ['خلص الضمان', 'tag-urgent'] : n <= 60 ? [`فاضل ${num(n)} يوم`, 'tag-soon'] : [`لحد ${fromIso(x.until).toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })}`, ''];
+    return `<button class="li cat-organize" data-a="war-edit" data-v="${x.id}">${Ico(ICON.shield)}<span class="li-body"><span class="li-title">${esc(x.name)}</span><span class="li-meta">${x.note ? esc(x.note) : 'ضمان'}</span></span><span class="tag ${tag[1]}">${tag[0]}</span></button>`;
+  }).join('');
+  return `${subHero('الأجهزة والضمانات', 'آخر ميعاد ضمان لكل جهاز، عشان ما يفوتكيش.', 'organize')}
+    <main class="screen gutter"><div class="wrap">
+      <div class="list">${w || '<div class="empty">مفيش أجهزة لسه</div>'}</div>
+      <button class="btn btn-secondary btn-lg" style="margin-top:16px" data-a="war-new">${ICON.plus}ضيفي جهاز</button>
+    </div></main>`;
+}
+
+function viewContacts() {
+  const c = S.home.contacts.map(x => `
+    <div class="li cat-clean">
+      <button class="li-tap" data-a="con-edit" data-v="${x.id}">${Ico(ICON.phone)}<span class="li-body"><span class="li-title">${esc(x.name)}</span><span class="li-meta">${esc(x.role || '')}${x.role ? '، ' : ''}<span dir="ltr">${esc(x.phone)}</span></span></span></button>
+      <a class="icon-btn icon-btn-primary" href="tel:${esc(x.phone)}" aria-label="اتصلي بـ ${esc(x.name)}">${ICON.phone}</a>
+    </div>`).join('');
+  return `${subHero('أرقام مهمة', 'السباك، والكهربائي، والصيانة. اتصلي بلمسة.', 'clean')}
+    <main class="screen gutter"><div class="wrap">
+      <div class="list">${c || '<div class="empty">مفيش أرقام لسه</div>'}</div>
+      <button class="btn btn-secondary btn-lg" style="margin-top:16px" data-a="con-new">${ICON.plus}ضيفي رقم</button>
+    </div></main>`;
+}
+
+function viewNotifs() {
+  const p = prefs(), st = notifState();
+  const row = (k, title, meta) => `<div class="li">${Ico(ICON.bell)}<span class="li-body"><span class="li-title">${title}</span><span class="li-meta">${meta}</span></span>${Switch(k, p[k], title)}</div>`;
+  const banner = st === 'granted' ? '' : st === 'denied'
+    ? `<div class="tip">الإشعارات مقفولة من إعدادات الموبايل. افتحي الإعدادات ← دفتر البيت ← الإشعارات، وشغليها.</div>`
+    : st === 'none'
+    ? `<div class="tip">عشان الإشعارات تشتغل على الآيفون، ضيفي التطبيق للشاشة الرئيسية الأول (زرار المشاركة ← Add to Home Screen).</div>`
+    : `<div class="tip tip-action"><span>اسمحي للتطبيق يبعتلك إشعارات عشان التذكيرات توصلك.</span><button class="btn btn-primary btn-sm" data-a="notif-allow">اسمحي</button></div>`;
+  return `${subHero('الإشعارات', 'اختاري التطبيق يفكرك بإيه.', '')}
+    <main class="screen gutter"><div class="wrap">
+      ${banner}
+      <div class="list" style="margin-top:14px">
+        ${row('morning', 'مهام النهارده', 'أول ما تفتحي التطبيق الصبح')}
+        ${row('bills', 'الفواتير', 'قبل ميعاد الفاتورة بيوم')}
+        ${row('warranty', 'الضمانات', 'لما الضمان يقرب يخلص (شهرين)')}
+      </div>
+    </div></main>`;
+}
+
+function viewLang() {
+  const p = prefs();
+  const opt = (k, title, meta, disabled) => `
+    <button class="li" data-a="lang" data-v="${k}" aria-pressed="${p.lang === k}" ${disabled ? 'disabled' : ''}>
+      ${Ico(ICON.globe)}<span class="li-body"><span class="li-title">${title}</span><span class="li-meta">${meta}</span></span>
+      ${p.lang === k ? `<span class="check is-on">${ICON.check}</span>` : disabled ? '<span class="tag">قريباً</span>' : ''}
+    </button>`;
+  return `${subHero('اللغة', 'لغة التطبيق كله.', '')}
+    <main class="screen gutter"><div class="wrap"><div class="list">
+      ${opt('ar', 'العربية', 'من اليمين للشمال', false)}
+      ${opt('en', 'English', 'Left to right', true)}
+    </div></div></main>`;
+}
+
+/** تذكيرات بسيطة بتطلع لما التطبيق يتفتح (مرة واحدة في اليوم) */
+function dailyReminders() {
+  const p = prefs();
+  if (notifState() !== 'granted' || S.lastNotif === todayStr()) return;
+  const msgs = [];
+  if (p.morning) { const n = todayTasks().filter(t => !isDone(t.id)).length; if (n) msgs.push(`عندك ${num(n)} مهام النهارده`); }
+  if (p.bills) S.money.bills.forEach(b => { const d = new Date(); d.setDate(d.getDate() + 1); if (!billPaid(b) && d.getDate() === b.day) msgs.push(`${b.name} ميعادها بكرة`); });
+  if (p.warranty) S.home.warranties.forEach(w => { const n = daysUntil(w.until); if (n >= 0 && n <= 60) msgs.push(`ضمان ${w.name} فاضل عليه ${num(n)} يوم`); });
+  if (!msgs.length) return;
+  S.lastNotif = todayStr(); save();
+  const show = r => r.showNotification('دفتر البيت', { body: msgs.join('\n'), icon: 'icons/icon-192.png', lang: 'ar', dir: 'rtl' });
+  if (navigator.serviceWorker && navigator.serviceWorker.controller) navigator.serviceWorker.ready.then(show).catch(() => {});
+  else try { new Notification('دفتر البيت', { body: msgs.join('\n'), lang: 'ar', dir: 'rtl' }); } catch (e) {}
+}
+
+function openWarrantyForm(x) {
+  openForm({
+    title: x ? 'تعديل الجهاز' : 'جهاز جديد', editing: !!x,
+    values: x ? { name: x.name, until: x.until, note: x.note || '' } : { name: '', until: addDays(365), note: '' },
+    fields: [{ k: 'name', label: 'اسم الجهاز', ph: 'مثلاً: البوتجاز', required: true }, { k: 'until', label: 'الضمان لحد إمتى؟', type: 'date', required: true }, { k: 'note', label: 'ملاحظة (اختياري)', ph: 'مثلاً: الفاتورة في درج المطبخ' }],
+    onSave: v => { const d = { name: v.name.trim(), until: v.until, note: v.note.trim() }; if (x) Object.assign(x, d); else S.home.warranties.push({ id: uid('w'), ...d }); return 'اتحفظ'; },
+    onDelete: x ? () => { S.home.warranties = S.home.warranties.filter(y => y.id !== x.id); return 'اتمسح'; } : null
+  });
+}
+function openContactForm(x) {
+  openForm({
+    title: x ? 'تعديل الرقم' : 'رقم جديد', editing: !!x,
+    values: x ? { name: x.name, role: x.role || '', phone: x.phone } : { name: '', role: '', phone: '' },
+    fields: [{ k: 'name', label: 'الاسم', ph: 'مثلاً: أسطى أحمد', required: true }, { k: 'role', label: 'بيشتغل إيه؟', ph: 'مثلاً: كهربائي' }, { k: 'phone', label: 'رقم الموبايل', type: 'tel', required: true }],
+    onSave: v => { const d = { name: v.name.trim(), role: v.role.trim(), phone: v.phone.trim() }; if (x) Object.assign(x, d); else S.home.contacts.push({ id: uid('c'), ...d }); return 'اتحفظ'; },
+    onDelete: x ? () => { S.home.contacts = S.home.contacts.filter(y => y.id !== x.id); return 'اتمسح'; } : null
+  });
+}
+function downloadBackup() {
+  const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `daftar-elbeit-${todayStr()}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast('اتنزلت النسخة');
+}
+
+/* =========================================================
+   الرسم والأحداث
+   ========================================================= */
+const TABS = [['today', 'النهارده', ICON.today], ['house', 'البيت', ICON.house], ['kitchen', 'المطبخ', ICON.kitchen], ['shopping', 'المشتريات', ICON.cart], ['money', 'الفلوس', ICON.wallet]];
+
+/* ---------- الهيدر: عنوان كل صفحة + رجوع + أكشن ---------- */
+const PAGE_TITLE = { settings: 'الإعدادات', warranties: 'الأجهزة والضمانات', contacts: 'أرقام مهمة', notifs: 'الإشعارات', lang: 'اللغة' };
+const TAB_TITLE = { today: 'النهارده', house: 'البيت', kitchen: 'المطبخ', shopping: 'المشتريات', money: 'الفلوس' };
+const pageTitle = p => !p ? TAB_TITLE[tab] : PAGE_TITLE[p] || (p.startsWith('recipe:') ? 'الوصفة' : p === 'list:stock' ? 'المخزن' : p.startsWith('list:') ? (listById(p.slice(5)) || {}).name || '' : CATS[p] ? CATS[p].name : '');
+const barBtn = (attrs, icon, label) => `<button class="bar-btn" ${attrs} aria-label="${label}">${icon}</button>`;
+function appBar() {
+  let start = '', end = '';
+  if (page) {
+    start = `<button class="back-btn" data-a="back" aria-label="رجوع لـ ${pageTitle(prevPage)}">${ICON.back}</button>`;
+    if (page === 'warranties') end = barBtn('data-a="war-new"', ICON.plus, 'ضيفي جهاز');
+    else if (page === 'contacts') end = barBtn('data-a="con-new"', ICON.plus, 'ضيفي رقم');
+    else if (page.startsWith('list:')) end = listEdit ? `<button class="bar-done" data-a="list-edit">تم</button>` : barBtn('data-a="list-edit"', ICON.edit, 'عدّلي القايمة وامسحي حاجات');
+    else if (page.startsWith('recipe:')) end = barBtn(`data-a="recipe-edit" data-v="${page.slice(7)}"`, ICON.edit, 'عدّلي الوصفة');
+    else if (CATS[page]) end = barBtn(`data-a="new" data-cat="${page}"`, ICON.plus, `ضيفي مهمة ${CATS[page].name}`);
+  } else if (tab === 'today') {
+    start = `<button class="avatar" data-a="open-cat" data-v="settings" aria-label="الإعدادات">${esc(S.name[0])}</button>`;
+    end = `<button class="bar-btn" data-a="open-notifs" aria-label="الإشعارات" style="position:relative">${ICON.bell}${notifState() === 'default' ? '<span class="badge-dot" style="top:7px; inset-inline-end:8px"></span>' : ''}</button>${barBtn('data-a="quick-add"', ICON.plus, 'ضيفي حاجة جديدة')}`;
+  } else if (tab === 'house') end = barBtn('data-a="new"', ICON.plus, 'ضيفي مهمة');
+  else if (tab === 'kitchen') end = kitchenView === 'learn' ? barBtn('data-a="learn-new"', ICON.plus, 'ضيفي ريل') : barBtn('data-a="recipe-new"', ICON.plus, 'ضيفي وصفة');
+  else if (tab === 'shopping') end = barBtn('data-a="list-new"', ICON.plus, 'قايمة جديدة');
+  else if (tab === 'money') end = barBtn('data-a="exp-new"', ICON.plus, 'سجّلي مصروف');
+  if (!page && tab === 'today') {   // الهوم: تحية بدل العنوان
+    const h = new Date().getHours();
+    return `<div class="appbar-in appbar-home">
+      ${start}
+      <span class="hello-text">
+        <h1 class="hello-title">${h < 12 ? 'صباح الخير' : 'مساء الخير'} يا ${esc(S.name)}</h1>
+        <span class="hello-sub">${new Date().toLocaleDateString('ar-EG', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+      </span>
+      ${end}
+    </div>`;
+  }
+  return `<div class="appbar-in"><div class="appbar-start">${start}</div><h1 class="appbar-title">${pageTitle(page)}</h1><div class="appbar-end">${end}</div></div>`;
+}
+let navDir = '';
+function render() {
+  $('appbar').innerHTML = appBar();
+  const _wrapHero = html => /^\s*<header class="hero/.test(html) ? html : '<header class="hero hero-min"></header>' + html;
+  $('app').innerHTML = _wrapHero(page === 'settings' ? viewProfile() : page === 'warranties' ? viewWarranties() : page === 'contacts' ? viewContacts() : page === 'notifs' ? viewNotifs() : page === 'lang' ? viewLang() : page && page.startsWith('recipe:') ? viewRecipe(page.slice(7)) : page && page.startsWith('list:') ? viewList(page.slice(5)) : page ? viewCategory(page) : tab === 'today' ? viewToday() : tab === 'house' ? viewHouse() : tab === 'kitchen' ? viewKitchen() : tab === 'shopping' ? viewShopping() : viewMoney());
+  if (navDir) { const app = $('app'); app.classList.remove('nav-push', 'nav-pop', 'nav-fade'); void app.offsetWidth; app.classList.add('nav-' + navDir); navDir = ''; }
+  $('tabs').innerHTML = TABS.map(([k, label, ico]) =>
+    `<button class="nav-item" data-a="go" data-v="${k}" aria-label="${label}" ${k === tab ? 'aria-current="page"' : ''}>${ico}<span>${label}</span></button>`).join('');
+}
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const a = el.dataset.a, v = el.dataset.v;
+  switch (a) {
+    case 'go': closeSheet(); confirmReset = false; listEdit = false; navDir = tab === v && !page ? '' : 'fade'; tab = v; page = null; prevPage = null; render(); scrollTo(0, 0); break;
+    case 'open-cat': navDir = 'push'; prevPage = page; page = v; render(); scrollTo(0, 0); break;
+    case 'back': listEdit = false; navDir = 'pop'; page = prevPage; prevPage = ['notifs', 'lang'].includes(page) ? 'settings' : null; render(); scrollTo(0, 0); break;
+    case 'cal-day': planDay = v === todayStr() ? null : v; if (monthSheet) closeSheet(); if (tab !== 'today') { tab = 'today'; page = null; } render(); break;
+    case 'week-move': { const d = fromIso(planDay || todayStr()); d.setDate(d.getDate() + 7 * Number(v)); planDay = iso(d) === todayStr() ? null : iso(d); render(); break; }
+    case 'month-open': renderMonthSheet(); break;
+    case 'kitchen-view': kitchenView = v; render(); break;
+    case 'quick-add': renderQuickAdd(); break;
+    case 'qa-shop': case 'shop-focus': { closeSheet(); const m = mainList(); if (!m) { openListForm(null); break; } navDir = 'push'; tab = 'shopping'; prevPage = null; page = 'list:' + m; shopView = m; listEdit = false; render(); scrollTo(0, 0); setTimeout(() => { const i = $('shop-new'); if (i) i.focus(); }, 60); break; }
+    case 'cal-open': calOpen = !calOpen; render(); break;
+    case 'cal-move': {
+      const d = fromIso(planDay || todayStr());
+      if (calOpen) { d.setDate(1); d.setMonth(d.getMonth() + Number(v)); if (monthSheet) { planDay = iso(d) === todayStr() ? null : iso(d); renderMonthSheet(); break; } } else d.setDate(d.getDate() + 7 * Number(v));
+      planDay = iso(d) === todayStr() ? null : iso(d); render(); break;
+    }
+    case 'fold': showDaily = !showDaily; render(); break;
+    case 'detail': openDetail(el.dataset.id); break;
+    case 'recipe': {   // من مهمة «تحضير الأكل»: افتحي أكلة النهارده لو متحددة
+      navDir = 'push'; const rid = S.meals[todayStr()]; closeSheet(); tab = 'kitchen'; prevPage = null; page = rid ? 'recipe:' + rid : null;
+      if (!rid) kitchenView = 'plan'; render(); scrollTo(0, 0); break;
+    }
+    case 'detail-toggle': toggle(viewId); renderDetail(); break;
+    case 'edit-form': { const id = viewId; viewId = null; if (id.startsWith('b:')) openBillForm(S.money.bills.find(b => b.id === id.slice(2))); else openSheet(S.tasks.find(x => x.id === id)); break; }
+    case 'toggle': toggle(el.dataset.id); break;
+    case 'new': openSheet(null, el.dataset.cat); break;
+    case 'edit': openDetail(el.dataset.id); break;
+    case 'close-sheet': closeSheet(); break;
+    case 'pick':
+      draft[el.dataset.k] = el.dataset.k === 'mins' ? Number(v) : v;
+      if (sheetError === 'days' && el.dataset.k === 'rtype') sheetError = '';
+      renderSheet(); break;
+    case 'pick-day': {
+      const n = Number(v), i = draft.days.indexOf(n);
+      i >= 0 ? draft.days.splice(i, 1) : draft.days.push(n);
+      if (draft.days.length) sheetError = '';
+      renderSheet(); break;
+    }
+    case 'save': saveDraft(); break;
+    /* الفورم العام */
+    case 'ff-pick': form.values[el.dataset.k] = v; renderForm(); break;
+    case 'ff-save': saveForm(); break;
+    case 'ff-delete': if (!form.confirmDel) { form.confirmDel = true; renderForm(); } else { const msg = form.onDelete(); save(); closeSheet(); render(); toast(msg); } break;
+    /* المطبخ */
+    case 'today-recipe': navDir = 'push'; tab = 'kitchen'; prevPage = null; page = 'recipe:' + S.meals[todayStr()]; render(); scrollTo(0, 0); break;
+    case 'ing-add': case 'ing-add-all': {
+      const r = recipeById(S.meals[todayStr()]);
+      const list = mealNeeds(r).filter(n => n.state === 'missing' && (a === 'ing-add-all' || String(n.idx) === v));
+      list.forEach(({ i }) => S.shop.items.push({ id: uid('i'), name: i.n, qty: i.q, sec: i.sec || guessSec(i.n), list: mainList(), done: false, from: r.name }));
+      save(); render(); toast(list.length > 1 ? `اتضاف ${num(list.length)} حاجات لقايمة الأسبوع` : 'اتضافت لقايمة الأسبوع'); break;
+    }
+    case 'open-recipe': navDir = 'push'; prevPage = page; page = 'recipe:' + v; render(); scrollTo(0, 0); break;
+    case 'meal-pick': picker = v; document.body.classList.add('locked'); renderPicker(); break;
+    case 'meal-set': { const d = picker; if (v) S.meals[d] = v; else delete S.meals[d]; save(); closeSheet(); render(); toast(v ? 'اتحطت في أكل الأسبوع' : 'اتشالت الأكلة'); break; }
+    case 'meals-to-shop': { const n = mealsToShop(Array.from({ length: 7 }, (_, i) => iso(dayDate(i)))); save(); render(); toast(n ? `اتضاف ${num(n)} حاجة لقايمة الأسبوع` : 'كل المكونات موجودة في القايمة أو المخزن'); break; }
+    case 'recipe-to-shop': { const k = '__one'; S.meals[k] = v; const n = mealsToShop([k]); delete S.meals[k]; save(); render(); toast(n ? `اتضاف ${num(n)} حاجة لقايمة الأسبوع` : 'المكونات موجودة في القايمة أو المخزن'); break; }
+    case 'rstatus': recipeById(page.slice(7)).status = v; save(); render(); break;
+    case 'recipe-new': openRecipeForm(null); break;
+    case 'learn-open': renderLearn(v); break;
+    case 'learn-new': openLearnForm(null); break;
+    case 'learn-edit': { const l = S.learn.find(x => x.id === v); closeSheet(); openLearnForm(l); break; }
+    case 'open-recipe-sheet': closeSheet(); if (!page || !page.startsWith('recipe:')) prevPage = page; page = 'recipe:' + v; render(); scrollTo(0, 0); break;
+    case 'recipe-edit': openRecipeForm(recipeById(v)); break;
+    case 'cook': startCook(v); break;
+    case 'cook-close': stopCook(); break;
+    case 'cook-step': { const r = recipeById(cook.id); clearInterval(cook.tick); cook.step = Math.max(0, Math.min(r.steps.length - 1, cook.step + Number(v))); cook.end = null; cook.left = null; renderCook(); break; }
+    case 'cook-timer': cookTimer(); break;
+    case 'cook-done': { const r = recipeById(cook.id); if (r.status === 'want') r.status = 'tried'; save(); stopCook(); render(); toast('بالهنا والشفا 🤍'); break; }
+    /* المشتريات */
+    case 'open-list': navDir = 'push'; prevPage = null; page = 'list:' + v; shopView = v; shopNew = ''; listEdit = false; render(); scrollTo(0, 0); break;
+    case 'list-new': openListForm(null); break;
+    case 'list-settings': openListForm(listById(v)); break;
+    case 'list-edit': listEdit = !listEdit; render(); break;
+    case 'item-del': { const it = S.shop.items.find(x => x.id === v); S.shop.items = S.shop.items.filter(x => x.id !== v); save(); render(); toast(`اتمسحت: ${it ? it.name : ''}`); break; }
+    case 'stock-del': S.shop.stock = S.shop.stock.filter(x => x.id !== v); save(); render(); toast('اتمسحت من المخزن'); break;
+    case 'list-renew': S.shop.items.forEach(i => { if (i.list === v) i.done = false; }); save(); render(); scrollTo(0, 0); toast('القايمة رجعت جديدة'); break;
+    case 'list-empty': if (listEdit !== 'clear') { listEdit = 'clear'; render(); } else { S.shop.items = S.shop.items.filter(i => i.list !== v); listEdit = false; save(); render(); toast('القايمة فضيت'); } break;
+    case 'shop-add': addShop(shopNew || ($('shop-new') || {}).value || ''); break;
+    case 'item-toggle': { const i = S.shop.items.find(x => x.id === v); i.done = !i.done; save(); render(); break; }
+    case 'item-edit': openItemForm(S.shop.items.find(x => x.id === v)); break;
+    case 'shop-clear': S.shop.items = S.shop.items.filter(i => !(i.list === shopView && i.done)); save(); render(); toast('القايمة نضفت'); break;
+    case 'month-reset': S.shop.items.forEach(i => { if (i.list === 'month') i.done = false; }); save(); render(); toast('القايمة رجعت لأول الشهر'); break;
+    case 'stock-open': stockId = v; stockConfirm = false; renderStockItem(); break;
+    case 'stock-set': { const x = S.shop.stock.find(y => y.id === stockId); x.state = v; save(); render(); renderStockItem(); toast(`${x.name}: ${STOCK[v][0]}`); break; }
+    case 'stock-rename': { const x = S.shop.stock.find(y => y.id === v); closeSheet(); openForm({ title: 'اسم الحاجة', editing: true, values: { name: x.name }, fields: [{ k: 'name', label: 'الاسم', required: true }], onSave: d => { x.name = d.name.trim(); return 'اتحفظ'; } }); break; }
+    case 'stock-del-sheet': if (!stockConfirm) { stockConfirm = true; renderStockItem(); } else { S.shop.stock = S.shop.stock.filter(y => y.id !== v); save(); closeSheet(); render(); toast('اتمسحت من المخزن'); } break;
+    case 'stock-to-list': { const x = S.shop.stock.find(y => y.id === v); S.shop.items.push({ id: uid('i'), name: x.name, qty: '', sec: guessSec(x.name), list: mainList(), done: false }); save(); render(); if (stockId && document.querySelector('#sheet .stock-opt')) renderStockItem(); toast('اتضافت لقايمة الأسبوع'); break; }
+    /* الفلوس */
+    case 'exp-new': openExpenseForm(null); break;
+    case 'exp-edit': openExpenseForm(S.money.expenses.find(x => x.id === v)); break;
+    case 'bill-new': openBillForm(null); break;
+    case 'budget-edit': openForm({ title: 'ميزانية الشهر', editing: true, values: { budget: S.money.budget }, fields: [{ k: 'budget', label: 'هتصرفوا كام في الشهر؟ (بالجنيه)', type: 'number', required: true }], onSave: v2 => { S.money.budget = Number(v2.budget); return 'اتحفظت الميزانية'; } }); break;
+    /* بيانات البيت */
+    case 'war-new': openWarrantyForm(null); break;
+    case 'war-edit': openWarrantyForm(S.home.warranties.find(x => x.id === v)); break;
+    case 'con-new': openContactForm(null); break;
+    case 'con-edit': openContactForm(S.home.contacts.find(x => x.id === v)); break;
+    case 'name-edit': openForm({ title: 'اسمك', editing: true, values: { name: S.name }, fields: [{ k: 'name', label: 'الاسم اللي يظهر في الهوم', required: true }], onSave: v2 => { S.name = v2.name.trim(); return 'اتحفظ'; } }); break;
+    case 'backup': downloadBackup(); break;
+    case 'open-notifs': navDir = 'push'; closeSheet(); prevPage = 'settings'; page = 'notifs'; render(); scrollTo(0, 0); break;
+    case 'pref': { const p = prefs(); p[v] = !p[v]; save(); render(); break; }
+    case 'lang': prefs().lang = v; save(); render(); break;
+    case 'notif-allow': Notification.requestPermission().then(() => { render(); dailyReminders(); }); break;
+    case 'reset': if (!confirmReset) { confirmReset = true; render(); } else { confirmReset = false; try { localStorage.removeItem(KEY); } catch (e) {} S = load(); page = null; tab = 'today'; render(); scrollTo(0, 0); toast('بدأنا من الأول'); } break;
+    case 'delete': deleteDraft(); break;
+  }
+});
+
+['input', 'change'].forEach(type => document.addEventListener(type, e => {
+  const ds = e.target.dataset || {};
+  if (ds.ff && form) { form.values[ds.ff] = e.target.value; if (form.error === ds.ff && e.target.value.trim()) { form.error = null; e.target.classList.remove('is-error'); } return; }
+  if (ds.sf) { if (type === "input") shopNew = e.target.value; return; }   // الـ change بيوصل بعد ما الخانة اتمسحت، فبنتجاهله
+  if (type === 'change' && e.target.id === 'restore-file' && e.target.files[0]) {
+    e.target.files[0].text().then(txt => {
+      try { const data = JSON.parse(txt); if (!Array.isArray(data.tasks)) throw 0; S = upgrade(data); save(); render(); toast('رجعت النسخة'); }
+      catch (err) { toast('الملف ده مش نسخة من دفتر البيت'); }
+    });
+    return;
+  }
+  const f = ds.f;
+  if (!f || !draft) return;
+  draft[f] = f === 'day' ? Number(e.target.value) : e.target.value;
+  if (f === 'title' && sheetError === 'title' && e.target.value.trim()) { sheetError = ''; e.target.classList.remove('is-error'); }
+}));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (cook) stopCook(); else if (draft || form || viewId || picker) closeSheet(); }
+  if (e.key === 'Enter' && e.target.id === 'shop-new') { e.preventDefault(); addShop(e.target.value); }
+});
+
+addEventListener('scroll', () => { const b = $('appbar'); if (b) b.classList.toggle('is-scrolled', scrollY > 4); }, { passive: true });
+/* اسحبي الشيت لتحت عشان تقفليه */
+(() => {
+  let y0 = null, sheet = null;
+  document.addEventListener('touchstart', e => {
+    const h = e.target.closest('.handle, .sheet-head'); if (!h || e.target.closest('button')) return;
+    sheet = h.closest('.sheet'); y0 = e.touches[0].clientY; sheet.classList.add('is-dragging');
+  }, { passive: true });
+  document.addEventListener('touchmove', e => { if (y0 === null) return; const d = Math.max(0, e.touches[0].clientY - y0); sheet.style.transform = `translateY(${d}px)`; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (y0 === null) return; const d = e.changedTouches[0].clientY - y0; sheet.classList.remove('is-dragging');
+    if (d > 90) closeSheet(); else sheet.style.transform = '';
+    y0 = null; sheet = null;
+  });
+})();
+
+/* الشيت بيتحرك (slide up) أول مرة يتفتح بس.
+   لما بنحدّث اللي جواه (اختيار، علامة، حالة) بيفضل ثابت مكانه ومن غير ما يرجع لأول السكرول */
+(() => {
+  const box = $('sheet'); let wasOpen = false, lastScroll = 0;
+  document.addEventListener('scroll', e => { if (e.target.classList && e.target.classList.contains('sheet')) lastScroll = e.target.scrollTop; }, true);
+  new MutationObserver(() => {
+    const sh = box.querySelector('.sheet');
+    if (!sh) { wasOpen = false; lastScroll = 0; return; }
+    if (wasOpen) {
+      box.querySelectorAll('.sheet, .backdrop').forEach(el => el.classList.add('no-anim'));
+      sh.scrollTop = lastScroll;
+    }
+    wasOpen = true;
+  }).observe(box, { childList: true });
+})();
+
+S = load();
+renewLists();
+render();
+dailyReminders();
+
+if ('serviceWorker' in navigator && location.hostname.endsWith('github.io')) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
