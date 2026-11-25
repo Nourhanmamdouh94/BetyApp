@@ -1,6 +1,6 @@
 // Service Worker: بيحفظ ملفات التطبيق على الموبايل عشان يفتح من غير نت.
 // كل ما نرفع تعديل على GitHub، نغيّر رقم النسخة هنا.
-const CACHE = 'daftar-v9-8';
+const CACHE = 'daftar-v9-9';
 const FILES = ['./', './index.html', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'];
 

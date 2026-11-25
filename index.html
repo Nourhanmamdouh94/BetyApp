@@ -445,47 +445,31 @@ select.input{appearance:none; -webkit-appearance:none}
 .sky-wrap{position:relative; margin:calc(-1 * calc(var(--safe-top) + var(--appbar-pad-top) + var(--appbar-h) + var(--appbar-pad-bottom))) calc(-1 * var(--gutter)) 0; padding:calc(var(--safe-top) + var(--appbar-pad-top) + var(--appbar-h) + var(--appbar-pad-bottom)) var(--gutter) 0; background:var(--sky-grad)}
 .sky-wrap .date-btn{position:relative; z-index:1; color:var(--sky-text-2)}
 .scene{display:block; width:calc(100% + 2 * var(--gutter)); height:210px; margin:-12px calc(-1 * var(--gutter)) 0}
-.sky-morning{--sky-grad:linear-gradient(180deg, var(--periwinkle-500), var(--lavender-300) 60%, var(--peach-200)); --far:var(--peach-200); --far-shade:var(--peach-300); --bld:var(--lavender-400); --bld-near:var(--lavender-500); --win:var(--lavender-300); --win-lit:var(--butter-200); --nile:var(--periwinkle-400); --nile-shine:color-mix(in srgb, var(--white) 55%, transparent); --boat:var(--indigo-800); --sail:var(--white); --palm:var(--indigo-700); --hill-near:var(--indigo-500); --cloud:color-mix(in srgb, var(--white) 85%, transparent);
-  --sun:var(--peach-300); --sun-light:var(--butter-100); --sun-edge:var(--peach-400); --sun-ray:var(--peach-300); --sun-face:var(--peach-800); --sun-blush:color-mix(in srgb, var(--pink-400) 55%, transparent)}
-.sky-noon{--sky-grad:linear-gradient(180deg, var(--periwinkle-500), var(--periwinkle-300) 60%, var(--periwinkle-100)); --far:var(--butter-100); --far-shade:var(--butter-300); --bld:var(--lavender-400); --bld-near:var(--lavender-500); --win:var(--lavender-300); --win-lit:var(--butter-200); --nile:var(--periwinkle-500); --nile-shine:color-mix(in srgb, var(--white) 55%, transparent); --boat:var(--indigo-800); --sail:var(--white); --palm:var(--indigo-700); --hill-near:var(--indigo-500); --cloud:color-mix(in srgb, var(--white) 90%, transparent);
-  --sun:var(--butter-200); --sun-light:var(--butter-50); --sun-edge:var(--butter-300); --sun-ray:var(--butter-200); --sun-face:var(--peach-800); --sun-blush:color-mix(in srgb, var(--peach-400) 50%, transparent)}
-.sky-sunset{--sky-grad:linear-gradient(180deg, var(--indigo-500), var(--pink-300) 60%, var(--peach-300)); --far:var(--pink-300); --far-shade:var(--pink-400); --bld:var(--lavender-600); --bld-near:var(--lavender-700); --win:var(--lavender-500); --win-lit:var(--butter-200); --nile:var(--pink-400); --nile-shine:color-mix(in srgb, var(--peach-100) 70%, transparent); --boat:var(--indigo-900); --sail:var(--lavender-50); --palm:var(--indigo-900); --hill-near:var(--indigo-600); --bird:color-mix(in srgb, var(--indigo-900) 55%, transparent);
-  --sun:var(--peach-300); --sun-light:var(--butter-100); --sun-edge:var(--peach-400); --sun-ray:var(--peach-300); --sun-face:var(--peach-800); --sun-blush:color-mix(in srgb, var(--pink-500) 50%, transparent)}
-.sky-night{--sky-grad:linear-gradient(180deg, var(--indigo-900), var(--indigo-700)); --far:var(--indigo-800); --far-shade:var(--indigo-900); --bld:var(--lavender-800); --bld-near:var(--lavender-900); --win:var(--lavender-800); --win-lit:var(--butter-200); --nile:var(--indigo-800); --nile-shine:color-mix(in srgb, var(--butter-200) 55%, transparent); --boat:var(--lavender-900); --sail:var(--lavender-200); --palm:var(--lavender-900); --hill-near:var(--indigo-900);
-  --sun:var(--butter-100); --sun-light:var(--white); --sun-edge:var(--butter-200); --sun-ray:var(--butter-200); --sun-face:var(--indigo-800); --sun-blush:color-mix(in srgb, var(--pink-300) 60%, transparent)}
+.sky-morning{--sky-grad:linear-gradient(180deg, var(--periwinkle-400), var(--lavender-200) 55%, var(--peach-200)); --l1:color-mix(in srgb, var(--peach-200) 60%, var(--lavender-300)); --l2:var(--lavender-300); --l3:var(--indigo-500); --haze:var(--peach-100); --water-top:var(--peach-200); --water-bottom:var(--lavender-400); --bank:var(--indigo-700); --hill-near:var(--indigo-700); --win-lit:var(--butter-200); --sun:var(--butter-100); --sun-glow:var(--peach-200)}
+.sky-noon{--sky-grad:linear-gradient(180deg, var(--periwinkle-500), var(--periwinkle-300) 55%, var(--periwinkle-100)); --l1:var(--periwinkle-200); --l2:var(--periwinkle-300); --l3:var(--indigo-500); --haze:var(--periwinkle-50); --water-top:var(--periwinkle-200); --water-bottom:var(--periwinkle-500); --bank:var(--indigo-700); --hill-near:var(--indigo-700); --win-lit:var(--butter-200); --sun:var(--white); --sun-glow:var(--butter-100)}
+.sky-sunset{--sky-grad:linear-gradient(180deg, var(--indigo-600), var(--pink-300) 58%, var(--peach-300)); --l1:color-mix(in srgb, var(--pink-300) 70%, var(--peach-300)); --l2:var(--pink-400); --l3:var(--indigo-700); --haze:var(--peach-200); --water-top:var(--peach-300); --water-bottom:var(--pink-500); --bank:var(--indigo-900); --hill-near:var(--indigo-900); --win-lit:var(--butter-200); --sun:var(--butter-100); --sun-glow:var(--peach-300)}
+.sky-night{--sky-grad:linear-gradient(180deg, color-mix(in srgb, var(--indigo-900) 85%, black), var(--indigo-800)); --l1:color-mix(in srgb, var(--indigo-800) 80%, var(--lavender-500)); --l2:var(--lavender-800); --l3:var(--indigo-900); --haze:var(--indigo-700); --water-top:var(--indigo-800); --water-bottom:color-mix(in srgb, var(--indigo-900) 80%, black); --bank:color-mix(in srgb, var(--indigo-900) 70%, black); --hill-near:color-mix(in srgb, var(--indigo-900) 70%, black); --win-lit:var(--butter-200); --sun:var(--butter-50); --sun-glow:var(--lavender-300)}
 .hero-sky{--sky-text-2:color-mix(in srgb, var(--white) 88%, transparent)}
 /* الهيدر شفاف فوق السما، ولما تسكرولي بيرجع لونه */
 .appbar{transition:background .25s ease, box-shadow .25s ease}
 .appbar.on-sky:not(.is-scrolled){background:transparent}
 /* حركات المنظر */
-.dp-star{fill:var(--white); animation:twinkle 2.4s ease-in-out infinite}
-@keyframes twinkle{0%,100%{opacity:.25} 50%{opacity:1}}
-.cloud{animation:drift 26s ease-in-out infinite alternate}
-.cloud.c2{animation-duration:34s; animation-direction:alternate-reverse}
-@keyframes drift{to{transform:translateX(-26px)}}
-.bird{animation:flap 1.6s ease-in-out infinite}
-.bird.b2{animation-delay:.4s} .bird.b3{animation-delay:.8s}
-@keyframes flap{50%{transform:translateY(-2px) scaleY(.7)}}
-.felucca{animation:bob 3.2s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-1.5px) rotate(-2deg)}}
-.shine path{stroke-dasharray:10 8; animation:shine 3s linear infinite}
-@keyframes shine{to{stroke-dashoffset:-36}}
-.frond{transform-origin:4px -34px; animation:sway 4s ease-in-out infinite}
-@keyframes sway{50%{transform:rotate(4deg)}}
-.win-on{animation:glow 3s ease-in-out infinite}
-@keyframes glow{50%{opacity:.6}}
-.tower-light{opacity:0}
-.sky-night .tower-light, .sky-sunset .tower-light{opacity:1; animation:blink 1.6s ease-in-out infinite}
-@keyframes blink{50%{opacity:.2}}
-.dp-sun{transform-origin:0 0; animation:sunFloat 4s ease-in-out infinite}
-@keyframes sunFloat{50%{transform:translateY(-2px)}}
-.dp-sun.pulse{animation:sunPulse .6s cubic-bezier(.2,.8,.2,1), sunFloat 4s ease-in-out .6s infinite}
-@keyframes sunPulse{40%{transform:scale(1.3)}}
-.dp-rays{transform-origin:0 0; animation:raysBreathe 3s ease-in-out infinite}
-@keyframes raysBreathe{50%{transform:scale(1.08)}}
-.dp-rays.spin{animation:raysSpin 14s linear infinite}
-@keyframes raysSpin{to{transform:rotate(360deg)}}
-.dp-twinkle{transform-origin:15px -11px; animation:twinkle 2s ease-in-out infinite}
+.felucca{animation:bob 3.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-1px) rotate(-1.5deg)}}
+.glint{animation:glint 2.4s ease-in-out infinite}
+@keyframes glint{50%{opacity:.35}}
+.frond{transform-origin:3px -32px; animation:sway 5s ease-in-out infinite}
+@keyframes sway{50%{transform:rotate(3deg)}}
+.win-on{animation:glow 3.4s ease-in-out infinite}
+@keyframes glow{50%{opacity:.55}}
+.bird{animation:flap 1.8s ease-in-out infinite}
+.bird.b2{animation-delay:.5s} .bird.b3{animation-delay:.9s}
+@keyframes flap{50%{transform:translateY(-1.5px) scaleY(.7)}}
+.dp-star{fill:var(--white); animation:twinkle 2.8s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.2} 50%{opacity:.9}}
+.dp-sun{transform-origin:0 0}
+.dp-sun.pulse{animation:sunPulse .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes sunPulse{40%{transform:scale(1.18)}}
 /* كارت الإزاز */
 .day-glass{position:relative; margin-top:-34px; padding:14px 16px 8px; border-radius:var(--r-lg); color:var(--white);
   background:color-mix(in srgb, var(--white) 16%, transparent); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
@@ -1168,80 +1152,60 @@ function dayPath(list) {
   dpLast = done;
   const phase = skyPhase(h), lit = phase === 'night' || phase === 'sunset';
   const t = Math.min(1, Math.max(0, (h - 6) / (23 - 6)));
-  const P0 = [352, 104], P1 = [200, -40], P2 = [48, 104];          // الشمس بتطلع من اليمين وتنزل شمال
+  const P0 = [356, 132], P1 = [200, -40], P2 = [44, 132];          // الشمس بتطلع من اليمين وتنزل شمال
   const pt = k => (1 - t) ** 2 * P0[k] + 2 * (1 - t) * t * P1[k] + t ** 2 * P2[k];
   const x = pt(0), y = pt(1);
-  /* رسمة الشمس: هالة ناعمة + أشعة مدوّرة بتطول مع الإنجاز + وش بيبتسم أكتر كل ما تخلصي */
-  const ink = 'var(--sun-face)', smile = (1.2 + 2.6 * prog).toFixed(1);
-  const eyes = allDone
-    ? `<path d="M-5.2 -1.2q1.6-2 3.2 0M2 -1.2q1.6-2 3.2 0" fill="none" stroke="${ink}" stroke-width="1.3" stroke-linecap="round"/>`
-    : `<circle cx="-3.6" cy="-1.4" r="1.15" fill="${ink}"/><circle cx="3.6" cy="-1.4" r="1.15" fill="${ink}"/>`;
-  const face = `${eyes}<ellipse cx="-6.3" cy="2.6" rx="2" ry="1.2" fill="var(--sun-blush)"/><ellipse cx="6.3" cy="2.6" rx="2" ry="1.2" fill="var(--sun-blush)"/>
-    <path d="M-2.6 2.4q2.6 ${smile} 5.2 0" fill="none" stroke="${ink}" stroke-width="1.3" stroke-linecap="round"/>`;
-  let body;
-  if (phase === 'night') {
-    body = `<circle r="30" fill="url(#dpGlow)"/>
-      <path d="M3 -12a12 12 0 1 0 9 19a10 10 0 0 1-9-19z" fill="url(#dpCore)"/>
-      <path d="M-6.5 -0.5q1.5 1.6 3 0" fill="none" stroke="${ink}" stroke-width="1.3" stroke-linecap="round"/>
-      <ellipse cx="-7.5" cy="3.6" rx="1.8" ry="1.1" fill="var(--sun-blush)"/>
-      <path d="M-3.5 4.2q1.6 ${(0.8 + 1.6 * prog).toFixed(1)} 3.2 0" fill="none" stroke="${ink}" stroke-width="1.2" stroke-linecap="round"/>
-      <path class="dp-twinkle" d="M15 -14l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z" fill="var(--sun)"/>`;
-  } else {
-    const rays = Array.from({ length: 8 }, (_, i) => {
-      const len = ((i % 2 ? 4 : 6.5) * (0.95 + 0.6 * prog)).toFixed(1);
-      return `<rect x="-2.2" y="${-(15 + +len)}" width="4.4" height="${len}" rx="2.2" transform="rotate(${i * 45})"/>`;
-    }).join('');
-    body = `<circle r="${30 + 6 * prog}" fill="url(#dpGlow)"/>
-      <g class="dp-rays ${allDone ? 'spin' : ''}" fill="var(--sun-ray)">${rays}</g>
-      <circle r="12" fill="url(#dpCore)"/><circle cx="-4" cy="-5" r="2.6" fill="#fff" opacity=".45"/>
-      ${face}`;
-  }
+  /* منظر القاهرة: طبقات silhouette بعمق (اللي بعيد أفتح)، شمس ناعمة وانعكاسها على النيل */
+  const sun = phase === 'night'
+    ? `<circle r="34" fill="url(#dpGlow)"/><path d="M4-11a11.5 11.5 0 1 0 8 18a9.5 9.5 0 0 1-8-18z" fill="var(--sun)"/>`
+    : `<circle r="${phase === 'noon' ? 46 : 58}" fill="url(#dpGlow)"/><circle r="11" fill="var(--sun)"/>`;
   const defs = `<defs>
-    <radialGradient id="dpCore" cx="40%" cy="35%" r="70%"><stop offset="0" style="stop-color:var(--sun-light)"/><stop offset=".6" style="stop-color:var(--sun)"/><stop offset="1" style="stop-color:var(--sun-edge)"/></radialGradient>
-    <radialGradient id="dpGlow"><stop offset="0" style="stop-color:var(--sun); stop-opacity:.55"/><stop offset="1" style="stop-color:var(--sun); stop-opacity:0"/></radialGradient></defs>`;
-  const STARS = [[24, 18], [60, 44], [96, 12], [132, 34], [176, 16], [222, 40], [258, 10], [296, 30], [336, 14], [376, 42], [40, 84], [372, 88], [150, 70], [250, 76]];
-  const sky = phase === 'night'
-    ? STARS.map(([sx, sy], i) => `<circle class="dp-star" cx="${sx}" cy="${sy}" r="${i % 3 ? 1.1 : 1.7}" style="animation-delay:${(i * .37 % 2).toFixed(2)}s"/>`).join('')
-    : phase === 'sunset'
-      ? `<g fill="none" stroke="var(--bird)" stroke-width="1.5" stroke-linecap="round"><path class="bird" d="M232 72q3-3 6 0q3-3 6 0"/><path class="bird b2" d="M252 60q2.5-2.5 5 0q2.5-2.5 5 0"/><path class="bird b3" d="M266 76q2-2 4 0q2-2 4 0"/></g>`
-      : `<g class="cloud"><path d="M236 46a9 9 0 0 1 9-9a13 13 0 0 1 24-3a9 9 0 0 1 10 12z" fill="var(--cloud)"/></g><g class="cloud c2"><path d="M52 72a7 7 0 0 1 7-7a10 10 0 0 1 18-2a7 7 0 0 1 8 9z" fill="var(--cloud)"/></g>`;
-  /* منظر القاهرة: الأهرامات بعيد، القلعة ومآذنها، برج القاهرة، العماير، النيل والفلوكة، والنخل */
-  const NEAR = [[0, 124, 26, 28], [228, 126, 26, 26], [258, 134, 28, 18], [290, 120, 20, 32], [344, 128, 28, 24], [376, 118, 24, 34]];
-  const wins = NEAR.map(([bx, by, bw, bh], bi) => {
-    let out = '';
-    for (let c = 0; c < Math.floor((bw - 4) / 7); c++) for (let r = 0; r < Math.floor((bh - 6) / 8); r++) {
-      const on = lit && (c * 3 + r * 5 + bi) % 3 === 0;
-      out += `<rect x="${bx + 4 + c * 7}" y="${by + 5 + r * 8}" width="3" height="4" rx=".8" fill="${on ? 'var(--win-lit)' : 'var(--win)'}" ${on ? 'class="win-on"' : ''}/>`;
-    }
-    return out;
-  }).join('');
-  const palm = (px, py, s) => `<g transform="translate(${px} ${py}) scale(${s})" fill="none" stroke="var(--palm)" stroke-linecap="round">
-      <path d="M0 0Q-2-18 4-34" stroke-width="3"/>
-      <g class="frond" stroke-width="3"><path d="M4-34q-10-5-17 3"/><path d="M4-34q-13 1-15 12"/><path d="M4-34q10-7 18 0"/><path d="M4-34q13 2 14 12"/><path d="M4-34q1-10-4-15"/></g></g>`;
+    <radialGradient id="dpGlow"><stop offset="0" style="stop-color:var(--sun-glow); stop-opacity:.75"/><stop offset=".35" style="stop-color:var(--sun-glow); stop-opacity:.28"/><stop offset="1" style="stop-color:var(--sun-glow); stop-opacity:0"/></radialGradient>
+    <linearGradient id="dpWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--water-top)"/><stop offset="1" style="stop-color:var(--water-bottom)"/></linearGradient>
+    <linearGradient id="dpHaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--haze); stop-opacity:0"/><stop offset="1" style="stop-color:var(--haze); stop-opacity:.55"/></linearGradient>
+    <clipPath id="dpWaterClip"><rect x="0" y="152" width="400" height="30"/></clipPath></defs>`;
+  const STARS = [[24, 18], [60, 44], [96, 12], [132, 34], [176, 16], [222, 40], [258, 10], [296, 30], [336, 14], [376, 42], [40, 76], [372, 70], [150, 60], [250, 66]];
+  const stars = phase === 'night' ? STARS.map(([sx, sy], i) => `<circle class="dp-star" cx="${sx}" cy="${sy}" r="${i % 3 ? .8 : 1.2}" style="animation-delay:${(i * .37 % 2).toFixed(2)}s"/>`).join('') : '';
+  const birds = phase === 'sunset' || phase === 'morning'
+    ? `<g fill="none" stroke="var(--l3)" stroke-width="1" stroke-linecap="round" opacity=".7"><path class="bird" d="M246 70q2.4-2 4.8 0q2.4-2 4.8 0"/><path class="bird b2" d="M262 62q2-1.6 4 0q2-1.6 4 0"/><path class="bird b3" d="M272 74q1.6-1.4 3.2 0q1.6-1.4 3.2 0"/></g>` : '';
+  // الطبقة البعيدة: قبب ومآذن القاهرة القديمة
+  const old = [];
+  [[124, 6], [146, 4], [262, 7], [300, 5], [352, 6], [384, 5]].forEach(([dx, r]) => old.push(`<rect x="${dx - r}" y="${146 - r}" width="${2 * r}" height="${r + 6}"/><path d="M${dx - r} ${146 - r}a${r} ${r} 0 0 1 ${2 * r} 0z"/>`));
+  [[132, 26], [276, 30], [292, 22], [366, 28], [118, 20]].forEach(([mx, hh]) => old.push(`<rect x="${mx - 1}" y="${152 - hh}" width="2" height="${hh}"/><path d="M${mx - 1.6} ${153 - hh}L${mx} ${146 - hh}L${mx + 1.6} ${153 - hh}Z"/>`));
+  [[240, 128, 14], [310, 120, 16], [336, 132, 12], [394, 126, 10]].forEach(([bx, by, bw]) => old.push(`<rect x="${bx}" y="${by}" width="${bw}" height="${152 - by}"/>`));
+  // الطبقة الأساسية: القلعة ومآذنها الرفيعة، برج القاهرة، والعماير
+  const BLD = [[0, 132, 18], [20, 138, 14], [236, 130, 16], [254, 140, 20], [276, 124, 14], [292, 134, 22], [340, 128, 16], [358, 136, 20], [380, 122, 20]];
+  const wins = lit ? BLD.map(([bx, by, bw], bi) => {
+    let o = ''; for (let c = 0; c < Math.floor((bw - 3) / 5); c++) for (let r = 0; r < Math.floor((152 - by - 4) / 6); r++)
+      if ((c * 7 + r * 3 + bi * 5) % 4 === 0) o += `<rect class="win-on" x="${bx + 2.5 + c * 5}" y="${by + 3 + r * 6}" width="1.6" height="2.2" fill="var(--win-lit)" style="animation-delay:${((c + r + bi) % 5) * .5}s"/>`;
+    return o; }).join('') : '';
+  const minaret = mx => `<rect x="${mx - 1.6}" y="74" width="3.2" height="62"/><path d="M${mx - 2.2} 75L${mx} 60L${mx + 2.2} 75Z"/><rect x="${mx - 3}" y="92" width="6" height="1.6" rx=".8"/><rect x="${mx - 2.8}" y="108" width="5.6" height="1.6" rx=".8"/>`;
+  const skyline = `<g id="dpSkyline" fill="var(--l3)">
+      <path d="M150 152V136h80v16z"/><path d="M156 136a8 8 0 0 1 16 0z"/><path d="M208 136a8 8 0 0 1 16 0z"/>
+      <path d="M168 132a11 11 0 0 1 22 0z"/><path d="M190 132a11 11 0 0 1 22 0z"/><rect x="172" y="124" width="36" height="12"/>
+      <path d="M173 125a17 17 0 0 1 34 0z"/><rect x="189.4" y="98" width="1.2" height="10"/>
+      ${minaret(160)}${minaret(220)}
+      <path d="M321.6 152L323 88h3l1.4 64z"/><path d="M319.5 88q-1-7 2.5-10h5q3.5 3 2.5 10z"/><rect x="321" y="74" width="7" height="4" rx="1.5"/><rect x="324" y="62" width="1" height="12"/>
+      ${BLD.map(([bx, by, bw]) => `<rect x="${bx}" y="${by}" width="${bw}" height="${152 - by}"/>`).join('')}
+      <rect x="262" y="134" width=".8" height="6"/><rect x="298" y="128" width=".8" height="6"/><rect x="386" y="116" width=".8" height="6"/></g>`;
+  const refl = [0, 5, 10, 15, 20, 25].map((dy, i) => { const w = 16 - i * 2.2; return `<rect class="glint" x="${(x - w / 2).toFixed(1)}" y="${156 + dy}" width="${w.toFixed(1)}" height="1.3" rx=".6" style="animation-delay:${i * .25}s"/>`; }).join('');
   const scene = `
     <svg class="scene" viewBox="0 0 400 210" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-      ${defs}${sky}
-      <g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(1.15)"><g class="dp-sun ${justDone ? 'pulse' : ''}">${body}</g></g>
-      <g fill="var(--far)"><path d="M14 152L56 104L98 152Z"/><path d="M86 152L114 120L142 152Z"/></g>
-      <g fill="var(--far-shade)"><path d="M56 104L98 152H74Z"/><path d="M114 120L142 152H128Z"/></g>
-      <g fill="var(--far)"><rect x="238" y="114" width="20" height="38"/><rect x="262" y="104" width="16" height="48"/><rect x="336" y="108" width="20" height="44"/><rect x="358" y="116" width="18" height="36"/></g>
-      <g fill="var(--bld)">
-        <rect x="146" y="132" width="88" height="20"/><circle cx="168" cy="132" r="9"/><circle cx="212" cy="132" r="9"/>
-        <rect x="170" y="121" width="40" height="11"/><path d="M168 122a22 22 0 0 1 44 0z"/><rect x="189.2" y="93" width="1.6" height="8"/><circle cx="190" cy="92" r="1.8"/>
-        <rect x="150" y="80" width="5" height="54"/><path d="M149.5 81L152.5 64L155.5 81Z"/><rect x="148.5" y="98" width="8" height="2.2" rx="1"/>
-        <rect x="225" y="80" width="5" height="54"/><path d="M224.5 81L227.5 64L230.5 81Z"/><rect x="223.5" y="98" width="8" height="2.2" rx="1"/>
-        <path d="M318 152L320.6 86H325.4L328 152Z"/><path d="M315.5 86Q313.5 76 318 71H328Q332.5 76 330.5 86Z"/><rect x="317" y="67" width="12" height="4.5" rx="2"/><rect x="322.3" y="54" width="1.4" height="13"/>
-      </g>
-      <circle class="tower-light" cx="323" cy="54" r="2" fill="var(--win-lit)"/>
-      <g fill="var(--bld-near)">${NEAR.map(([bx, by, bw, bh]) => `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="1.5"/>`).join('')}</g>
-      ${wins}
-      <rect x="0" y="150" width="400" height="30" fill="var(--nile)"/>
-      <g class="shine" stroke="var(--nile-shine)" stroke-width="1.6" stroke-linecap="round"><path d="M40 160h26M150 166h34M250 158h22M318 168h30M96 172h18"/></g>
-      <g transform="translate(206 163)"><g class="felucca">
-        <path d="M-15 0Q0 7 15 0Z" fill="var(--boat)"/><path d="M0 0V-27" stroke="var(--boat)" stroke-width="1.6"/>
-        <path d="M-5-4L17-31L5-1Z" fill="var(--sail)"/></g></g>
-      <path d="M0 176Q100 168 200 172T400 170V210H0Z" fill="var(--hill-near)"/>
-      ${palm(26, 176, 1)}${palm(384, 174, .85)}
+      ${defs}${stars}
+      <g transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><g class="dp-sun ${justDone ? 'pulse' : ''}">${sun}</g></g>
+      ${birds}
+      <g fill="var(--l1)"><path d="M6 152L52 110L98 152Z"/><path d="M84 152L108 130L132 152Z"/></g>
+      <rect x="0" y="104" width="400" height="48" fill="url(#dpHaze)"/>
+      <g fill="var(--l2)">${old.join('')}</g>
+      <rect x="0" y="122" width="400" height="30" fill="url(#dpHaze)" opacity=".7"/>
+      ${skyline}${wins}
+      <rect x="0" y="152" width="400" height="30" fill="url(#dpWater)"/>
+      <g clip-path="url(#dpWaterClip)" opacity=".22"><use href="#dpSkyline" transform="translate(0 304) scale(1 -1)"/></g>
+      <g fill="var(--sun)" opacity="${phase === 'night' ? .45 : .75}">${refl}</g>
+      <g fill="var(--bank)"><path d="M0 180Q120 172 220 176T400 174V210H0Z"/>
+        <g transform="translate(112 168)"><g class="felucca"><path d="M-12 0Q0 4.5 12 0Z"/><path d="M-.5 0V-22h1V0z"/><path d="M-4-3L13-26L4-1Z" opacity=".9"/></g></g>
+        <g transform="translate(370 178)"><path d="M0 0q-1.5-16 3-32" fill="none" stroke="var(--bank)" stroke-width="2.4" stroke-linecap="round"/>
+          <g class="frond" fill="none" stroke="var(--bank)" stroke-width="1.5" stroke-linecap="round"><path d="M3-32q-9-3-15 5"/><path d="M3-32q-12 0-14 9"/><path d="M3-32q9-5 15 1"/><path d="M3-32q11 1 12 10"/><path d="M3-32q-3-8-9-10"/><path d="M3-32q4-8 10-9"/></g></g></g>
     </svg>`;
   const curIdx = periodIndex(nowPeriod());
   const pers = PERIODS.map((p, i) => {
