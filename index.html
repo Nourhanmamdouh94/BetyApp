@@ -422,7 +422,7 @@ select.input{appearance:none; -webkit-appearance:none}
 .wday[aria-pressed="true"]{opacity:1}
 .wday.today:not([aria-pressed="true"]) b{background:color-mix(in srgb, var(--white) 22%, transparent); color:var(--white)}   /* النهارده لما يكون في يوم تاني مختار */
 .wdot{position:absolute; bottom:1px; left:50%; width:4px; height:4px; margin-left:-2px; border-radius:50%; background:currentColor; opacity:.8}
-.week-bar{display:flex; align-items:center; justify-content:space-between; margin:0 0 4px}
+.week-bar{display:flex; align-items:center; justify-content:space-between; margin:0 0 8px}
 .wk-nav{display:flex; gap:4px}
 .wk-btn{width:32px; height:32px; border-radius:50%; display:grid; place-items:center; color:var(--white); background:none}
 .wk-btn:active{background:color-mix(in srgb, var(--white) 14%, transparent)}
@@ -1083,10 +1083,6 @@ function weekBar() {
   const sd = fromIso(planDay || todayStr());
   return `<div class="week-bar">
     <button class="wk-month" data-a="month-open" aria-label="افتحي الشهر كله">${sd.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })} ${ICON.chevDown}</button>
-    <div class="wk-nav">
-      <button class="wk-btn" data-a="week-move" data-v="-1" aria-label="الأسبوع اللي فات">${ICON.back}</button>
-      <button class="wk-btn" data-a="week-move" data-v="1" aria-label="الأسبوع الجاي">${ICON.fwd}</button>
-    </div>
   </div>`;
 }
 function renderMonthSheet() {
