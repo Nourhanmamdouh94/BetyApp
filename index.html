@@ -107,7 +107,10 @@
   --btn-secondary-bg: var(--white);    --btn-secondary-border: var(--indigo-200);   --btn-secondary-fg: var(--indigo-600);
   --btn-soft-bg: var(--white);       --btn-soft-fg: var(--indigo-600);
   --btn-text-fg: var(--indigo-600);
-  --btn-danger-fg: var(--red-600);     --btn-danger-confirm-bg: var(--red-50);    --btn-danger-confirm-fg: var(--red-700);
+  --btn-danger-fg: var(--red-600);
+  --btn-destructive-bg: var(--white);  --btn-destructive-border: var(--red-200);  --btn-destructive-fg: var(--red-600);   /* زرار مسح ثانوي */
+  --btn-destructive-solid-bg: var(--red-600); --btn-destructive-solid-fg: var(--white);                                  /* زرار التأكيد في الرسالة */
+  --dialog-bg: var(--white); --dialog-radius: 16px; --dialog-shadow: 0 20px 48px color-mix(in srgb, var(--neutral-900) 22%, transparent); --dialog-title-fg: var(--ink); --dialog-msg-fg: var(--muted);
   --btn-disabled-opacity: .4;
 
   /* Icon button */
@@ -297,7 +300,17 @@ button{background:none; border:0; padding:0; cursor:pointer; text-align:inherit}
 .btn-soft{background:var(--btn-soft-bg); color:var(--btn-soft-fg)}
 .btn-text{background:none; color:var(--btn-text-fg); padding:0 4px; height:auto}
 .btn-danger{background:none; color:var(--btn-danger-fg)}
-.btn-danger.is-confirm{background:var(--btn-danger-confirm-bg); color:var(--btn-danger-confirm-fg)}
+/* المسح: زرار ثانوي أحمر، ولما تدوسي عليه بتطلع رسالة تأكيد */
+.btn-destructive{background:var(--btn-destructive-bg); color:var(--btn-destructive-fg); box-shadow:inset 0 0 0 1.5px var(--btn-destructive-border)}
+.btn-destructive-solid{background:var(--btn-destructive-solid-bg); color:var(--btn-destructive-solid-fg)}
+/* رسالة التأكيد */
+.dialog-backdrop{position:fixed; inset:0; z-index:60; background:var(--backdrop); animation:fade .15s ease}
+.dialog{position:fixed; z-index:61; left:50%; top:50%; transform:translate(-50%,-50%); width:calc(100% - 64px); max-width:320px; padding:20px 16px 16px; border-radius:var(--dialog-radius); background:var(--dialog-bg); box-shadow:var(--dialog-shadow); text-align:center; animation:dlgIn .18s cubic-bezier(.2,.8,.2,1)}
+.dialog h2{margin:0 0 6px; font-size:var(--fs-title); font-weight:800; color:var(--dialog-title-fg)}
+.dialog p{margin:0; font-size:var(--fs-body); color:var(--dialog-msg-fg)}
+.dialog-actions{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:20px}
+.dialog-actions .btn{height:44px; width:100%; font-weight:800}
+@keyframes dlgIn{from{opacity:0; transform:translate(-50%,-50%) scale(.94)} to{opacity:1; transform:translate(-50%,-50%) scale(1)}}
 
 /* Icon button */
 .icon-btn{flex:none; width:var(--icon-btn-size); height:var(--icon-btn-size); border-radius:50%; display:grid; place-items:center; position:relative}
@@ -744,6 +757,7 @@ a.btn{text-decoration:none}
   <div id="app"></div>
 </div>
 <div id="sheet"></div>
+<div id="dialog"></div>
 <div id="cook" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -1390,7 +1404,7 @@ function renderSheet() {
 
       <div class="sheet-actions">
         <button class="btn btn-primary btn-lg" data-a="save">${d.id ? 'احفظي التعديل' : 'ضيفي المهمة'}</button>
-        ${d.id ? `<button class="btn btn-danger ${confirmDelete ? 'is-confirm' : ''}" data-a="delete">${confirmDelete ? 'دوسي تاني عشان تمسحيها' : 'امسحي المهمة'}</button>` : ''}
+        ${d.id ? `<button class="btn btn-destructive btn-lg" data-a="delete">امسحي المهمة</button>` : ''}
       </div>
     </div>`;
 }
@@ -1412,10 +1426,30 @@ function saveDraft() {
   toast(i < 0 ? 'اتضافت المهمة' : 'اتحفظ التعديل');
 }
 function deleteDraft() {
-  if (!confirmDelete) { confirmDelete = true; renderSheet(); return; }
-  S.tasks = S.tasks.filter(t => t.id !== draft.id);
-  save(); closeSheet(); render(); toast('اتمسحت المهمة');
+  const id = draft.id;
+  askConfirm({ title: `تمسحي «${draft.title || 'المهمة'}»؟`, onOk: () => {
+    S.tasks = S.tasks.filter(t => t.id !== id);
+    save(); closeSheet(); render(); toast('اتمسحت المهمة');
+  } });
 }
+
+/* ---------- رسالة التأكيد قبل أي مسح ---------- */
+let dialog = null;
+function askConfirm(d) { dialog = { ok: 'امسحي', ...d }; renderDialog(); setTimeout(() => { const b = document.querySelector('#dialog [data-a="dlg-cancel"].btn'); if (b) b.focus(); }, 50); }
+function renderDialog() {
+  const d = dialog;
+  $('dialog').innerHTML = !d ? '' : `
+    <div class="dialog-backdrop" data-a="dlg-cancel"></div>
+    <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="dlg-t" ${d.msg ? 'aria-describedby="dlg-m"' : ''}>
+      <h2 id="dlg-t">${esc(d.title)}</h2>
+      ${d.msg ? `<p id="dlg-m">${esc(d.msg)}</p>` : ''}
+      <div class="dialog-actions">
+        <button class="btn btn-secondary" data-a="dlg-cancel">إلغاء</button>
+        <button class="btn btn-destructive-solid" data-a="dlg-ok">${esc(d.ok)}</button>
+      </div>
+    </div>`;
+}
+function closeDialog() { dialog = null; renderDialog(); }
 
 /* =========================================================
    صفحة القسم — بتفتح من تاب روتين البيت
@@ -1638,7 +1672,7 @@ function renderForm() {
   $('sheet').innerHTML = sheetWrap(f.title, `${fields}
     <div class="sheet-actions">
       <button class="btn btn-primary btn-lg" data-a="ff-save">${f.saveLabel || 'احفظي'}</button>
-      ${f.onDelete ? `<button class="btn btn-danger ${f.confirmDel ? 'is-confirm' : ''}" data-a="ff-delete">${f.confirmDel ? 'دوسي تاني عشان تمسحي' : (f.deleteLabel || 'امسحي')}</button>` : ''}
+      ${f.onDelete ? `<button class="btn btn-destructive btn-lg" data-a="ff-delete">${f.deleteLabel || 'امسحي'}</button>` : ''}
     </div>`);
 }
 function saveForm() {
@@ -1700,7 +1734,7 @@ function renderPicker() {
         ${Ico(ICON.kitchen)}<span class="li-body"><span class="li-title">${esc(r.name)}</span><span class="li-meta">${num(r.mins)} دقيقة، ${r.level}</span></span>
         ${r.id === cur ? `<span class="check is-on">${ICON.check}</span>` : ''}
       </button>`).join('')}</div>
-    <div class="sheet-actions">${cur ? `<button class="btn btn-danger" data-a="meal-set" data-v="">شيلي الأكلة من اليوم ده</button>` : ''}</div>`, 'cat-kitchen');
+    <div class="sheet-actions">${cur ? `<button class="btn btn-destructive btn-lg" data-a="meal-set" data-v="">شيلي الأكلة من اليوم ده</button>` : ''}</div>`, 'cat-kitchen');
 }
 
 function mealsToShop(dates) {
@@ -2102,7 +2136,7 @@ function viewList(id) {
     ${items.length ? rows(items) : '<div class="empty">القايمة فاضية</div>'}
     <div class="sheet-actions">
       <button class="btn btn-secondary btn-lg" data-a="list-settings" data-v="${id}">${ICON.edit}إعدادات القايمة</button>
-      ${items.length ? `<button class="btn btn-danger ${listEdit === 'clear' ? 'is-confirm' : ''}" data-a="list-empty" data-v="${id}">${listEdit === 'clear' ? 'دوسي تاني للتأكيد' : 'امسحي كل الحاجات'}</button>` : ''}
+      ${items.length ? `<button class="btn btn-destructive btn-lg" data-a="list-empty" data-v="${id}">امسحي كل الحاجات</button>` : ''}
     </div>
   </div></main>`;
   return `<main class="screen screen-top gutter"><div class="wrap cat-${l.color || 'shop'}">
@@ -2168,7 +2202,7 @@ function renderStockItem() {
         : inList ? `<button class="btn btn-soft btn-lg" disabled style="opacity:1">في «${esc(main.name)}» ✓</button>`
         : `<button class="btn btn-primary btn-lg" data-a="stock-to-list" data-v="${x.id}">${ICON.cart}ضيفيها لـ«${esc(main.name)}»</button>`}
       <button class="btn btn-secondary btn-lg" data-a="stock-rename" data-v="${x.id}">${ICON.edit}عدّلي الاسم</button>
-      <button class="btn btn-danger ${stockConfirm ? 'is-confirm' : ''}" data-a="stock-del-sheet" data-v="${x.id}">${stockConfirm ? 'دوسي تاني عشان تمسحيها' : 'امسحيها من المخزن'}</button>
+      <button class="btn btn-destructive btn-lg" data-a="stock-del-sheet" data-v="${x.id}">امسحيها من المخزن</button>
     </div>`, 'cat-kitchen');
 }
 let stockConfirm = false;
@@ -2214,7 +2248,7 @@ function openListForm(l) {
       listEdit = false; navDir = 'push'; prevPage = null; page = 'list:' + nl.id; shopView = nl.id;
       return 'اتعملت القايمة';
     },
-    deleteLabel: 'امسحي القايمة كلها',
+    deleteLabel: 'امسحي القايمة', confirmTitle: 'تمسحي القايمة كلها؟', confirmMsg: 'الحاجات اللي فيها هتتمسح كمان.',
     onDelete: l ? () => {
       S.shop.items = S.shop.items.filter(i => i.list !== l.id); S.shop.lists = S.shop.lists.filter(x => x.id !== l.id);
       listEdit = false; page = null; prevPage = null; return 'اتمسحت القايمة';
@@ -2399,7 +2433,7 @@ function viewProfile() {
           <label class="li" for="restore-file">${Ico(ICON.upload)}<span class="li-body"><span class="li-title">رجّعي نسخة احتياطية</span><span class="li-meta">اختاري الملف اللي نزّلتيه قبل كده</span></span></label>
           <input type="file" id="restore-file" accept="application/json,.json" hidden>
         </div>
-        <button class="btn btn-danger ${confirmReset ? 'is-confirm' : ''}" style="margin-top:14px; width:100%" data-a="reset">${confirmReset ? 'متأكدة؟ دوسي تاني وكل الداتا هتتمسح' : 'ابدئي من الأول'}</button>
+        <button class="btn btn-destructive btn-lg" style="margin-top:14px" data-a="reset">ابدئي من الأول</button>
       </section>
       <p class="about">دفتر البيت، النسخة ٢٫٠<br>معمول بحب لبيت نور 🤍</p>
     </div></main>`;
@@ -2598,7 +2632,10 @@ document.addEventListener('click', e => {
     /* الفورم العام */
     case 'ff-pick': form.values[el.dataset.k] = v; renderForm(); break;
     case 'ff-save': saveForm(); break;
-    case 'ff-delete': if (!form.confirmDel) { form.confirmDel = true; renderForm(); } else { const msg = form.onDelete(); save(); closeSheet(); render(); toast(msg); } break;
+    case 'ff-delete': { const f = form, n = f.values.name || f.values.title;
+      askConfirm({ title: f.confirmTitle || (n ? `تمسحي «${n}»؟` : 'تمسحيها؟'), msg: f.confirmMsg, onOk: () => { const msg = f.onDelete(); save(); closeSheet(); render(); toast(msg); } }); break; }
+    case 'dlg-cancel': closeDialog(); break;
+    case 'dlg-ok': { const fn = dialog && dialog.onOk; closeDialog(); if (fn) fn(); break; }
     /* المطبخ */
     case 'today-recipe': navDir = 'push'; tab = 'kitchen'; prevPage = null; page = 'recipe:' + S.meals[todayStr()]; render(); toTop(); break;
     case 'ing-add': case 'ing-add-all': {
@@ -2632,7 +2669,7 @@ document.addEventListener('click', e => {
     case 'item-del': { const it = S.shop.items.find(x => x.id === v); S.shop.items = S.shop.items.filter(x => x.id !== v); save(); render(); toast(`اتمسحت: ${it ? it.name : ''}`); break; }
     case 'stock-del': S.shop.stock = S.shop.stock.filter(x => x.id !== v); save(); render(); toast('اتمسحت من المخزن'); break;
     case 'list-renew': S.shop.items.forEach(i => { if (i.list === v) i.done = false; }); save(); render(); toTop(); toast('القايمة رجعت جديدة'); break;
-    case 'list-empty': if (listEdit !== 'clear') { listEdit = 'clear'; render(); } else { S.shop.items = S.shop.items.filter(i => i.list !== v); listEdit = false; save(); render(); toast('القايمة فضيت'); } break;
+    case 'list-empty': askConfirm({ title: 'تمسحي كل الحاجات؟', msg: 'القايمة هتفضل موجودة بس فاضية.', onOk: () => { S.shop.items = S.shop.items.filter(i => i.list !== v); listEdit = false; save(); render(); toast('القايمة فضيت'); } }); break;
     case 'shop-add': addShop(shopNew || ($('shop-new') || {}).value || '', shopQty || ($('shop-qty') || {}).value || ''); break;
     case 'item-toggle': { const i = S.shop.items.find(x => x.id === v); i.done = !i.done; save(); render(); break; }
     case 'item-edit': openItemForm(S.shop.items.find(x => x.id === v)); break;
@@ -2641,7 +2678,7 @@ document.addEventListener('click', e => {
     case 'stock-open': stockId = v; stockConfirm = false; renderStockItem(); break;
     case 'stock-set': { const x = S.shop.stock.find(y => y.id === stockId); x.state = v; save(); render(); renderStockItem(); toast(`${x.name}: ${STOCK[v][0]}`); break; }
     case 'stock-rename': { const x = S.shop.stock.find(y => y.id === v); closeSheet(); openForm({ title: 'اسم الحاجة', editing: true, values: { name: x.name }, fields: [{ k: 'name', label: 'الاسم', required: true }], onSave: d => { x.name = d.name.trim(); return 'اتحفظ'; } }); break; }
-    case 'stock-del-sheet': if (!stockConfirm) { stockConfirm = true; renderStockItem(); } else { S.shop.stock = S.shop.stock.filter(y => y.id !== v); save(); closeSheet(); render(); toast('اتمسحت من المخزن'); } break;
+    case 'stock-del-sheet': { const x = S.shop.stock.find(y => y.id === v); askConfirm({ title: `تمسحي «${x ? x.name : ''}» من المخزن؟`, onOk: () => { S.shop.stock = S.shop.stock.filter(y => y.id !== v); save(); closeSheet(); render(); toast('اتمسحت من المخزن'); } }); break; }
     case 'stock-to-list': { const x = S.shop.stock.find(y => y.id === v); S.shop.items.push({ id: uid('i'), name: x.name, qty: '', sec: guessSec(x.name), list: mainList(), done: false }); save(); render(); if (stockId && document.querySelector('#sheet .stock-opt')) renderStockItem(); toast('اتضافت لقايمة الأسبوع'); break; }
     /* الفلوس */
     case 'exp-new': openExpenseForm(null); break;
@@ -2659,7 +2696,7 @@ document.addEventListener('click', e => {
     case 'pref': { const p = prefs(); p[v] = !p[v]; save(); render(); break; }
     case 'lang': prefs().lang = v; save(); render(); break;
     case 'notif-allow': Notification.requestPermission().then(() => { render(); dailyReminders(); }); break;
-    case 'reset': if (!confirmReset) { confirmReset = true; render(); } else { confirmReset = false; try { localStorage.removeItem(KEY); } catch (e) {} S = load(); page = null; tab = 'today'; render(); toTop(); toast('بدأنا من الأول'); } break;
+    case 'reset': askConfirm({ title: 'تبدئي من الأول؟', msg: 'كل بياناتك هتتمسح ومش هتقدري ترجّعيها.', ok: 'امسحي كل حاجة', onOk: () => { try { localStorage.removeItem(KEY); } catch (e) {} S = load(); page = null; tab = 'today'; render(); toTop(); toast('بدأنا من الأول'); } }); break;
     case 'delete': deleteDraft(); break;
   }
 });
@@ -2681,7 +2718,7 @@ document.addEventListener('click', e => {
   if (f === 'title' && sheetError === 'title' && e.target.value.trim()) { sheetError = ''; e.target.classList.remove('is-error'); }
 }));
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { if (cook) stopCook(); else if (draft || form || viewId || picker) closeSheet(); }
+  if (e.key === 'Escape') { if (dialog) closeDialog(); else if (cook) stopCook(); else if (draft || form || viewId || picker) closeSheet(); }
   if (e.key === 'Enter' && e.target.id === 'shop-new') { e.preventDefault(); const q = $('shop-qty'); if (q && e.target.value.trim()) q.focus(); else addShop(e.target.value, q ? q.value : ''); }   // Enter في الاسم يودّي للكمية
   if (e.key === 'Enter' && e.target.id === 'shop-qty') { e.preventDefault(); addShop(($('shop-new') || {}).value || shopNew, e.target.value); }
 });
