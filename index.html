@@ -616,6 +616,12 @@ textarea.input{height:auto; min-height:96px; padding:10px 14px; line-height:1.7;
 .cook-nav .btn{height:var(--btn-h-lg)}
 /* المشتريات */
 .add-row{display:flex; gap:8px; margin-bottom:6px}
+.add-row .input{min-width:0}
+/* لما خانة تاخد focus وتتسكرول، متستخباش تحت الهيدر */
+#scroller .input{scroll-margin-top:calc(var(--safe-top) + var(--appbar-h) + 24px)}
+.add-row .add-name{flex:1}
+.add-row .add-qty{flex:0 0 96px}
+.done-list{margin-top:16px}
 .add-row .icon-btn{width:var(--input-h); height:var(--input-h); border-radius:var(--r-lg)}
 .sub-head{display:flex; align-items:center; gap:6px; margin:16px 0 8px; font-size:var(--fs-meta); font-weight:800; color:var(--muted)}
 .sub-head span{background:var(--neutral-100); border-radius:var(--r-sm); padding:0 6px}
@@ -733,8 +739,10 @@ a.btn{text-decoration:none}
 </style>
 </head>
 <body>
-<header class="appbar gutter" id="appbar"></header>
-<div id="scroller"><div id="app"></div></div>
+<div id="scroller">
+  <header class="appbar gutter" id="appbar"></header>
+  <div id="app"></div>
+</div>
 <div id="sheet"></div>
 <div id="cook" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -2008,7 +2016,7 @@ function beep() {
    كل قايمة: اسم + بتتجدد إمتى (كل أسبوع / كل شهر / يدوي)
    «بتتجدد» = الحاجات بتفضل في القايمة، والعلامات بس بتترجع فاضية
    ========================================================= */
-let shopView = 'week', shopNew = '', listEdit = false;
+let shopView = 'week', shopNew = '', shopQty = '', listEdit = false;
 const RENEW = [['weekly', 'كل أسبوع'], ['monthly', 'كل شهر'], ['manual', 'لما أقول']];
 const RENEW_NAME = Object.fromEntries(RENEW);
 const LIST_COLORS = ['shop', 'clean', 'kitchen', 'organize', 'events', 'bills'];
@@ -2047,9 +2055,11 @@ function shopRow(i) {
       ${del ? '' : `<button class="check" data-a="item-toggle" data-v="${i.id}" aria-pressed="${i.done}" aria-label="${i.done ? 'رجّعيها' : 'اشتريتها'}: ${esc(i.name)}">${ICON.check}</button>`}
     </div>`;
 }
-const addRow = ph => `
+/* الإضافة خطوة واحدة: الاسم والكمية جنب بعض، والقسم بيتحدد لوحده من الاسم */
+const addRow = (ph, withQty) => `
   <div class="add-row">
-    <input class="input" id="shop-new" data-sf="new" value="${esc(shopNew)}" placeholder="${ph}" autocomplete="off" enterkeyhint="done">
+    <input class="input add-name" id="shop-new" data-sf="new" value="${esc(shopNew)}" placeholder="${ph}" aria-label="${ph}" autocomplete="off" enterkeyhint="${withQty ? 'next' : 'done'}">
+    ${withQty ? `<input class="input add-qty" id="shop-qty" data-sf="qty" value="${esc(shopQty)}" placeholder="الكمية" aria-label="الكمية" autocomplete="off" enterkeyhint="done">` : ''}
     <button class="icon-btn icon-btn-primary" data-a="shop-add" aria-label="ضيفي">${ICON.plus}</button>
   </div>`;
 
@@ -2068,8 +2078,8 @@ function viewShopping() {
   const low = S.shop.stock.filter(x => x.state !== 'ok').length;
   return `<main class="screen screen-top gutter"><div class="wrap">
     <section class="block">
-      <div class="section-head"><h2 class="section-title">قوايمي</h2><span class="tag">${num(S.shop.lists.length)} قوايم</span></div>
-      <div class="list-grid">${cards}<button class="list-card list-add" data-a="list-new">${ICON.plus}<b>قايمة جديدة</b><span class="list-card-meta">هايبر، خضار، أونلاين…</span></button></div>
+      <div class="section-head"><h2 class="section-title">قوايمي</h2></div>
+      <div class="list-grid">${cards}<button class="list-card list-add" data-a="list-new">${ICON.plus}<b>قايمة جديدة</b></button></div>
     </section>
     <section class="block">
       <div class="section-head"><h2 class="section-title">المخزن</h2></div>
@@ -2089,24 +2099,17 @@ function viewList(id) {
     return g.length ? `<div class="sub-head">${name}<span>${num(g.length)}</span></div><div class="list">${g.map(shopRow).join('')}</div>` : '';
   }).join('');
   if (listEdit) return `<main class="screen screen-top gutter"><div class="wrap cat-${l.color || 'shop'}">
-    <p class="hint" style="margin-top:0">دوسي على ⊖ عشان تمسحي حاجة، أو على اسمها عشان تعدليها.</p>
     ${items.length ? rows(items) : '<div class="empty">القايمة فاضية</div>'}
     <div class="sheet-actions">
-      <button class="btn btn-secondary btn-lg" data-a="list-settings" data-v="${id}">${ICON.edit}اسم القايمة وبتتجدد إمتى</button>
-      ${items.length ? `<button class="btn btn-danger ${listEdit === 'clear' ? 'is-confirm' : ''}" data-a="list-empty" data-v="${id}">${listEdit === 'clear' ? 'متأكدة؟ دوسي تاني وكل الحاجات هتتمسح' : 'امسحي كل الحاجات اللي فيها'}</button>` : ''}
+      <button class="btn btn-secondary btn-lg" data-a="list-settings" data-v="${id}">${ICON.edit}إعدادات القايمة</button>
+      ${items.length ? `<button class="btn btn-danger ${listEdit === 'clear' ? 'is-confirm' : ''}" data-a="list-empty" data-v="${id}">${listEdit === 'clear' ? 'دوسي تاني للتأكيد' : 'امسحي كل الحاجات'}</button>` : ''}
     </div>
   </div></main>`;
   return `<main class="screen screen-top gutter"><div class="wrap cat-${l.color || 'shop'}">
-    <div class="list-summary">
-      <span>${items.length ? `اشتريتي ${num(done.length)} من ${num(items.length)}` : 'القايمة فاضية، ابدئي ضيفي'}</span>
-      <span class="tag">بتتجدد ${RENEW_NAME[l.renew]}</span>
-    </div>
-    ${items.length ? `<span class="bar" style="margin-bottom:14px"><i style="width:${done.length / items.length * 100}%"></i></span>` : ''}
-    ${addRow('ضيفي حاجة، مثلاً: خيار')}
+    ${addRow('ضيفي حاجة', true)}
     ${left.length ? rows(left) : items.length ? '<div class="empty">اشتريتي كل حاجة 🎉</div>' : ''}
-    ${done.length ? `<div class="sub-head">اشتريتيهم<span>${num(done.length)}</span></div><div class="list">${done.map(shopRow).join('')}</div>` : ''}
-    ${done.length ? `<button class="btn btn-secondary btn-lg" style="margin-top:16px" data-a="list-renew" data-v="${id}">${ICON.refresh}ابدئي القايمة من جديد</button>
-      <p class="hint" style="text-align:center">الحاجات هتفضل زي ما هي، والعلامات بس هترجع فاضية.${l.renew !== 'manual' ? ` وده بيحصل لوحده ${RENEW_NAME[l.renew]}.` : ''}</p>` : ''}
+    ${done.length ? `<div class="list done-list">${done.map(shopRow).join('')}</div>
+      <button class="btn btn-secondary btn-lg" style="margin-top:16px" data-a="list-renew" data-v="${id}">${ICON.refresh}ابدئي من جديد</button>` : ''}
   </div></main>`;
 }
 
@@ -2136,8 +2139,7 @@ function viewStock() {
       <span class="tag tag-soon"><i class="sdot"></i>${num(low)} قرب يخلص</span>
       <span class="tag tag-done"><i class="sdot"></i>${num(S.shop.stock.length - out - low)} موجود</span>
     </div>
-    ${listEdit ? '' : addRow('ضيفي حاجة للمخزن، مثلاً: عسل')}
-    <p class="hint">دوسي على أي حاجة عشان تغيري حالتها${main ? `، أو تبعتيها لـ«${esc(main.name)}»` : ''}.</p>
+    ${listEdit ? '' : addRow('ضيفي للمخزن')}
     ${groups || '<div class="empty">المخزن فاضي</div>'}
   </div></main>`;
 }
@@ -2151,11 +2153,10 @@ function renderStockItem() {
   const inList = S.shop.items.some(i => !i.done && i.name === x.name);
   const opt = (k, label, sub) => `
     <button class="stock-opt ${STOCK[k][1]}" role="radio" aria-checked="${x.state === k}" data-a="stock-set" data-v="${k}">
-      <i class="sdot"></i><span class="li-body"><span class="li-title">${label}</span><span class="li-meta">${sub}</span></span>
+      <i class="sdot"></i><span class="li-body"><span class="li-title">${label}</span></span>
       <span class="check ${x.state === k ? 'is-on' : ''}">${ICON.check}</span>
     </button>`;
   $('sheet').innerHTML = sheetWrap(esc(x.name), `
-    <span class="field-label">حالتها دلوقتي</span>
     <div class="list" role="radiogroup" aria-label="حالة ${esc(x.name)}">
       ${opt('ok', 'موجود', 'عندي منه كفاية')}
       ${opt('low', 'قرب يخلص', 'لازم أجيب قريب')}
@@ -2172,14 +2173,14 @@ function renderStockItem() {
 }
 let stockConfirm = false;
 
-function addShop(name) {
-  name = name.trim(); if (!name) return;
+function addShop(name, qty = '') {
+  name = name.trim(); qty = qty.trim(); if (!name) return;
   if (shopView === 'stock') {
     if (!S.shop.stock.some(x => x.name === name)) S.shop.stock.unshift({ id: uid('s'), name, state: 'ok' });
   } else {
-    S.shop.items.push({ id: uid('i'), name, qty: '', sec: guessSec(name), list: shopView, done: false });
+    S.shop.items.push({ id: uid('i'), name, qty, sec: guessSec(name), list: shopView, done: false });
   }
-  shopNew = ''; save(); render();
+  shopNew = ''; shopQty = ''; save(); render();
   setTimeout(() => { const f = $('shop-new'); if (f) f.focus(); }, 30);
   toast(shopView === 'stock' ? 'اتضافت للمخزن' : `اتضافت في ${SEC_NAME[guessSec(name)]}`);
 }
@@ -2202,8 +2203,8 @@ function openListForm(l) {
     title: l ? 'إعدادات القايمة' : 'قايمة جديدة', editing: !!l, saveLabel: l ? 'احفظي' : 'اعملي القايمة',
     values: l ? { name: l.name, renew: l.renew, color: l.color || 'shop' } : { name: '', renew: 'monthly', color: LIST_COLORS[S.shop.lists.length % LIST_COLORS.length] },
     fields: [
-      { k: 'name', label: 'اسم القايمة', ph: 'مثلاً: الهايبر ماركت، الخضار، طلبات أونلاين', required: true },
-      { k: 'renew', label: 'تتجدد إمتى؟ (الحاجات بتفضل، والعلامات بترجع فاضية)', type: 'chips', options: RENEW },
+      { k: 'name', label: 'اسم القايمة', ph: 'مثلاً: الهايبر', required: true },
+      { k: 'renew', label: 'بتتجدد', type: 'chips', options: RENEW },
       { k: 'color', label: 'لونها', type: 'chips', cols: 3, options: [['shop', 'أزرق', 'shop'], ['clean', 'أخضر', 'clean'], ['kitchen', 'أصفر', 'kitchen'], ['organize', 'بنفسجي', 'organize'], ['events', 'بينك', 'events'], ['bills', 'خوخي', 'bills']] }
     ],
     onSave: v => {
@@ -2211,7 +2212,7 @@ function openListForm(l) {
       if (l) { const changed = l.renew !== d.renew; Object.assign(l, d); if (changed) l.period = periodKey(l); return 'اتحفظت القايمة'; }
       const nl = { id: uid('l'), ...d }; nl.period = periodKey(nl); S.shop.lists.push(nl);
       listEdit = false; navDir = 'push'; prevPage = null; page = 'list:' + nl.id; shopView = nl.id;
-      return 'اتعملت القايمة، ابدئي ضيفي حاجات';
+      return 'اتعملت القايمة';
     },
     deleteLabel: 'امسحي القايمة كلها',
     onDelete: l ? () => {
@@ -2624,7 +2625,7 @@ document.addEventListener('click', e => {
     case 'cook-timer': cookTimer(); break;
     case 'cook-done': { const r = recipeById(cook.id); if (r.status === 'want') r.status = 'tried'; save(); stopCook(); render(); toast('بالهنا والشفا 🤍'); break; }
     /* المشتريات */
-    case 'open-list': navDir = 'push'; prevPage = null; page = 'list:' + v; shopView = v; shopNew = ''; listEdit = false; render(); toTop(); break;
+    case 'open-list': navDir = 'push'; prevPage = null; page = 'list:' + v; shopView = v; shopNew = ''; shopQty = ''; listEdit = false; render(); toTop(); break;
     case 'list-new': openListForm(null); break;
     case 'list-settings': openListForm(listById(v)); break;
     case 'list-edit': listEdit = !listEdit; render(); break;
@@ -2632,7 +2633,7 @@ document.addEventListener('click', e => {
     case 'stock-del': S.shop.stock = S.shop.stock.filter(x => x.id !== v); save(); render(); toast('اتمسحت من المخزن'); break;
     case 'list-renew': S.shop.items.forEach(i => { if (i.list === v) i.done = false; }); save(); render(); toTop(); toast('القايمة رجعت جديدة'); break;
     case 'list-empty': if (listEdit !== 'clear') { listEdit = 'clear'; render(); } else { S.shop.items = S.shop.items.filter(i => i.list !== v); listEdit = false; save(); render(); toast('القايمة فضيت'); } break;
-    case 'shop-add': addShop(shopNew || ($('shop-new') || {}).value || ''); break;
+    case 'shop-add': addShop(shopNew || ($('shop-new') || {}).value || '', shopQty || ($('shop-qty') || {}).value || ''); break;
     case 'item-toggle': { const i = S.shop.items.find(x => x.id === v); i.done = !i.done; save(); render(); break; }
     case 'item-edit': openItemForm(S.shop.items.find(x => x.id === v)); break;
     case 'shop-clear': S.shop.items = S.shop.items.filter(i => !(i.list === shopView && i.done)); save(); render(); toast('القايمة نضفت'); break;
@@ -2666,7 +2667,7 @@ document.addEventListener('click', e => {
 ['input', 'change'].forEach(type => document.addEventListener(type, e => {
   const ds = e.target.dataset || {};
   if (ds.ff && form) { form.values[ds.ff] = e.target.value; if (form.error === ds.ff && e.target.value.trim()) { form.error = null; e.target.classList.remove('is-error'); } return; }
-  if (ds.sf) { if (type === "input") shopNew = e.target.value; return; }   // الـ change بيوصل بعد ما الخانة اتمسحت، فبنتجاهله
+  if (ds.sf) { if (type === "input") { if (ds.sf === 'qty') shopQty = e.target.value; else shopNew = e.target.value; } return; }   // الـ change بيوصل بعد ما الخانة اتمسحت، فبنتجاهله
   if (type === 'change' && e.target.id === 'restore-file' && e.target.files[0]) {
     e.target.files[0].text().then(txt => {
       try { const data = JSON.parse(txt); if (!Array.isArray(data.tasks)) throw 0; S = upgrade(data); save(); render(); toast('رجعت النسخة'); }
@@ -2681,7 +2682,8 @@ document.addEventListener('click', e => {
 }));
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { if (cook) stopCook(); else if (draft || form || viewId || picker) closeSheet(); }
-  if (e.key === 'Enter' && e.target.id === 'shop-new') { e.preventDefault(); addShop(e.target.value); }
+  if (e.key === 'Enter' && e.target.id === 'shop-new') { e.preventDefault(); const q = $('shop-qty'); if (q && e.target.value.trim()) q.focus(); else addShop(e.target.value, q ? q.value : ''); }   // Enter في الاسم يودّي للكمية
+  if (e.key === 'Enter' && e.target.id === 'shop-qty') { e.preventDefault(); addShop(($('shop-new') || {}).value || shopNew, e.target.value); }
 });
 
 // السكرول بقى جوه #scroller مش الصفحة
