@@ -440,7 +440,9 @@ select.input{appearance:none; -webkit-appearance:none}
 .ring svg{position:absolute; inset:0; transform:rotate(-90deg)}
 .ring b{font-size:var(--fs-title); font-weight:var(--fw-medium)}
 /* ملخص اليوم جوه الخلفية البنفسجي: من غير كارت أبيض */
-.today-sum{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; padding:12px; border-radius:var(--r-lg); background:var(--today-sum-bg); box-shadow:inset 0 0 0 1px var(--today-sum-border); color:var(--hero-fg)}
+.date-btn{display:inline-flex; align-items:center; gap:4px; padding:2px 0; color:var(--hero-fg-2); font-size:var(--fs-body); font-weight:var(--fw-medium)}
+.date-btn svg{width:16px; height:16px}
+.today-sum{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:8px; padding:12px; border-radius:var(--r-lg); background:var(--today-sum-bg); box-shadow:inset 0 0 0 1px var(--today-sum-border); color:var(--hero-fg)}
 .today-sum .today-title{font-size:var(--fs-title)}
 .today-sum .today-sub{color:var(--hero-fg-2)}
 .today-sum .ring{width:48px; height:48px; --ring-track:color-mix(in srgb, var(--white) 25%, transparent); --ring-fill:var(--white)}
@@ -1079,6 +1081,11 @@ function weekStrip() {
       <span>${DAY_SHORT[d.getDay()]}</span><b>${num(d.getDate())}</b><i class="wdot" ${has ? '' : 'hidden'}></i></button>`;
   }).join('');
 }
+/* تاريخ اليوم بس، بسيط. لو دوستي عليه بيفتح الشهر كله تختاري منه أي يوم */
+function dateBar() {
+  const d = fromIso(planDay || todayStr());
+  return `<button class="date-btn" data-a="month-open" aria-label="${DAY_NAME[d.getDay()]} ${fullDate(d)}، افتحي الشهر">${DAY_NAME[d.getDay()]}، ${fullDate(d)} ${ICON.chevDown}</button>`;
+}
 function weekBar() {
   const sd = fromIso(planDay || todayStr());
   return `<div class="week-bar">
@@ -1120,8 +1127,7 @@ function viewToday() {
 
   const hero = `
     <header class="hero gutter"><div class="wrap">
-      ${weekBar()}
-      <div class="week" role="group" aria-label="أيام الأسبوع">${weekStrip()}</div>
+      ${dateBar()}
       <div class="today-sum">
         <div class="today-info">
           <span class="today-title">يومك النهارده</span>
@@ -1180,11 +1186,10 @@ function viewDay(d) {
   }).join('');
   return `
     <header class="hero gutter"><div class="wrap">
-      ${weekBar()}
-      <div class="week" role="group" aria-label="أيام الأسبوع">${weekStrip()}</div>
+      ${dateBar()}
       <div class="today-sum">
         <div class="today-info">
-          <span class="today-title">${dayTitle(d)}، ${fullDate(d)}</span>
+          <span class="today-title">${Object.values(DAY_NAME).includes(dayTitle(d)) ? 'يوم ' + dayTitle(d) : dayTitle(d)}</span>
           <span class="today-sub">${num(items.length)} مهام${special ? `، منهم ${num(special)} مش يومية` : ''}${r ? `، والأكلة ${esc(r.name)}` : ''}</span>
         </div>
         <button class="btn btn-sm btn-primary" data-a="cal-day" data-v="${todayStr()}">ارجعي للنهارده</button>
