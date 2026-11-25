@@ -449,9 +449,7 @@ select.input{appearance:none; -webkit-appearance:none}
 .hero-illu{position:relative; padding:0; margin-top:calc(-1 * (var(--safe-top) + var(--appbar-pad-top) + var(--appbar-h) + var(--appbar-pad-bottom)));
   padding-top:calc(var(--safe-top) + var(--appbar-pad-top) + var(--appbar-h) + var(--appbar-pad-bottom));
   background:linear-gradient(var(--illu-dim), var(--illu-dim)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='40'%3E%3Cg stroke='%23A7BEF3' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M6 7l3 4M30 4l-2 4M18 22l4 1M40 26l-1 4M10 33l3-2'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 46px 40px, var(--butter-50); --illu-dim:transparent}
-.hero-illu.sky-night{--illu-dim:color-mix(in srgb, var(--indigo-900) 45%, transparent)}
 .hero-illu .date-btn{display:flex; margin:0 var(--gutter); color:var(--neutral-700)}
-.hero-illu.sky-night .date-btn{color:color-mix(in srgb, var(--white) 85%, transparent)}
 .hero-illu .illu{display:block; width:100%; height:auto; aspect-ratio:400 / 250; margin-top:-6px}
 /* الهيدر فوق الرسمة: شفاف وكلامه غامق (بالليل أبيض)، ولما تسكرولي يرجع إنديجو */
 .appbar{transition:background .25s ease, box-shadow .25s ease, color .25s ease}
@@ -1218,7 +1216,7 @@ function dayPath(list) {
   }
   const defs = `<defs>
     <filter id="dpRough" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G"/></filter>
-    <filter id="dpGrain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="1" seed="9" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .15  0 0 0 0 .3  1.4 0 0 0 -.66"/></filter>
+    <filter id="dpGrain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="1" seed="9" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .2  1.4 0 0 0 -.66"/></filter>
     <radialGradient id="dpGlow"><stop offset="0" style="stop-color:var(--wglow); stop-opacity:.85"/><stop offset=".4" style="stop-color:var(--wglow); stop-opacity:.3"/><stop offset="1" style="stop-color:var(--wglow); stop-opacity:0"/></radialGradient>
     <linearGradient id="dpWinSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--wsky1)"/><stop offset="1" style="stop-color:var(--wsky2)"/></linearGradient>
     <clipPath id="dpWin"><path d="M30 172V54C30 26 52 12 78 12S126 26 126 54V172Z"/></clipPath></defs>`;
@@ -1289,7 +1287,6 @@ function dayPath(list) {
         <g fill="var(--lime-700)"><path d="M43 192c-16-9-28-28-21-46 12 5 21 23 21 46z"/><path d="M43 192c2-21 14-39 32-41 2 18-14 37-32 41z"/><path d="M43 192c-5-18-2-39 7-50 9 14 5 37-7 50z"/></g>
         <g fill="none" stroke="var(--lime-400)" stroke-width="1.1" stroke-linecap="round"><path d="M43 190c-7-12-14-25-17-39"/><path d="M44 190c7-14 16-25 28-34"/><path d="M44 190c0-16 2-32 6-46"/></g>
       </g>
-      ${night ? `<rect width="400" height="250" fill="var(--indigo-900)" opacity=".45"/>` : phase === 'sunset' ? `<rect width="400" height="250" fill="var(--peach-300)" opacity=".14"/>` : ''}
       <rect width="400" height="250" filter="url(#dpGrain)" opacity=".32"/>
     </svg>`;
   const curIdx = periodIndex(nowPeriod());
@@ -2844,7 +2841,7 @@ function appBar() {
 let navDir = '';
 function render() {
   $('appbar').innerHTML = appBar();
-  { const onIllu = tab === 'today' && !page && (!planDay || planDay === todayStr()); $('appbar').classList.toggle('on-illu', onIllu); $('appbar').classList.toggle('is-night', onIllu && skyPhase(new Date().getHours() + new Date().getMinutes() / 60) === 'night'); }
+  { const onIllu = tab === 'today' && !page && (!planDay || planDay === todayStr()); $('appbar').classList.toggle('on-illu', onIllu); $('appbar').classList.remove('is-night'); }
   const _wrapHero = html => /^\s*<header class="hero/.test(html) ? html : '<header class="hero hero-min"></header>' + html;
   $('app').innerHTML = _wrapHero(page === 'settings' ? viewProfile() : page === 'warranties' ? viewWarranties() : page === 'contacts' ? viewContacts() : page === 'notifs' ? viewNotifs() : page === 'lang' ? viewLang() : page && page.startsWith('recipe:') ? viewRecipe(page.slice(7)) : page && page.startsWith('list:') ? viewList(page.slice(5)) : page ? viewCategory(page) : tab === 'today' ? viewToday() : tab === 'house' ? viewHouse() : tab === 'kitchen' ? viewKitchen() : tab === 'shopping' ? viewShopping() : viewMoney());
   if (navDir) { const app = $('app'); app.classList.remove('nav-push', 'nav-pop', 'nav-fade'); void app.offsetWidth; app.classList.add('nav-' + navDir); navDir = ''; }
