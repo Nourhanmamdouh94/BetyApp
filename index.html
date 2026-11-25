@@ -188,7 +188,8 @@
   --hero-avatar-bg: var(--white); --hero-avatar-fg: var(--indigo-600);
   --today-card-bg: var(--indigo-50); --today-card-fg: var(--neutral-900); --today-card-fg-2: var(--neutral-600);
   --week-day-bg: color-mix(in srgb, var(--white) 14%, transparent);  --week-day-fg: color-mix(in srgb, var(--white) 78%, transparent); --week-day-num: var(--white); --week-day-shadow: none;
-  --week-today-bg: var(--white); --week-today-fg: var(--indigo-600);
+  --week-today-bg: var(--white); --week-today-fg: var(--indigo-600); --week-num-size: 32px;
+  --today-sum-bg: color-mix(in srgb, var(--white) 14%, transparent); --today-sum-border: color-mix(in srgb, var(--white) 20%, transparent);
   --cal-day-fg: var(--ink); --cal-day-muted: var(--neutral-400); --cal-head-fg: var(--muted);
   --cal-selected-bg: var(--indigo-600); --cal-selected-fg: var(--white); --cal-today-ring: var(--indigo-300);
   --cal-dot-size: 5px; --cal-cell-h: 44px;
@@ -411,21 +412,22 @@ select.input{appearance:none; -webkit-appearance:none}
 .hello-title{font-size:var(--fs-title); font-weight:var(--fw-semibold); display:block}
 .hello-sub{font-size:var(--fs-meta); color:var(--hero-fg-2)}
 
-.week{display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin:0 0 16px}
-.wday{display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 0; border-radius:var(--r-lg); background:var(--week-day-bg); box-shadow:var(--week-day-shadow); font-size:var(--fs-meta); color:var(--week-day-fg)}
-.wday b{font-size:var(--fs-title); color:var(--week-day-num); font-weight:var(--fw-medium)}
-.wday.today{background:var(--week-today-bg); color:var(--week-today-fg)}
-.wday.today b{color:var(--week-today-fg)}
-.wday.past{opacity:.6}
-.wday{position:relative; width:100%; font:inherit}
-.wday[aria-pressed="true"]:not(.today){background:color-mix(in srgb, var(--white) 34%, transparent); box-shadow:inset 0 0 0 1.5px var(--white); opacity:1}
-.wday.today:not([aria-pressed="true"]){background:var(--week-day-bg); box-shadow:inset 0 0 0 1.5px var(--white)}
-.wday.today:not([aria-pressed="true"]) b, .wday.today:not([aria-pressed="true"]){color:var(--white)}
-.wdot{position:absolute; bottom:5px; left:50%; width:4px; height:4px; margin-left:-2px; border-radius:50%; background:currentColor; opacity:.8}
-.week-bar{display:flex; align-items:center; justify-content:space-between; margin:0 0 10px}
-.wk-btn{width:32px; height:32px; border-radius:50%; display:grid; place-items:center; color:var(--white); background:color-mix(in srgb, var(--white) 14%, transparent)}
+/* شريط الأسبوع: من غير كروت، اسم اليوم صغير والرقم في دايرة */
+.week{display:grid; grid-template-columns:repeat(7, 1fr); margin:0}
+.wday{position:relative; width:100%; font:inherit; display:flex; flex-direction:column; align-items:center; gap:4px; padding:2px 0 8px; background:none; color:var(--week-day-fg); font-size:var(--fs-meta)}
+.wday b{width:var(--week-num-size); height:var(--week-num-size); border-radius:50%; display:grid; place-items:center; font-size:var(--fs-title); font-weight:var(--fw-medium); color:var(--week-day-num); transition:background .15s ease}
+.wday.past{opacity:.55}
+.wday.today b{background:var(--week-today-bg); color:var(--week-today-fg)}                            /* النهارده: دايرة بيضا */
+.wday[aria-pressed="true"]:not(.today) b{box-shadow:inset 0 0 0 1.5px var(--white); opacity:1}         /* يوم مختار: دايرة بإطار */
+.wday[aria-pressed="true"]{opacity:1}
+.wday.today:not([aria-pressed="true"]) b{background:color-mix(in srgb, var(--white) 22%, transparent); color:var(--white)}   /* النهارده لما يكون في يوم تاني مختار */
+.wdot{position:absolute; bottom:1px; left:50%; width:4px; height:4px; margin-left:-2px; border-radius:50%; background:currentColor; opacity:.8}
+.week-bar{display:flex; align-items:center; justify-content:space-between; margin:0 0 4px}
+.wk-nav{display:flex; gap:4px}
+.wk-btn{width:32px; height:32px; border-radius:50%; display:grid; place-items:center; color:var(--white); background:none}
+.wk-btn:active{background:color-mix(in srgb, var(--white) 14%, transparent)}
 .wk-btn svg{width:18px; height:18px}
-.wk-month{display:inline-flex; align-items:center; gap:4px; color:var(--white); font-weight:var(--fw-medium); font-size:var(--fs-body); padding:4px 10px; border-radius:var(--r-pill)}
+.wk-month{display:inline-flex; align-items:center; gap:4px; color:var(--white); font-weight:var(--fw-medium); font-size:var(--fs-body); padding:4px 0; border-radius:var(--r-pill)}
 .wk-month svg{width:16px; height:16px}
 .day-card{justify-content:space-between}
 
@@ -438,7 +440,8 @@ select.input{appearance:none; -webkit-appearance:none}
 .ring svg{position:absolute; inset:0; transform:rotate(-90deg)}
 .ring b{font-size:var(--fs-title); font-weight:var(--fw-medium)}
 /* ملخص اليوم جوه الخلفية البنفسجي: من غير كارت أبيض */
-.today-sum{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:16px; color:var(--hero-fg)}
+.today-sum{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; padding:12px; border-radius:var(--r-lg); background:var(--today-sum-bg); box-shadow:inset 0 0 0 1px var(--today-sum-border); color:var(--hero-fg)}
+.today-sum .today-title{font-size:var(--fs-title)}
 .today-sum .today-sub{color:var(--hero-fg-2)}
 .today-sum .ring{width:48px; height:48px; --ring-track:color-mix(in srgb, var(--white) 25%, transparent); --ring-fill:var(--white)}
 .today-sum .ring b{font-size:var(--fs-meta)}
@@ -1079,9 +1082,11 @@ function weekStrip() {
 function weekBar() {
   const sd = fromIso(planDay || todayStr());
   return `<div class="week-bar">
-    <button class="wk-btn" data-a="week-move" data-v="-1" aria-label="الأسبوع اللي فات">${ICON.back}</button>
     <button class="wk-month" data-a="month-open" aria-label="افتحي الشهر كله">${sd.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })} ${ICON.chevDown}</button>
-    <button class="wk-btn" data-a="week-move" data-v="1" aria-label="الأسبوع الجاي">${ICON.fwd}</button>
+    <div class="wk-nav">
+      <button class="wk-btn" data-a="week-move" data-v="-1" aria-label="الأسبوع اللي فات">${ICON.back}</button>
+      <button class="wk-btn" data-a="week-move" data-v="1" aria-label="الأسبوع الجاي">${ICON.fwd}</button>
+    </div>
   </div>`;
 }
 function renderMonthSheet() {
