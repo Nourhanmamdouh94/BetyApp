@@ -192,19 +192,38 @@
 | `--check-done-bg` | `var(--indigo-600)` |
 
 ### Chip
+
+**States (الـ Chip مش زرار):**
+
+| State | الشكل |
+|---|---|
+| Default | خلفية رمادي فاتح جداً + إطار رفيع، على قد الكلام |
+| Selected | خلفية إنديجو فاتحة + إطار إنديجو + ✓ قبل الكلام (أو أيقونة القسم لو موجودة) |
+| Disabled | من غير خلفية + إطار متقطع + كلام رمادي. لو كانت مختارة: نفس الـ Selected بشفافية ٥٠٪ |
+
+**الفرق عن الـ Button:** الزرار بيعمل أكشن (احفظي، امسحي)، ارتفاعه 44–52px، وزنه 700–800، والـ primary لونه مليان. الـ Chip بيختار قيمة، ارتفاعه 32px، على قد الكلام وبينزل سطر جديد، والـ selected عمره ما بيبقى لون مليان.
+استثناء: الأيام والدقايق (`.chip-grid.is-even`) كلها نفس العرض ومن غير ✓.
+
 | Token | القيمة |
 |---|---|
-| `--chip-h` | `36px` |
-| `--chip-px` | `14px` |
+| `--chip-h` | `32px` |
+| `--chip-px` | `12px` |
 | `--chip-radius` | `var(--r-md)` |
-| `--chip-bg` | `var(--white)` |
-| `--chip-fg` | `var(--neutral-800)` |
+| `--chip-gap` | `8px` |
+| `--chip-weight` | `600` |
+| `--chip-bg` | `var(--neutral-50)` |
+| `--chip-fg` | `var(--neutral-700)` |
 | `--chip-border` | `var(--neutral-200)` |
-| `--chip-bg-selected` | `var(--indigo-600)` |
-| `--chip-fg-selected` | `var(--white)` |
-| `--chip-border-selected` | `var(--indigo-600)` |
-| `--chip-count-fg` | `var(--neutral-600)` |
-| `--chip-count-fg-selected` | `var(--neutral-300)` |
+| `--chip-bg-pressed` | `var(--neutral-100)` |
+| `--chip-bg-selected` | `var(--indigo-50)` |
+| `--chip-fg-selected` | `var(--indigo-700)` |
+| `--chip-border-selected` | `var(--indigo-300)` |
+| `--chip-bg-disabled` | `transparent` |
+| `--chip-fg-disabled` | `var(--neutral-400)` |
+| `--chip-border-disabled` | `var(--neutral-300)` (dashed) |
+| `--chip-disabled-selected-opacity` | `.5` |
+| `--chip-count-fg` | `var(--neutral-500)` |
+| `--chip-count-fg-selected` | `var(--indigo-500)` |
 | `--chip-icon-bg` | `transparent` |
 | `--chip-icon-fg` | `var(--cat-700, var(--neutral-800))` |
 

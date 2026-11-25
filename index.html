@@ -127,10 +127,12 @@
   --check-done-bg: var(--indigo-600);   /* لون واحد لكل المهام اللي خلصت */
 
   /* Chip */
-  --chip-h: 36px; --chip-px: 14px; --chip-radius: var(--r-md);
-  --chip-bg: var(--white);               --chip-fg: var(--neutral-800);   --chip-border: var(--neutral-200);
-  --chip-bg-selected: var(--indigo-600);   --chip-fg-selected: var(--white); --chip-border-selected: var(--indigo-600);
-  --chip-count-fg: var(--neutral-600);   --chip-count-fg-selected: var(--neutral-300);
+  /* الـ Chip مش زرار: أصغر، على قد الكلام، خفيف، والـ selected لون فاتح + علامة صح (مش لون مليان زي الـ primary) */
+  --chip-h: 32px; --chip-px: 12px; --chip-radius: var(--r-md); --chip-gap: 8px; --chip-weight: 600;
+  --chip-bg: var(--neutral-50);            --chip-fg: var(--neutral-700);      --chip-border: var(--neutral-200);   --chip-bg-pressed: var(--neutral-100);   /* default */
+  --chip-bg-selected: var(--indigo-50);    --chip-fg-selected: var(--indigo-700); --chip-border-selected: var(--indigo-300);                           /* selected */
+  --chip-bg-disabled: transparent;         --chip-fg-disabled: var(--neutral-400); --chip-border-disabled: var(--neutral-300); --chip-disabled-selected-opacity: .5;   /* disabled */
+  --chip-count-fg: var(--neutral-500);   --chip-count-fg-selected: var(--indigo-500);
   --chip-icon-bg: transparent; --chip-icon-fg: var(--cat-700, var(--neutral-800));   /* الأيقونات Line art من غير خلفية */
 
   /* Segmented */
@@ -336,21 +338,34 @@ button{background:none; border:0; padding:0; cursor:pointer; text-align:inherit}
    Chip · Segmented · Tag
    ========================================================= */
 .chip{
-  flex:none; display:inline-flex; align-items:center; justify-content:center; gap:6px;
-  height:var(--chip-h); padding:0 var(--chip-px); border-radius:var(--chip-radius);
+  flex:none; display:inline-flex; align-items:center; justify-content:center; gap:4px;
+  height:var(--chip-h); padding:0 var(--chip-px); border:0; border-radius:var(--chip-radius);
   background:var(--chip-bg); color:var(--chip-fg); box-shadow:inset 0 0 0 1px var(--chip-border);
-  font-size:var(--fs-body); font-weight:700; white-space:nowrap;
-  transition:background .15s ease, color .15s ease;
+  font-size:var(--fs-body); font-weight:var(--chip-weight); white-space:nowrap;
+  transition:background .15s ease, color .15s ease, box-shadow .15s ease;
 }
+.chip:active{background:var(--chip-bg-pressed)}
 .chip .count{font-size:var(--fs-meta); color:var(--chip-count-fg)}
+.chip-check{display:none; margin-inline-start:-2px}
+.chip-check svg{width:14px; height:14px}
+/* selected */
 .chip[aria-pressed="true"], .chip[aria-checked="true"]{background:var(--chip-bg-selected); color:var(--chip-fg-selected); box-shadow:inset 0 0 0 1px var(--chip-border-selected)}
-.chip[aria-pressed="true"] .count{color:var(--chip-count-fg-selected)}
+.chip[aria-pressed="true"] .chip-check, .chip[aria-checked="true"] .chip-check{display:inline-flex}
+.chip[aria-pressed="true"] .count, .chip[aria-checked="true"] .count{color:var(--chip-count-fg-selected)}
+/* disabled: من غير خلفية، وإطار متقطع، عشان يبان إنه مش متاح */
+.chip:disabled{background:var(--chip-bg-disabled); color:var(--chip-fg-disabled); box-shadow:none; border:1px dashed var(--chip-border-disabled); cursor:not-allowed}
+.chip:disabled .chip-ico{opacity:.5}
+.chip:disabled[aria-pressed="true"], .chip:disabled[aria-checked="true"]{background:var(--chip-bg-selected); color:var(--chip-fg-selected); border:0; box-shadow:inset 0 0 0 1px var(--chip-border-selected); opacity:var(--chip-disabled-selected-opacity)}
 .chip-ico{flex:none; width:18px; height:18px; margin-inline-start:-2px; border-radius:50%; display:grid; place-items:center; background:var(--chip-icon-bg); color:var(--chip-icon-fg)}
 .chip-ico svg{width:16px; height:16px}
 .chip-row{display:flex; gap:var(--s-2); overflow-x:auto; scrollbar-width:none}
 .chip-row::-webkit-scrollbar{display:none}
-.chip-grid{display:grid; gap:6px}
-.chip-grid .chip{padding:0; width:100%}
+/* الـ chips على قد الكلام وبتنزل سطر جديد، مش بتتمط زي الزراير */
+.chip-grid{display:flex; flex-wrap:wrap; gap:var(--chip-gap)}
+/* استثناء: الأيام والدقايق، كلها نفس العرض */
+.chip-grid.is-even{display:grid; gap:6px}
+.chip-grid.is-even .chip{padding:0; width:100%}
+.chip-grid.is-even .chip-check, .seg .chip-check{display:none !important}
 
 .seg{display:grid; gap:2px; background:var(--seg-bg); padding:3px; border-radius:var(--r-lg)}
 .seg .chip{height:34px; padding:0; background:none; box-shadow:none; color:var(--seg-fg); font-size:var(--fs-meta)}
@@ -1024,9 +1039,10 @@ function toast(msg) {
    ========================================================= */
 const Ico = (svgIcon, size = '', cat = null) => `<span class="ico ${size} ${catClass(cat)}">${svgIcon}</span>`;
 const ChipIco = k => `<span class="chip-ico ${catClass(k)}">${CATS[k].icon}</span>`;
-const Chip = ({ label, pressed, attrs = '', icon = '', count = null, role = 'pressed' }) =>
-  `<button class="chip" ${role === 'radio' ? `role="radio" aria-checked="${!!pressed}"` : `aria-pressed="${!!pressed}"`} ${attrs}>
-    ${icon}${label}${count !== null ? ` <span class="count">${num(count)}</span>` : ''}</button>`;
+/* Chip: default / selected / disabled. لو مفيهاش أيقونة، بيظهر ✓ لما تتختار */
+const Chip = ({ label, pressed, attrs = '', icon = '', count = null, role = 'pressed', disabled = false }) =>
+  `<button class="chip" ${role === 'radio' ? `role="radio" aria-checked="${!!pressed}"` : `aria-pressed="${!!pressed}"`} ${disabled ? 'disabled' : ''} ${attrs}>
+    ${icon || `<span class="chip-check" aria-hidden="true">${ICON.checkInk}</span>`}${label}${count !== null ? ` <span class="count">${num(count)}</span>` : ''}</button>`;
 const Seg = (key, value, options, action = 'pick') =>
   `<div class="seg" role="radiogroup" style="grid-template-columns:repeat(${options.length}, 1fr)">
     ${options.map(([v, label]) => Chip({ label, pressed: String(value) === String(v), role: 'radio', attrs: `data-a="${action}" data-k="${key}" data-v="${v}"` })).join('')}</div>`;
@@ -1357,7 +1373,7 @@ function renderSheet() {
   const d = draft;
   let repeatExtra = '';
   if (d.rtype === 'weekly') {
-    repeatExtra = `<div class="chip-grid" style="grid-template-columns:repeat(7, 1fr); margin-top:10px" role="group" aria-label="أيام التكرار">
+    repeatExtra = `<div class="chip-grid is-even" style="grid-template-columns:repeat(7, 1fr); margin-top:10px" role="group" aria-label="أيام التكرار">
       ${WEEK.map(w => Chip({ label: DAY_SHORT[w], pressed: d.days.includes(w), attrs: `data-a="pick-day" data-v="${w}"` })).join('')}</div>`;
   } else if (d.rtype === 'monthly') {
     repeatExtra = `<label class="field-label" for="f-day">يوم كام في الشهر؟</label>
@@ -1395,7 +1411,7 @@ function renderSheet() {
       ${sheetError === 'days' ? '<div class="field-error">اختاري يوم واحد على الأقل</div>' : ''}
 
       <span class="field-label">بتاخد قد إيه؟</span>
-      <div class="chip-grid" style="grid-template-columns:repeat(6, 1fr)" role="radiogroup">
+      <div class="chip-grid is-even" style="grid-template-columns:repeat(6, 1fr)" role="radiogroup">
         ${MINS.map(m => Chip({ label: num(m) + ' د', pressed: d.mins === m, role: 'radio', attrs: `data-a="pick" data-k="mins" data-v="${m}"` })).join('')}
       </div>
 
