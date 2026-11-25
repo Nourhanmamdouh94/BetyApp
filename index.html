@@ -265,9 +265,12 @@
    Base
    ========================================================= */
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-html,body{margin:0; min-height:100%; overscroll-behavior-y:none; direction:rtl}
+html,body{margin:0; height:100%; overflow:hidden; overscroll-behavior:none; direction:rtl}
+/* الصفحة نفسها ثابتة، والمحتوى بيسكرول جوه #scroller.
+   ده بيحل باج iOS 26: بعد ما الكيبورد يقفل، الآيفون بيسيب الصفحة مزحزحة فالناف بار يطلع لفوق. */
+#scroller{position:fixed; inset:0; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain}
 body{background:var(--bg); color:var(--ink); font-family:var(--font); font-size:var(--fs-body); line-height:1.6; -webkit-font-smoothing:antialiased}
-body.locked{overflow:hidden}
+body.locked #scroller{overflow:hidden}
 button,input,select{font:inherit; color:inherit}
 button{background:none; border:0; padding:0; cursor:pointer; text-align:inherit}
 :focus-visible{outline:2px solid var(--pink-600); outline-offset:2px; border-radius:var(--r-lg)}
@@ -731,7 +734,7 @@ a.btn{text-decoration:none}
 </head>
 <body>
 <header class="appbar gutter" id="appbar"></header>
-<div id="app"></div>
+<div id="scroller"><div id="app"></div></div>
 <div id="sheet"></div>
 <div id="cook" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -2553,15 +2556,15 @@ document.addEventListener('click', e => {
   const el = e.target.closest('[data-a]'); if (!el) return;
   const a = el.dataset.a, v = el.dataset.v;
   switch (a) {
-    case 'go': closeSheet(); confirmReset = false; listEdit = false; navDir = tab === v && !page ? '' : 'fade'; tab = v; page = null; prevPage = null; render(); scrollTo(0, 0); break;
-    case 'open-cat': navDir = 'push'; prevPage = page; page = v; render(); scrollTo(0, 0); break;
-    case 'back': listEdit = false; navDir = 'pop'; page = prevPage; prevPage = ['notifs', 'lang'].includes(page) ? 'settings' : null; render(); scrollTo(0, 0); break;
+    case 'go': closeSheet(); confirmReset = false; listEdit = false; navDir = tab === v && !page ? '' : 'fade'; tab = v; page = null; prevPage = null; render(); toTop(); break;
+    case 'open-cat': navDir = 'push'; prevPage = page; page = v; render(); toTop(); break;
+    case 'back': listEdit = false; navDir = 'pop'; page = prevPage; prevPage = ['notifs', 'lang'].includes(page) ? 'settings' : null; render(); toTop(); break;
     case 'cal-day': planDay = v === todayStr() ? null : v; if (monthSheet) closeSheet(); if (tab !== 'today') { tab = 'today'; page = null; } render(); break;
     case 'week-move': { const d = fromIso(planDay || todayStr()); d.setDate(d.getDate() + 7 * Number(v)); planDay = iso(d) === todayStr() ? null : iso(d); render(); break; }
     case 'month-open': renderMonthSheet(); break;
     case 'kitchen-view': kitchenView = v; render(); break;
     case 'quick-add': renderQuickAdd(); break;
-    case 'qa-shop': case 'shop-focus': { closeSheet(); const m = mainList(); if (!m) { openListForm(null); break; } navDir = 'push'; tab = 'shopping'; prevPage = null; page = 'list:' + m; shopView = m; listEdit = false; render(); scrollTo(0, 0); setTimeout(() => { const i = $('shop-new'); if (i) i.focus(); }, 60); break; }
+    case 'qa-shop': case 'shop-focus': { closeSheet(); const m = mainList(); if (!m) { openListForm(null); break; } navDir = 'push'; tab = 'shopping'; prevPage = null; page = 'list:' + m; shopView = m; listEdit = false; render(); toTop(); setTimeout(() => { const i = $('shop-new'); if (i) i.focus(); }, 60); break; }
     case 'cal-open': calOpen = !calOpen; render(); break;
     case 'cal-move': {
       const d = fromIso(planDay || todayStr());
@@ -2572,7 +2575,7 @@ document.addEventListener('click', e => {
     case 'detail': openDetail(el.dataset.id); break;
     case 'recipe': {   // من مهمة «تحضير الأكل»: افتحي أكلة النهارده لو متحددة
       navDir = 'push'; const rid = S.meals[todayStr()]; closeSheet(); tab = 'kitchen'; prevPage = null; page = rid ? 'recipe:' + rid : null;
-      if (!rid) kitchenView = 'plan'; render(); scrollTo(0, 0); break;
+      if (!rid) kitchenView = 'plan'; render(); toTop(); break;
     }
     case 'detail-toggle': toggle(viewId); renderDetail(); break;
     case 'edit-form': { const id = viewId; viewId = null; if (id.startsWith('b:')) openBillForm(S.money.bills.find(b => b.id === id.slice(2))); else openSheet(S.tasks.find(x => x.id === id)); break; }
@@ -2596,14 +2599,14 @@ document.addEventListener('click', e => {
     case 'ff-save': saveForm(); break;
     case 'ff-delete': if (!form.confirmDel) { form.confirmDel = true; renderForm(); } else { const msg = form.onDelete(); save(); closeSheet(); render(); toast(msg); } break;
     /* المطبخ */
-    case 'today-recipe': navDir = 'push'; tab = 'kitchen'; prevPage = null; page = 'recipe:' + S.meals[todayStr()]; render(); scrollTo(0, 0); break;
+    case 'today-recipe': navDir = 'push'; tab = 'kitchen'; prevPage = null; page = 'recipe:' + S.meals[todayStr()]; render(); toTop(); break;
     case 'ing-add': case 'ing-add-all': {
       const r = recipeById(S.meals[todayStr()]);
       const list = mealNeeds(r).filter(n => n.state === 'missing' && (a === 'ing-add-all' || String(n.idx) === v));
       list.forEach(({ i }) => S.shop.items.push({ id: uid('i'), name: i.n, qty: i.q, sec: i.sec || guessSec(i.n), list: mainList(), done: false, from: r.name }));
       save(); render(); toast(list.length > 1 ? `اتضاف ${num(list.length)} حاجات لقايمة الأسبوع` : 'اتضافت لقايمة الأسبوع'); break;
     }
-    case 'open-recipe': navDir = 'push'; prevPage = page; page = 'recipe:' + v; render(); scrollTo(0, 0); break;
+    case 'open-recipe': navDir = 'push'; prevPage = page; page = 'recipe:' + v; render(); toTop(); break;
     case 'meal-pick': picker = v; document.body.classList.add('locked'); renderPicker(); break;
     case 'meal-set': { const d = picker; if (v) S.meals[d] = v; else delete S.meals[d]; save(); closeSheet(); render(); toast(v ? 'اتحطت في أكل الأسبوع' : 'اتشالت الأكلة'); break; }
     case 'meals-to-shop': { const n = mealsToShop(Array.from({ length: 7 }, (_, i) => iso(dayDate(i)))); save(); render(); toast(n ? `اتضاف ${num(n)} حاجة لقايمة الأسبوع` : 'كل المكونات موجودة في القايمة أو المخزن'); break; }
@@ -2613,7 +2616,7 @@ document.addEventListener('click', e => {
     case 'learn-open': renderLearn(v); break;
     case 'learn-new': openLearnForm(null); break;
     case 'learn-edit': { const l = S.learn.find(x => x.id === v); closeSheet(); openLearnForm(l); break; }
-    case 'open-recipe-sheet': closeSheet(); if (!page || !page.startsWith('recipe:')) prevPage = page; page = 'recipe:' + v; render(); scrollTo(0, 0); break;
+    case 'open-recipe-sheet': closeSheet(); if (!page || !page.startsWith('recipe:')) prevPage = page; page = 'recipe:' + v; render(); toTop(); break;
     case 'recipe-edit': openRecipeForm(recipeById(v)); break;
     case 'cook': startCook(v); break;
     case 'cook-close': stopCook(); break;
@@ -2621,13 +2624,13 @@ document.addEventListener('click', e => {
     case 'cook-timer': cookTimer(); break;
     case 'cook-done': { const r = recipeById(cook.id); if (r.status === 'want') r.status = 'tried'; save(); stopCook(); render(); toast('بالهنا والشفا 🤍'); break; }
     /* المشتريات */
-    case 'open-list': navDir = 'push'; prevPage = null; page = 'list:' + v; shopView = v; shopNew = ''; listEdit = false; render(); scrollTo(0, 0); break;
+    case 'open-list': navDir = 'push'; prevPage = null; page = 'list:' + v; shopView = v; shopNew = ''; listEdit = false; render(); toTop(); break;
     case 'list-new': openListForm(null); break;
     case 'list-settings': openListForm(listById(v)); break;
     case 'list-edit': listEdit = !listEdit; render(); break;
     case 'item-del': { const it = S.shop.items.find(x => x.id === v); S.shop.items = S.shop.items.filter(x => x.id !== v); save(); render(); toast(`اتمسحت: ${it ? it.name : ''}`); break; }
     case 'stock-del': S.shop.stock = S.shop.stock.filter(x => x.id !== v); save(); render(); toast('اتمسحت من المخزن'); break;
-    case 'list-renew': S.shop.items.forEach(i => { if (i.list === v) i.done = false; }); save(); render(); scrollTo(0, 0); toast('القايمة رجعت جديدة'); break;
+    case 'list-renew': S.shop.items.forEach(i => { if (i.list === v) i.done = false; }); save(); render(); toTop(); toast('القايمة رجعت جديدة'); break;
     case 'list-empty': if (listEdit !== 'clear') { listEdit = 'clear'; render(); } else { S.shop.items = S.shop.items.filter(i => i.list !== v); listEdit = false; save(); render(); toast('القايمة فضيت'); } break;
     case 'shop-add': addShop(shopNew || ($('shop-new') || {}).value || ''); break;
     case 'item-toggle': { const i = S.shop.items.find(x => x.id === v); i.done = !i.done; save(); render(); break; }
@@ -2651,11 +2654,11 @@ document.addEventListener('click', e => {
     case 'con-edit': openContactForm(S.home.contacts.find(x => x.id === v)); break;
     case 'name-edit': openForm({ title: 'اسمك', editing: true, values: { name: S.name }, fields: [{ k: 'name', label: 'الاسم اللي يظهر في الهوم', required: true }], onSave: v2 => { S.name = v2.name.trim(); return 'اتحفظ'; } }); break;
     case 'backup': downloadBackup(); break;
-    case 'open-notifs': navDir = 'push'; closeSheet(); prevPage = 'settings'; page = 'notifs'; render(); scrollTo(0, 0); break;
+    case 'open-notifs': navDir = 'push'; closeSheet(); prevPage = 'settings'; page = 'notifs'; render(); toTop(); break;
     case 'pref': { const p = prefs(); p[v] = !p[v]; save(); render(); break; }
     case 'lang': prefs().lang = v; save(); render(); break;
     case 'notif-allow': Notification.requestPermission().then(() => { render(); dailyReminders(); }); break;
-    case 'reset': if (!confirmReset) { confirmReset = true; render(); } else { confirmReset = false; try { localStorage.removeItem(KEY); } catch (e) {} S = load(); page = null; tab = 'today'; render(); scrollTo(0, 0); toast('بدأنا من الأول'); } break;
+    case 'reset': if (!confirmReset) { confirmReset = true; render(); } else { confirmReset = false; try { localStorage.removeItem(KEY); } catch (e) {} S = load(); page = null; tab = 'today'; render(); toTop(); toast('بدأنا من الأول'); } break;
     case 'delete': deleteDraft(); break;
   }
 });
@@ -2681,7 +2684,10 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.id === 'shop-new') { e.preventDefault(); addShop(e.target.value); }
 });
 
-addEventListener('scroll', () => { const b = $('appbar'); if (b) b.classList.toggle('is-scrolled', scrollY > 4); }, { passive: true });
+// السكرول بقى جوه #scroller مش الصفحة
+const scroller = $('scroller');
+function toTop() { scroller.scrollTop = 0; }
+scroller.addEventListener('scroll', () => { const b = $('appbar'); if (b) b.classList.toggle('is-scrolled', scroller.scrollTop > 4); }, { passive: true });
 /* اسحبي الشيت لتحت عشان تقفليه */
 (() => {
   let y0 = null, sheet = null;
@@ -2716,11 +2722,12 @@ addEventListener('scroll', () => { const b = $('appbar'); if (b) b.classList.tog
 // الكيبورد على الآيفون: بنعرف إنه مفتوح من الخانة اللي عليها الـ focus
 (() => {
   const isField = el => el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') && !['checkbox','radio','button'].includes(el.type);
+  if (window.visualViewport) visualViewport.addEventListener('resize', () => { if (visualViewport.height > innerHeight - 80) window.scrollTo(0, 0); });
   document.addEventListener('focusin', e => { if (isField(e.target)) document.body.classList.add('kb-open'); });
   document.addEventListener('focusout', () => setTimeout(() => {
     if (isField(document.activeElement)) return;      // انتقلت لخانة تانية، الكيبورد لسه مفتوح
     document.body.classList.remove('kb-open');
-    window.scrollTo(window.scrollX, window.scrollY);   // بيخلي الآيفون يرجّع الحاجات الثابتة (الناف بار) لمكانها
+    window.scrollTo(0, 0);   // الصفحة نفسها لازم تفضل عند الصفر؛ لو الآيفون زحزحها وقت الكيبورد بنرجّعها
   }, 80));
 })();
 
