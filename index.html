@@ -442,37 +442,42 @@ select.input{appearance:none; -webkit-appearance:none}
 /* ملخص اليوم جوه الخلفية البنفسجي: من غير كارت أبيض */
 /* الهوم: منظر للبيت والسما بتتغير مع الوقت، وكارت إزاز فوقه */
 .hero-sky{background:var(--hill-near); transition:background .6s ease}
-.sky-wrap{position:relative; margin:calc(-1 * calc(var(--safe-top) + var(--appbar-pad-top) + var(--appbar-h) + var(--appbar-pad-bottom))) calc(-1 * var(--gutter)) 0; padding:calc(var(--safe-top) + var(--appbar-pad-top) + var(--appbar-h) + var(--appbar-pad-bottom)) var(--gutter) 0; background:var(--sky-grad)}
+.sky-wrap{position:relative; overflow:hidden; margin:calc(-1 * calc(var(--safe-top) + var(--appbar-pad-top) + var(--appbar-h) + var(--appbar-pad-bottom))) calc(-1 * var(--gutter)) 0; padding:calc(var(--safe-top) + var(--appbar-pad-top) + var(--appbar-h) + var(--appbar-pad-bottom)) var(--gutter) 0; background:var(--sky-grad)}
 .sky-wrap .date-btn{position:relative; z-index:1; color:var(--sky-text-2)}
-.scene{display:block; width:calc(100% + 2 * var(--gutter)); height:210px; margin:-12px calc(-1 * var(--gutter)) 0}
-.sky-morning{--sky-grad:linear-gradient(180deg, var(--periwinkle-400), var(--lavender-200) 55%, var(--peach-200)); --l1:color-mix(in srgb, var(--peach-200) 60%, var(--lavender-300)); --l2:var(--lavender-300); --l3:var(--indigo-500); --haze:var(--peach-100); --water-top:var(--peach-200); --water-bottom:var(--lavender-400); --bank:var(--indigo-700); --hill-near:var(--indigo-700); --win-lit:var(--butter-200); --sun:var(--butter-100); --sun-glow:var(--peach-200)}
-.sky-noon{--sky-grad:linear-gradient(180deg, var(--periwinkle-500), var(--periwinkle-300) 55%, var(--periwinkle-100)); --l1:var(--periwinkle-200); --l2:var(--periwinkle-300); --l3:var(--indigo-500); --haze:var(--periwinkle-50); --water-top:var(--periwinkle-200); --water-bottom:var(--periwinkle-500); --bank:var(--indigo-700); --hill-near:var(--indigo-700); --win-lit:var(--butter-200); --sun:var(--white); --sun-glow:var(--butter-100)}
-.sky-sunset{--sky-grad:linear-gradient(180deg, var(--indigo-600), var(--pink-300) 58%, var(--peach-300)); --l1:color-mix(in srgb, var(--pink-300) 70%, var(--peach-300)); --l2:var(--pink-400); --l3:var(--indigo-700); --haze:var(--peach-200); --water-top:var(--peach-300); --water-bottom:var(--pink-500); --bank:var(--indigo-900); --hill-near:var(--indigo-900); --win-lit:var(--butter-200); --sun:var(--butter-100); --sun-glow:var(--peach-300)}
-.sky-night{--sky-grad:linear-gradient(180deg, color-mix(in srgb, var(--indigo-900) 85%, black), var(--indigo-800)); --l1:color-mix(in srgb, var(--indigo-800) 80%, var(--lavender-500)); --l2:var(--lavender-800); --l3:var(--indigo-900); --haze:var(--indigo-700); --water-top:var(--indigo-800); --water-bottom:color-mix(in srgb, var(--indigo-900) 80%, black); --bank:color-mix(in srgb, var(--indigo-900) 70%, black); --hill-near:color-mix(in srgb, var(--indigo-900) 70%, black); --win-lit:var(--butter-200); --sun:var(--butter-50); --sun-glow:var(--lavender-300)}
+.scene{display:block; overflow:visible; width:calc(100% + 2 * var(--gutter)); height:230px; margin:-12px calc(-1 * var(--gutter)) 0}
+/* ألوان الأوضة: الحيطة بلون الأبلكيشن، والشباك هو اللي بيتغير مع الوقت */
+.hero-sky{--wall:var(--indigo-500); --speck:color-mix(in srgb, var(--white) 22%, transparent); --frame:var(--lavender-50); --frame-line:var(--lavender-200); --base:var(--indigo-700); --tile-a:var(--white); --tile-b:var(--periwinkle-200); --rug:var(--lavender-100); --sofa:var(--lavender-300); --sofa-2:var(--lavender-200); --sofa-leg:var(--indigo-800); --table:var(--lavender-200); --leaf:var(--lime-500); --leaf-vein:var(--lime-700); --lamp:var(--pink-300); --lamp-rim:var(--pink-400); --cord:var(--indigo-900); --shelf:var(--peach-400); --hill-near:var(--indigo-700)}
+.sky-morning{--sky1:var(--peach-100); --sky2:var(--lavender-200); --city:var(--lavender-300); --sun:var(--butter-100); --sun-glow:var(--peach-300)}
+.sky-noon{--sky1:var(--periwinkle-300); --sky2:var(--periwinkle-100); --city:var(--periwinkle-400); --sun:var(--white); --sun-glow:var(--butter-200)}
+.sky-sunset{--sky1:var(--pink-300); --sky2:var(--peach-300); --city:var(--pink-500); --sun:var(--butter-100); --sun-glow:var(--peach-300)}
+.sky-night{--wall:var(--indigo-700); --sky1:var(--indigo-900); --sky2:var(--indigo-700); --city:var(--indigo-900); --sun:var(--butter-50); --sun-glow:var(--lavender-300); --hill-near:var(--indigo-900)}
+.sky-wrap{background:linear-gradient(var(--floor-dim), var(--floor-dim)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Cg stroke='%23ffffff' stroke-opacity='.22' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M3 4l1.6 2.6M12 9l-1 2.8M7 14.5l2.4.8M15 2.5l.8 1.8'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 18px 18px, var(--wall)}
+/* الأرضية بتكمل تحت الكارت لحد الشيت الأبيض */
+.hero-sky{background:linear-gradient(var(--floor-dim), var(--floor-dim)), repeating-conic-gradient(var(--tile-b) 0 25%, var(--tile-a) 0 50%) 0 0 / 18px 18px; --floor-dim:transparent}
+.hero-sky.sky-night{--floor-dim:color-mix(in srgb, var(--indigo-900) 38%, transparent)}
 .hero-sky{--sky-text-2:color-mix(in srgb, var(--white) 88%, transparent)}
 /* الهيدر شفاف فوق السما، ولما تسكرولي بيرجع لونه */
 .appbar{transition:background .25s ease, box-shadow .25s ease}
-.appbar.on-sky:not(.is-scrolled){background:transparent}
+.appbar.on-sky:not(.is-scrolled){background:transparent; box-shadow:none}
 /* حركات المنظر */
-.felucca{animation:bob 3.6s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-1px) rotate(-1.5deg)}}
-.glint{animation:glint 2.4s ease-in-out infinite}
-@keyframes glint{50%{opacity:.35}}
-.frond{transform-origin:3px -32px; animation:sway 5s ease-in-out infinite}
+.sway{transform-box:fill-box; transform-origin:50% 100%; animation:sway 5s ease-in-out infinite}
+.sway.s2{transform-origin:50% 0; animation-duration:6s}
+.sway.s3{animation-duration:6.5s; animation-delay:.8s}
 @keyframes sway{50%{transform:rotate(3deg)}}
+.lamp{transform-origin:262px 0; animation:lampSwing 7s ease-in-out infinite}
+@keyframes lampSwing{50%{transform:rotate(1.2deg)}}
+.flame{transform-box:fill-box; transform-origin:50% 100%; animation:flame 1.2s ease-in-out infinite}
+@keyframes flame{50%{transform:scaleY(1.25) skewX(4deg)}}
 .win-on{animation:glow 3.4s ease-in-out infinite}
 @keyframes glow{50%{opacity:.55}}
-.bird{animation:flap 1.8s ease-in-out infinite}
-.bird.b2{animation-delay:.5s} .bird.b3{animation-delay:.9s}
-@keyframes flap{50%{transform:translateY(-1.5px) scaleY(.7)}}
 .dp-star{fill:var(--white); animation:twinkle 2.8s ease-in-out infinite}
 @keyframes twinkle{0%,100%{opacity:.2} 50%{opacity:.9}}
 .dp-sun{transform-origin:0 0}
 .dp-sun.pulse{animation:sunPulse .7s cubic-bezier(.2,.8,.2,1)}
-@keyframes sunPulse{40%{transform:scale(1.18)}}
+@keyframes sunPulse{40%{transform:scale(1.25)}}
 /* كارت الإزاز */
 .day-glass{position:relative; margin-top:-34px; padding:14px 16px 8px; border-radius:var(--r-lg); color:var(--white);
-  background:color-mix(in srgb, var(--white) 16%, transparent); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+  background:color-mix(in srgb, var(--indigo-800) 62%, transparent); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
   box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--white) 26%, transparent), 0 14px 30px color-mix(in srgb, var(--indigo-900) 30%, transparent)}
 .dp-foot{display:flex; align-items:flex-end; justify-content:space-between; gap:12px}
 .dp-foot .today-sub{color:color-mix(in srgb, var(--white) 78%, transparent)}
@@ -1155,57 +1160,79 @@ function dayPath(list) {
   const P0 = [356, 132], P1 = [200, -40], P2 = [44, 132];          // الشمس بتطلع من اليمين وتنزل شمال
   const pt = k => (1 - t) ** 2 * P0[k] + 2 * (1 - t) * t * P1[k] + t ** 2 * P2[k];
   const x = pt(0), y = pt(1);
-  /* منظر القاهرة: طبقات silhouette بعمق (اللي بعيد أفتح)، شمس ناعمة وانعكاسها على النيل */
-  const sun = phase === 'night'
-    ? `<circle r="34" fill="url(#dpGlow)"/><path d="M4-11a11.5 11.5 0 1 0 8 18a9.5 9.5 0 0 1-8-18z" fill="var(--sun)"/>`
-    : `<circle r="${phase === 'noon' ? 46 : 58}" fill="url(#dpGlow)"/><circle r="11" fill="var(--sun)"/>`;
+  /* أوضة المعيشة بستايل إيديتوريال مرسوم باليد: ألوان مسطحة، باترنز، ونقط خفيفة على الحيطة.
+     الشباك بيوري سما القاهرة، والشمس بتمشي فيه مع الوقت، وبالليل النجفة بتنور */
+  const wt = t, wP0 = [132, 118], wP1 = [93, 8], wP2 = [54, 118];
+  const wx = (1 - wt) ** 2 * wP0[0] + 2 * (1 - wt) * wt * wP1[0] + wt ** 2 * wP2[0];
+  const wy = (1 - wt) ** 2 * wP0[1] + 2 * (1 - wt) * wt * wP1[1] + wt ** 2 * wP2[1];
+  const night = phase === 'night';
+  const sun = night
+    ? `<circle r="22" fill="url(#dpGlow)"/><path d="M3-8a8 8 0 1 0 6 12.5a6.6 6.6 0 0 1-6-12.5z" fill="var(--sun)"/>`
+    : `<circle r="26" fill="url(#dpGlow)"/><circle r="8" fill="var(--sun)"/>`;
+  const STARS = [[58, 52], [76, 40], [104, 46], [122, 60], [88, 70], [66, 84], [118, 86]];
+  const stars = night ? STARS.map(([sx, sy], i) => `<circle class="dp-star" cx="${sx}" cy="${sy}" r="${i % 2 ? .7 : 1}" style="animation-delay:${(i * .41 % 2).toFixed(2)}s"/>`).join('') : '';
+  const cityWin = lit ? [[104, 132], [110, 138], [124, 130], [130, 136], [62, 136], [70, 132]].map(([cx, cy], i) => `<rect class="win-on" x="${cx}" y="${cy}" width="1.6" height="2" fill="var(--butter-200)" style="animation-delay:${i * .6}s"/>`).join('') : '';
   const defs = `<defs>
-    <radialGradient id="dpGlow"><stop offset="0" style="stop-color:var(--sun-glow); stop-opacity:.75"/><stop offset=".35" style="stop-color:var(--sun-glow); stop-opacity:.28"/><stop offset="1" style="stop-color:var(--sun-glow); stop-opacity:0"/></radialGradient>
-    <linearGradient id="dpWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--water-top)"/><stop offset="1" style="stop-color:var(--water-bottom)"/></linearGradient>
-    <linearGradient id="dpHaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--haze); stop-opacity:0"/><stop offset="1" style="stop-color:var(--haze); stop-opacity:.55"/></linearGradient>
-    <clipPath id="dpWaterClip"><rect x="0" y="152" width="400" height="30"/></clipPath></defs>`;
-  const STARS = [[24, 18], [60, 44], [96, 12], [132, 34], [176, 16], [222, 40], [258, 10], [296, 30], [336, 14], [376, 42], [40, 76], [372, 70], [150, 60], [250, 66]];
-  const stars = phase === 'night' ? STARS.map(([sx, sy], i) => `<circle class="dp-star" cx="${sx}" cy="${sy}" r="${i % 3 ? .8 : 1.2}" style="animation-delay:${(i * .37 % 2).toFixed(2)}s"/>`).join('') : '';
-  const birds = phase === 'sunset' || phase === 'morning'
-    ? `<g fill="none" stroke="var(--l3)" stroke-width="1" stroke-linecap="round" opacity=".7"><path class="bird" d="M246 70q2.4-2 4.8 0q2.4-2 4.8 0"/><path class="bird b2" d="M262 62q2-1.6 4 0q2-1.6 4 0"/><path class="bird b3" d="M272 74q1.6-1.4 3.2 0q1.6-1.4 3.2 0"/></g>` : '';
-  // الطبقة البعيدة: قبب ومآذن القاهرة القديمة
-  const old = [];
-  [[124, 6], [146, 4], [262, 7], [300, 5], [352, 6], [384, 5]].forEach(([dx, r]) => old.push(`<rect x="${dx - r}" y="${146 - r}" width="${2 * r}" height="${r + 6}"/><path d="M${dx - r} ${146 - r}a${r} ${r} 0 0 1 ${2 * r} 0z"/>`));
-  [[132, 26], [276, 30], [292, 22], [366, 28], [118, 20]].forEach(([mx, hh]) => old.push(`<rect x="${mx - 1}" y="${152 - hh}" width="2" height="${hh}"/><path d="M${mx - 1.6} ${153 - hh}L${mx} ${146 - hh}L${mx + 1.6} ${153 - hh}Z"/>`));
-  [[240, 128, 14], [310, 120, 16], [336, 132, 12], [394, 126, 10]].forEach(([bx, by, bw]) => old.push(`<rect x="${bx}" y="${by}" width="${bw}" height="${152 - by}"/>`));
-  // الطبقة الأساسية: القلعة ومآذنها الرفيعة، برج القاهرة، والعماير
-  const BLD = [[0, 132, 18], [20, 138, 14], [236, 130, 16], [254, 140, 20], [276, 124, 14], [292, 134, 22], [340, 128, 16], [358, 136, 20], [380, 122, 20]];
-  const wins = lit ? BLD.map(([bx, by, bw], bi) => {
-    let o = ''; for (let c = 0; c < Math.floor((bw - 3) / 5); c++) for (let r = 0; r < Math.floor((152 - by - 4) / 6); r++)
-      if ((c * 7 + r * 3 + bi * 5) % 4 === 0) o += `<rect class="win-on" x="${bx + 2.5 + c * 5}" y="${by + 3 + r * 6}" width="1.6" height="2.2" fill="var(--win-lit)" style="animation-delay:${((c + r + bi) % 5) * .5}s"/>`;
-    return o; }).join('') : '';
-  const minaret = mx => `<rect x="${mx - 1.6}" y="74" width="3.2" height="62"/><path d="M${mx - 2.2} 75L${mx} 60L${mx + 2.2} 75Z"/><rect x="${mx - 3}" y="92" width="6" height="1.6" rx=".8"/><rect x="${mx - 2.8}" y="108" width="5.6" height="1.6" rx=".8"/>`;
-  const skyline = `<g id="dpSkyline" fill="var(--l3)">
-      <path d="M150 152V136h80v16z"/><path d="M156 136a8 8 0 0 1 16 0z"/><path d="M208 136a8 8 0 0 1 16 0z"/>
-      <path d="M168 132a11 11 0 0 1 22 0z"/><path d="M190 132a11 11 0 0 1 22 0z"/><rect x="172" y="124" width="36" height="12"/>
-      <path d="M173 125a17 17 0 0 1 34 0z"/><rect x="189.4" y="98" width="1.2" height="10"/>
-      ${minaret(160)}${minaret(220)}
-      <path d="M321.6 152L323 88h3l1.4 64z"/><path d="M319.5 88q-1-7 2.5-10h5q3.5 3 2.5 10z"/><rect x="321" y="74" width="7" height="4" rx="1.5"/><rect x="324" y="62" width="1" height="12"/>
-      ${BLD.map(([bx, by, bw]) => `<rect x="${bx}" y="${by}" width="${bw}" height="${152 - by}"/>`).join('')}
-      <rect x="262" y="134" width=".8" height="6"/><rect x="298" y="128" width=".8" height="6"/><rect x="386" y="116" width=".8" height="6"/></g>`;
-  const refl = [0, 5, 10, 15, 20, 25].map((dy, i) => { const w = 16 - i * 2.2; return `<rect class="glint" x="${(x - w / 2).toFixed(1)}" y="${156 + dy}" width="${w.toFixed(1)}" height="1.3" rx=".6" style="animation-delay:${i * .25}s"/>`; }).join('');
+    <radialGradient id="dpGlow"><stop offset="0" style="stop-color:var(--sun-glow); stop-opacity:.8"/><stop offset=".4" style="stop-color:var(--sun-glow); stop-opacity:.3"/><stop offset="1" style="stop-color:var(--sun-glow); stop-opacity:0"/></radialGradient>
+    <radialGradient id="dpLampGlow"><stop offset="0" style="stop-color:var(--butter-200); stop-opacity:.55"/><stop offset="1" style="stop-color:var(--butter-200); stop-opacity:0"/></radialGradient>
+    <linearGradient id="dpWinSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky1)"/><stop offset="1" style="stop-color:var(--sky2)"/></linearGradient>
+    <pattern id="dpSpeck" width="18" height="18" patternUnits="userSpaceOnUse"><g stroke="var(--speck)" stroke-width="1" stroke-linecap="round"><path d="M3 4l1.6 2.6M12 9l-1 2.8M7 14.5l2.4.8M15 2.5l.8 1.8"/></g></pattern>
+    <pattern id="dpTiles" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="var(--tile-a)"/><rect width="9" height="9" fill="var(--tile-b)"/><rect x="9" y="9" width="9" height="9" fill="var(--tile-b)"/></pattern>
+    <pattern id="dpStripe" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="var(--pink-100)"/><rect width="3.2" height="7" fill="var(--peach-400)"/></pattern>
+    <pattern id="dpCheck" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--butter-200)"/><path d="M0 .5H6M.5 0V6" stroke="var(--lime-500)" stroke-width=".9"/></pattern>
+    <clipPath id="dpWin"><path d="M43 146V64a50 38 0 0 1 100 0V146Z"/></clipPath></defs>`;
+  const leaf = (lx, ly, r, rot) => `<g transform="translate(${lx} ${ly}) rotate(${rot})"><ellipse rx="${r}" ry="${(r * .82).toFixed(1)}" fill="var(--leaf)"/><path d="M${-r * .7} 0H${r * .7}" stroke="var(--leaf-vein)" stroke-width=".7"/></g>`;
   const scene = `
-    <svg class="scene" viewBox="0 0 400 210" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-      ${defs}${stars}
-      <g transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><g class="dp-sun ${justDone ? 'pulse' : ''}">${sun}</g></g>
-      ${birds}
-      <g fill="var(--l1)"><path d="M6 152L52 110L98 152Z"/><path d="M84 152L108 130L132 152Z"/></g>
-      <rect x="0" y="104" width="400" height="48" fill="url(#dpHaze)"/>
-      <g fill="var(--l2)">${old.join('')}</g>
-      <rect x="0" y="122" width="400" height="30" fill="url(#dpHaze)" opacity=".7"/>
-      ${skyline}${wins}
-      <rect x="0" y="152" width="400" height="30" fill="url(#dpWater)"/>
-      <g clip-path="url(#dpWaterClip)" opacity=".22"><use href="#dpSkyline" transform="translate(0 304) scale(1 -1)"/></g>
-      <g fill="var(--sun)" opacity="${phase === 'night' ? .45 : .75}">${refl}</g>
-      <g fill="var(--bank)"><path d="M0 180Q120 172 220 176T400 174V210H0Z"/>
-        <g transform="translate(112 168)"><g class="felucca"><path d="M-12 0Q0 4.5 12 0Z"/><path d="M-.5 0V-22h1V0z"/><path d="M-4-3L13-26L4-1Z" opacity=".9"/></g></g>
-        <g transform="translate(370 178)"><path d="M0 0q-1.5-16 3-32" fill="none" stroke="var(--bank)" stroke-width="2.4" stroke-linecap="round"/>
-          <g class="frond" fill="none" stroke="var(--bank)" stroke-width="1.5" stroke-linecap="round"><path d="M3-32q-9-3-15 5"/><path d="M3-32q-12 0-14 9"/><path d="M3-32q9-5 15 1"/><path d="M3-32q11 1 12 10"/><path d="M3-32q-3-8-9-10"/><path d="M3-32q4-8 10-9"/></g></g></g>
+    <svg class="scene" viewBox="0 0 400 230" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      ${defs}
+      <rect width="400" height="172" fill="var(--wall)"/><rect width="400" height="172" fill="url(#dpSpeck)"/>
+      <!-- الشباك -->
+      <path d="M36 150V62a57 44 0 0 1 114 0V150Z" fill="var(--frame)"/>
+      <g clip-path="url(#dpWin)">
+        <rect x="40" y="16" width="106" height="134" fill="url(#dpWinSky)"/>${stars}
+        <g transform="translate(${wx.toFixed(1)} ${wy.toFixed(1)})"><g class="dp-sun ${justDone ? 'pulse' : ''}">${sun}</g></g>
+        <g fill="var(--city)"><rect x="48" y="128" width="16" height="20"/><rect x="66" y="122" width="10" height="26"/><path d="M80 138a11 11 0 0 1 22 0v10H80z"/><rect x="90.2" y="122" width="1.6" height="5"/>
+          <rect x="102" y="104" width="2.6" height="44"/><path d="M101.6 105l1.7-10 1.7 10z"/><rect x="108" y="126" width="18" height="22"/><rect x="128" y="120" width="12" height="28"/></g>${cityWin}
+      </g>
+      <path d="M93 22V146M43 104H143" stroke="var(--frame)" stroke-width="3.5"/>
+      <rect x="30" y="146" width="126" height="7" rx="2.5" fill="var(--frame)"/><path d="M34 149.5h118" stroke="var(--frame-line)" stroke-width=".8" stroke-dasharray="3 3"/>
+      <path d="M124 146l2-11h12l2 11z" fill="var(--periwinkle-400)"/><path d="M127 140h10" stroke="var(--white)" stroke-width=".8"/>
+      <g class="sway"><path d="M132 135q-6-10 -2-18M132 135q4-11 10-14M132 135q0-12 2-20" fill="none" stroke="var(--leaf)" stroke-width="1.6" stroke-linecap="round"/></g>
+      <!-- النجفة -->
+      <g class="lamp"><path d="M262 0V40" stroke="var(--cord)" stroke-width="1.2"/>
+        ${lit ? `<circle cx="262" cy="56" r="64" fill="url(#dpLampGlow)"/>` : ''}
+        <path d="M245 56q17-26 34 0z" fill="var(--lamp)"/><path d="M249 51q13-17 26 0" fill="none" stroke="var(--white)" stroke-width=".8" stroke-dasharray="2 2.5" opacity=".7"/>
+        <rect x="244" y="55" width="36" height="3" rx="1.5" fill="var(--lamp-rim)"/><circle cx="262" cy="60" r="3.2" fill="${lit ? 'var(--butter-100)' : 'var(--lavender-100)'}"/></g>
+      <!-- الرفوف -->
+      <g fill="var(--shelf)"><rect x="300" y="64" width="94" height="4" rx="1"/><rect x="300" y="106" width="94" height="4" rx="1"/><rect x="306" y="68" width="3" height="6"/><rect x="384" y="68" width="3" height="6"/><rect x="306" y="110" width="3" height="6"/><rect x="384" y="110" width="3" height="6"/></g>
+      <path d="M316 64c-9 0-11-7-8-13 2-4 4-5 4-8h8c0 3 2 4 4 8 3 6 1 13-8 13z" fill="var(--periwinkle-300)"/><path d="M309 55q7 4 14 0M309 59q7 4 14 0" fill="none" stroke="var(--white)" stroke-width=".9"/>
+      <path d="M338 64c-5 0-7-4-6-9l2-8v-8h8v8l2 8c1 5-1 9-6 9z" fill="var(--pink-300)"/>
+      <g><rect x="356" y="56" width="32" height="8" rx="1" fill="var(--butter-300)"/><rect x="358" y="48" width="28" height="8" rx="1" fill="var(--peach-400)"/><rect x="360" y="41" width="24" height="7" rx="1" fill="var(--lime-400)"/>
+        <path d="M360 60h26M362 52h22M364 44.5h18" stroke="var(--white)" stroke-width=".7" opacity=".8"/></g>
+      <path d="M314 106l2-10h14l2 10z" fill="var(--butter-300)"/>
+      <g class="sway s2" fill="none" stroke="var(--leaf)" stroke-width="1.4" stroke-linecap="round"><path d="M318 97q-6 12-2 26"/><path d="M324 97q2 14 8 22"/><path d="M328 97q8 6 10 14"/></g>
+      <path d="M354 106q0-8 12-8t12 8z" fill="var(--pink-200)"/><rect x="372" y="88" width="5" height="10" rx="1.5" fill="var(--lavender-100)"/><path d="M374.5 88q-2-4 0-6q2 2 0 6" fill="var(--butter-200)" class="${lit ? 'flame' : ''}"/>
+      <!-- الأرضية والسجادة -->
+      <rect y="168" width="400" height="4" fill="var(--base)"/>
+      <rect y="172" width="400" height="58" fill="url(#dpTiles)"/>
+      <path d="M150 180H334L346 226H138Z" fill="var(--rug)"/><path d="M155 184H329L339 222H145Z" fill="none" stroke="var(--peach-400)" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <g fill="var(--peach-400)"><path d="M180 194l6 6-6 6-6-6z"/><path d="M240 194l6 6-6 6-6-6z"/><path d="M300 194l6 6-6 6-6-6z"/></g>
+      <g fill="var(--lime-500)"><path d="M210 200q4-8 8 0q-4 8-8 0z"/><path d="M270 200q4-8 8 0q-4 8-8 0z"/><path d="M160 212q4-6 8 0q-4 6-8 0z"/><path d="M318 212q4-6 8 0q-4 6-8 0z"/></g>
+      <g fill="var(--periwinkle-400)"><circle cx="210" cy="215" r="2"/><circle cx="244" cy="215" r="2"/><circle cx="278" cy="215" r="2"/></g>
+      <!-- الكنبة -->
+      <rect x="170" y="110" width="156" height="36" rx="14" fill="var(--sofa)"/><rect x="170" y="110" width="156" height="36" rx="14" fill="url(#dpSpeck)" opacity=".6"/>
+      <rect x="164" y="138" width="168" height="24" rx="8" fill="var(--sofa-2)"/>
+      <rect x="156" y="124" width="20" height="40" rx="9" fill="var(--sofa)"/><rect x="320" y="124" width="20" height="40" rx="9" fill="var(--sofa)"/>
+      <path d="M248 140v20" stroke="var(--sofa)" stroke-width="1"/>
+      <rect x="166" y="162" width="5" height="7" rx="1" fill="var(--sofa-leg)"/><rect x="325" y="162" width="5" height="7" rx="1" fill="var(--sofa-leg)"/>
+      <rect x="186" y="116" width="40" height="26" rx="8" fill="url(#dpCheck)" transform="rotate(-6 206 129)"/>
+      <rect x="262" y="114" width="46" height="28" rx="9" fill="url(#dpStripe)" transform="rotate(5 285 128)"/>
+      <!-- الترابيزة والزرعة -->
+      <ellipse cx="142" cy="146" rx="17" ry="4.5" fill="var(--table)"/><path d="M136 147h12l-3 12q8 4 8 10h-22q0-6 8-10z" fill="var(--table)"/>
+      <path d="M131 144l3-15h16l3 15z" fill="var(--butter-300)"/><path d="M133 136h18" stroke="var(--white)" stroke-width=".8" opacity=".8"/>
+      <g class="sway s3"><path d="M142 129q-4-10-12-14M142 129q2-12 0-22M142 129q6-8 14-10M142 129q-8-4-16-2" fill="none" stroke="var(--leaf-vein)" stroke-width="1"/>
+        ${leaf(129, 114, 6, -30)}${leaf(142, 106, 6.5, 0)}${leaf(156, 118, 6, 25)}${leaf(125, 126, 5, -60)}${leaf(150, 124, 4.5, 40)}</g>
+      ${night ? `<rect width="400" height="230" fill="var(--indigo-900)" opacity=".38"/><circle cx="262" cy="60" r="70" fill="url(#dpLampGlow)"/><path d="M246 60L200 172H324L278 60z" fill="var(--butter-200)" opacity=".08"/>` : phase === 'sunset' ? `<rect width="400" height="230" fill="var(--peach-300)" opacity=".12"/>` : ''}
     </svg>`;
   const curIdx = periodIndex(nowPeriod());
   const pers = PERIODS.map((p, i) => {
