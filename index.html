@@ -1179,6 +1179,8 @@ function weekStrip() {
    ٣) الفترات أزرار: بتوريكي الباقي في كل فترة، ولما تدوسي بتوديكي لها في القايمة
    ٤) كل مهمة شَرطة بتنور بحركة لما تخلصيها، والشمس بتنبض
    ٥) لما تخلصي كل حاجة: الأشعة بتلف وكونفيتي صغير */
+/* الأوضة متحضّرة كصورة مرة واحدة (الإحساس المرسوم باليد تقيل على الآيفون لو اتحسب كل مرة) */
+const ROOM_IMG = 'icons/room.webp';
 let dpLast = null, dpSummary = '', dpPhase = 'noon';
 function skyPhase(h) { return h >= 5 && h < 11 ? 'morning' : h >= 11 && h < 16.5 ? 'noon' : h >= 16.5 && h < 18.5 ? 'sunset' : 'night'; }
 function dayPath(list) {
@@ -1222,11 +1224,22 @@ function dayPath(list) {
     <radialGradient id="dpGlow"><stop offset="0" style="stop-color:var(--wglow); stop-opacity:.85"/><stop offset=".4" style="stop-color:var(--wglow); stop-opacity:.3"/><stop offset="1" style="stop-color:var(--wglow); stop-opacity:0"/></radialGradient>
     <linearGradient id="dpWinSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--wsky1)"/><stop offset="1" style="stop-color:var(--wsky2)"/></linearGradient>
     <clipPath id="dpWin"><path d="M30 172V54C30 26 52 12 78 12S126 26 126 54V172Z"/></clipPath></defs>`;
+  /* طبقة السما ورا الشباك: خفيفة ومن غير فلاتر عشان الشمس تتحرك */
+  const winLayer = `
+        <g clip-path="url(#dpWin)"><rect x="24" y="6" width="108" height="172" fill="url(#dpWinSky)"/>
+          ${night ? [[44, 40], [62, 28], [100, 34], [112, 60], [50, 70], [90, 76], [70, 100]].map(([a, b]) => `<circle cx="${a}" cy="${b}" r="1" fill="#fff"/>`).join('') : ''}
+          <g transform="translate(${wx.toFixed(1)} ${wy.toFixed(1)})"><g class="dp-sun ${justDone ? 'pulse' : ''}">${sun}</g></g>
+          <g fill="var(--wcity)"><rect x="32" y="150" width="16" height="24"/><path d="M52 160a11 11 0 0 1 22 0v14H52z"/><rect x="62.4" y="144" width="1.4" height="6"/><rect x="78" y="124" width="3.4" height="50"/><path d="M77.4 125l2.3-11 2.3 11z"/><rect x="86" y="146" width="16" height="28"/><rect x="104" y="138" width="12" height="36"/><rect x="118" y="152" width="10" height="22"/></g>
+          ${lit ? [[90, 150], [96, 158], [107, 144], [111, 154], [36, 156], [41, 164]].map(([a, b]) => `<rect x="${a}" y="${b}" width="2.2" height="2.6" fill="var(--butter-200)"/>`).join('') : ''}
+        </g>
+`;
   const scene = `
     <svg class="illu" viewBox="0 0 400 250" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
       ${defs}
+      ${window.__BAKE ? '' : winLayer}
+      ${ROOM_IMG && !window.__BAKE ? `<image href="${ROOM_IMG}" x="0" y="0" width="400" height="250"/>` : `
       <g filter="url(#dpRough)">
-        <rect x="-4" y="-4" width="408" height="210" fill="var(--butter-50)"/>
+        <path d="M-4-4H404V206H-4ZM30 172V54C30 26 52 12 78 12S126 26 126 54V172Z" fill="var(--butter-50)" fill-rule="evenodd"/>
         <g stroke="var(--periwinkle-300)" stroke-width="1.4" stroke-linecap="round">${specks}</g>
         <!-- ركن المطبخ: حيطة خضرا بقوس -->
         <path d="M268 206V70C268 44 288 28 314 28H404V206Z" fill="var(--lime-800)"/>
@@ -1248,13 +1261,7 @@ function dayPath(list) {
         <g fill="none" stroke="var(--lime-500)" stroke-width="1.3"><path d="M354 143c-1-7 1-12 4-15M358 143c2-6 6-9 10-9M356 143c-4-4-9-5-12-3"/></g>
         <circle cx="358" cy="127" r="2.6" fill="var(--pink-200)"/><circle cx="368" cy="134" r="2.4" fill="var(--lavender-300)"/><circle cx="344" cy="139" r="2.2" fill="var(--pink-200)"/>
         <!-- الشباك -->
-        <path d="M24 178V52C24 20 50 6 78 6S132 20 132 52V178Z" fill="var(--peach-400)"/>
-        <g clip-path="url(#dpWin)"><rect x="24" y="6" width="108" height="172" fill="url(#dpWinSky)"/>
-          ${night ? [[44, 40], [62, 28], [100, 34], [112, 60], [50, 70], [90, 76], [70, 100]].map(([a, b]) => `<circle cx="${a}" cy="${b}" r="1" fill="#fff"/>`).join('') : ''}
-          <g transform="translate(${wx.toFixed(1)} ${wy.toFixed(1)})"><g class="dp-sun ${justDone ? 'pulse' : ''}">${sun}</g></g>
-          <g fill="var(--wcity)"><rect x="32" y="150" width="16" height="24"/><path d="M52 160a11 11 0 0 1 22 0v14H52z"/><rect x="62.4" y="144" width="1.4" height="6"/><rect x="78" y="124" width="3.4" height="50"/><path d="M77.4 125l2.3-11 2.3 11z"/><rect x="86" y="146" width="16" height="28"/><rect x="104" y="138" width="12" height="36"/><rect x="118" y="152" width="10" height="22"/></g>
-          ${lit ? [[90, 150], [96, 158], [107, 144], [111, 154], [36, 156], [41, 164]].map(([a, b]) => `<rect x="${a}" y="${b}" width="2.2" height="2.6" fill="var(--butter-200)"/>`).join('') : ''}
-        </g>
+        <path d="M24 178V52C24 20 50 6 78 6S132 20 132 52V178ZM30 172V54C30 26 52 12 78 12S126 26 126 54V172Z" fill="var(--peach-400)" fill-rule="evenodd"/>
         <path d="M78 12V172M30 92H126" stroke="var(--peach-400)" stroke-width="4.5"/>
         <rect x="16" y="172" width="124" height="8" rx="2" fill="var(--peach-500)"/>
         <!-- الرف فوق الكنبة -->
@@ -1289,7 +1296,7 @@ function dayPath(list) {
         <g fill="var(--lime-700)"><path d="M43 192c-16-9-28-28-21-46 12 5 21 23 21 46z"/><path d="M43 192c2-21 14-39 32-41 2 18-14 37-32 41z"/><path d="M43 192c-5-18-2-39 7-50 9 14 5 37-7 50z"/></g>
         <g fill="none" stroke="var(--lime-400)" stroke-width="1.1" stroke-linecap="round"><path d="M43 190c-7-12-14-25-17-39"/><path d="M44 190c7-14 16-25 28-34"/><path d="M44 190c0-16 2-32 6-46"/></g>
       </g>
-      <rect width="400" height="250" filter="url(#dpGrain)" opacity=".32"/>
+      <rect width="400" height="250" filter="url(#dpGrain)" opacity=".32"/>`}
     </svg>`;
   const curIdx = periodIndex(nowPeriod());
   const pers = PERIODS.map((p, i) => {
